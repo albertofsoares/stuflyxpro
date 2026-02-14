@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlix Ultimate - CS Learning Platform</title>
+    
+    <!-- Tailwind CSS (Estilização Moderna) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Configuração de Tema Netflix/Dark -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        netflix: {
+                            red: '#E50914',
+                            redHover: '#b20710',
+                            dark: '#141414',
+                            gray: '#808080'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar para imersão total */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #141414; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E50914; 
+        }
+
+        /* Animações e Utilitários */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .slide-up { animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Esconder scrollbar mas permitir scroll */
+        .hide-scroll-x {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hide-scroll-x::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to top, #141414 0%, transparent 60%, rgba(0,0,0,0.7) 100%);
+        }
+
+        /* Loader Spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #E50914;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-netflix-dark text-white font-sans overflow-x-hidden min-h-screen">
+
+    <!-- Container Principal da Aplicação -->
+    <div id="app" class="relative min-h-screen">
+        <!-- O conteúdo será injetado aqui via JavaScript -->
+        <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-netflix-dark z-50">
+            <div class="text-center">
+                <div class="loader mx-auto mb-4"></div>
+                <h2 class="text-2xl font-bold text-netflix-red tracking-widest">STUDYFLIX</h2>
+                <p class="text-gray-400 text-sm mt-2">Carregando seus estudos...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container de Notificações (Toasts) -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[9999] flex flex-col gap-2"></div>
+
+    <!-- Módulo JS Principal -->
+    <script type="module">
+        // ------------------------------------------------------------------
+        // 1. IMPORTAÇÕES E CONFIGURAÇÃO FIREBASE
+        // ------------------------------------------------------------------
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            getDoc, 
+            getDocs, 
+            addDoc, 
+            updateDoc, 
+            deleteDoc, 
+            setDoc, 
+            query, 
+            where, 
+            orderBy, 
+            serverTimestamp,
+            limit
+        } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        // Configuração Obrigatória
+        const firebaseConfig = {
+            apiKey: "AIzaSyC38VXjnYskoAx5SLF6n3PiEgnaRtz4IJ0",
+            authDomain: "studyflix53.firebaseapp.com",
+            projectId: "studyflix53",
+            storageBucket: "studyflix53.firebasestorage.app",
+            messagingSenderId: "799853597162",
+            appId: "1:799853597162:web:179f1450c419157d62a293"
+        };
+
+        // Inicialização dos Serviços
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            console.log("🔥 Firebase inicializado com sucesso.");
+        } catch (error) {
+            console.error("Erro crítico ao iniciar Firebase:", error);
+            alert("Erro de conexão. Verifique o console.");
+        }
+
+        // ------------------------------------------------------------------
+        // 2. UTILITÁRIOS E ESTADO GLOBAL (STORE)
+        // ------------------------------------------------------------------
+
+        /**
+         * Gerenciador de Estado Global Simples (Observer Pattern)
+         * Centraliza os dados para acesso em toda a SPA.
+         */
+        const Store = {
+            user: null,
+            courses: [],
+            myList: [],
+            progress: {}, // { courseId_videoId: { watched: boolean, timestamp: number } }
+            currentView: 'loading',
+            activeCourse: null, // Para o modal de detalhes
+            
+            // Notificar mudanças
+            listeners: [],
+            subscribe(fn) { this.listeners.push(fn); },
+            notify() { this.listeners.forEach(fn => fn(this)); }
+        };
+
+        /**
+         * Sistema de Notificações Toast
+         * @param {string} message - Mensagem a exibir
+         * @param {string} type - 'success' | 'error' | 'info'
+         */
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = type === 'success' ? 'bg-green-600' : (type === 'error' ? 'bg-red-600' : 'bg-blue-600');
+            
+            toast.className = `${bgClass} text-white px-6 py-3 rounded shadow-lg transform transition-all duration-300 translate-x-full flex items-center gap-3`;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle')}"></i>
+                <span class="font-medium">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Animação de entrada
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-x-full');
+            });
+
+            // Auto remoção
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // ------------------------------------------------------------------
+        // 3. CAMADA DE DADOS (DATA LAYER)
+        // ------------------------------------------------------------------
+
+        const DataService = {
+            /**
+             * Carrega todos os cursos do Firestore.
+             * Se a coleção estiver vazia, popula com dados iniciais (Seed).
+             */
+            async fetchCourses() {
+                try {
+                    const q = query(collection(db, "courses"));
+                    const querySnapshot = await getDocs(q);
+                    
+                    const courses = [];
+                    querySnapshot.forEach((doc) => {
+                        courses.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    if (courses.length === 0) {
+                        console.log("Banco vazio. Iniciando seed de dados...");
+                        await this.seedDatabase();
+                        return await this.fetchCourses(); // Recurso após seed
+                    }
+
+                    Store.courses = courses;
+                    return courses;
+                } catch (error) {
+                    console.error("Erro ao buscar cursos:", error);
+                    showToast("Erro ao carregar conteúdo.", "error");
+                    throw error;
+                }
+            },
+
+            /**
+             * Popula o banco de dados com conteúdo de Ciência da Computação
+             * Focado no currículo acadêmico (Anhanguera/Geral).
+             */
+            async seedDatabase() {
+                const seedData = [
+                    {
+                        title: "Algoritmos e Lógica de Programação",
+                        description: "Fundamentos essenciais para qualquer cientista da computação. Aprenda fluxogramas, pseudocódigo e estruturas básicas.",
+                        thumbnail: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=800&q=80",
+                        videoUrl: "https://www.youtube.com/embed/8mei6uVttho", // Exemplo genérico
+                        category: "Fundamentos",
+                        difficulty: "Iniciante",
+                        duration: "45m",
+                        featured: true
+                    },
+                    {
+                        title: "Estruturas de Dados em C",
+                        description: "Domine Listas Encadeadas, Pilhas, Filas e Árvores. Crucial para otimização de memória e performance.",
+                        thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+                        videoUrl: "https://www.youtube.com/embed/RBSGKlAvoiM",
+                        category: "Estrutura de Dados",
+                        difficulty: "Intermediário",
+                        duration: "1h 20m"
+                    },
+                    {
+                        title: "Programação Orientada a Objetos (Java)",
+                        description: "Entenda Classes, Objetos, Herança e Polimorfismo. O paradigma mais usado na indústria corporativa.",
+                        thumbnail: "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80",
+                        videoUrl: "https://www.youtube.com/embed/sSXxN7c9yvw",
+                        category: "Programação",
+                        difficulty: "Intermediário",
+                        duration: "55m"
+                    },
+                    {
+                        title: "Matemática Discreta",
+                        description: "Lógica proposicional, teoria dos conjuntos e grafos. A base matemática da computação.",
+                        thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
+                        videoUrl: "https://www.youtube.com/embed/5cPWQ0h149I",
+                        category: "Matemática",
+                        difficulty: "Avançado",
+                        duration: "1h 10m"
+                    },
+                    {
+                        title: "Banco de Dados SQL",
+                        description: "Modelagem de dados, normalização e queries complexas. Essencial para back-end.",
+                        thumbnail: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80",
+                        videoUrl: "https://www.youtube.com/embed/HXV3zeQKqGY",
+                        category: "Banco de Dados",
+                        difficulty: "Intermediário",
+                        duration: "2h"
+                    }
+                ];
+
+                for (const course of seedData) {
+                    await addDoc(collection(db, "courses"), course);
+                }
+                showToast("Banco de dados populado com sucesso!", "success");
+            },
+
+            /**
+             * Carrega a "Minha Lista" e o Progresso do Usuário
+             */
+            async fetchUserData(userId) {
+                try {
+                    const userRef = doc(db, "users", userId);
+                    const userSnap = await getDoc(userRef);
+
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        Store.myList = data.myList || [];
+                        Store.progress = data.progress || {};
+                    } else {
+                        // Cria documento de usuário se não existir
+                        await setDoc(userRef, { myList: [], progress: {} });
+                        Store.myList = [];
+                        Store.progress = {};
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar dados do usuário:", error);
+                }
+            },
+
+            /**
+             * Adiciona ou remove da "Minha Lista"
+             */
+            async toggleMyList(courseId) {
+                if (!Store.user) return;
+                
+                const index = Store.myList.indexOf(courseId);
+                let newList = [...Store.myList];
+
+                if (index > -1) {
+                    newList.splice(index, 1);
+                    showToast("Removido da Minha Lista");
+                } else {
+                    newList.push(courseId);
+                    showToast("Adicionado à Minha Lista", "success");
+                }
+
+                Store.myList = newList;
+                
+                // Atualização Otimista (UI primeiro, DB depois)
+                Store.notify();
+
+                try {
+                    await updateDoc(doc(db, "users", Store.user.uid), {
+                        myList: newList
+                    });
+                } catch (error) {
+                    showToast("Erro ao sincronizar lista", "error");
+                    // Reverter em caso de erro (seria ideal, mas simplificado aqui)
+                }
+            },
+
+            /**
+             * Salva progresso de visualização e anotações
+             */
+            async saveProgress(courseId, notes = "") {
+                if (!Store.user) return;
+
+                const progressKey = courseId;
+                const newProgress = {
+                    ...Store.progress,
+                    [progressKey]: {
+                        watched: true,
+                        lastWatched: Date.now(),
+                        notes: notes
+                    }
+                };
+
+                Store.progress = newProgress;
+                Store.notify();
+
+                try {
+                    await updateDoc(doc(db, "users", Store.user.uid), {
+                        progress: newProgress
+                    });
+                    showToast("Progresso e anotações salvos!", "success");
+                } catch (error) {
+                    console.error(error);
+                    showToast("Erro ao salvar progresso", "error");
+                }
+            }
+        };
+
+        // ------------------------------------------------------------------
+        // 4. SISTEMA DE AUTENTICAÇÃO
+        // ------------------------------------------------------------------
+
+        const AuthService = {
+            init() {
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        Store.user = user;
+                        showToast(`Bem-vindo de volta, ${user.displayName || 'Estudante'}!`, "success");
+                        await Promise.all([
+                            DataService.fetchCourses(),
+                            DataService.fetchUserData(user.uid)
+                        ]);
+                        Router.navigate('browse');
+                    } else {
+                        Store.user = null;
+                        Store.courses = [];
+                        Router.navigate('login');
+                    }
+                });
+            },
+
+            async login(email, password) {
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } catch (error) {
+                    let msg = "Erro ao fazer login.";
+                    if (error.code === 'auth/wrong-password') msg = "Senha incorreta.";
+                    if (error.code === 'auth/user-not-found') msg = "Usuário não encontrado.";
+                    showToast(msg, "error");
+                }
+            },
+
+            async register(email, password, name) {
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    await updateProfile(userCredential.user, { displayName: name });
+                    
+                    // Criar documento inicial no Firestore
+                    await setDoc(doc(db, "users", userCredential.user.uid), {
+                        email: email,
+                        createdAt: serverTimestamp(),
+                        myList: [],
+                        progress: {}
+                    });
+                    
+                    showToast("Conta criada com sucesso!", "success");
+                } catch (error) {
+                    showToast("Erro ao criar conta: " + error.message, "error");
+                }
+            },
+
+            async logout() {
+                try {
+                    await signOut(auth);
+                    showToast("Você saiu do sistema.");
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        };
+
+        // ------------------------------------------------------------------
+        // 5. ROTEAMENTO E NAVEGAÇÃO
+        // ------------------------------------------------------------------
+
+        const Router = {
+            routes: {
+                'login': renderLogin,
+                'browse': renderBrowse,
+                'watch': renderWatch,
+                'mylist': renderMyList,
+                'admin': renderAdmin
+            },
+
+            navigate(route, params = null) {
+                Store.currentView = route;
+                Store.routeParams = params;
+                this.render();
+            },
+
+            render() {
+                const appDiv = document.getElementById('app');
+                const renderer = this.routes[Store.currentView];
+                
+                if (renderer) {
+                    appDiv.innerHTML = renderer(Store.routeParams);
+                    this.attachEvents();
+                } else {
+                    appDiv.innerHTML = `<div class="text-white p-10">404 - Página não encontrada</div>`;
+                }
+            },
+
+            attachEvents() {
+                // Anexa listeners específicos da view atual após renderização
+                const viewName = Store.currentView;
+                if (viewName === 'login') attachLoginEvents();
+                if (viewName === 'browse' || viewName === 'mylist') attachBrowseEvents();
+                if (viewName === 'watch') attachWatchEvents();
+                if (viewName === 'admin') attachAdminEvents();
+                
+                // Navbar listeners (comuns)
+                attachNavbarEvents();
+            }
+        };
+
+        // ------------------------------------------------------------------
+        // 6. COMPONENTES UI (Render Functions)
+        // ------------------------------------------------------------------
+
+        // --- Componentes Reutilizáveis ---
+
+        const Navbar = () => `
+            <nav class="fixed top-0 w-full z-40 transition-all duration-300 bg-gradient-to-b from-black to-transparent p-4 flex justify-between items-center" id="navbar">
+                <div class="flex items-center gap-8">
+                    <h1 class="text-netflix-red text-3xl font-bold cursor-pointer tracking-tighter" onclick="window.navigate('browse')">STUDYFLIX</h1>
+                    <ul class="hidden md:flex gap-4 text-sm text-gray-300">
+                        <li class="hover:text-white cursor-pointer transition" onclick="window.navigate('browse')">Início</li>
+                        <li class="hover:text-white cursor-pointer transition" onclick="window.navigate('mylist')">Minha Lista</li>
+                        <li class="hover:text-white cursor-pointer transition font-semibold text-netflix-red" onclick="window.navigate('admin')">Painel do Professor</li>
+                    </ul>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="w-8 h-8 rounded cursor-pointer">
+                        <div class="absolute right-0 mt-2 w-32 bg-black border border-gray-700 rounded shadow-xl hidden group-hover:block">
+                            <div class="p-2 text-xs text-gray-400 border-b border-gray-700">
+                                ${Store.user?.email}
+                            </div>
+                            <button id="btn-logout" class="w-full text-left p-2 text-sm hover:bg-gray-800 text-white">Sair</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        `;
+
+        const CourseCard = (course) => {
+            const inList = Store.myList.includes(course.id);
+            return `
+            <div class="course-card relative flex-none w-64 md:w-72 aspect-video bg-gray-800 rounded-md overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-10 group" 
+                 onclick="window.openModal('${course.id}')">
+                <img src="${course.thumbnail}" alt="${course.title}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black via-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <h4 class="text-sm font-bold text-white truncate">${course.title}</h4>
+                    <div class="flex justify-between items-center mt-1">
+                        <span class="text-xs text-green-400 font-semibold">${course.difficulty}</span>
+                        <div class="flex gap-2">
+                             <button class="bg-white text-black rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-300" onclick="event.stopPropagation(); window.playCourse('${course.id}')">
+                                <i class="fas fa-play text-xs"></i>
+                            </button>
+                            <button class="border border-gray-400 text-white rounded-full w-6 h-6 flex items-center justify-center hover:border-white" onclick="event.stopPropagation(); window.toggleList('${course.id}')">
+                                <i class="fas ${inList ? 'fa-check' : 'fa-plus'} text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                ${Store.progress[course.id]?.watched ? '<div class="absolute top-2 right-2 bg-netflix-red text-xs px-1 rounded">Visto</div>' : ''}
+            </div>
+            `;
+        };
+
+        const DetailModal = () => {
+            if (!Store.activeCourse) return '';
+            const c = Store.activeCourse;
+            const inList = Store.myList.includes(c.id);
+
+            return `
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 fade-in" onclick="window.closeModal()">
+                <div class="bg-zinc-900 w-full max-w-2xl rounded-lg overflow-hidden shadow-2xl relative slide-up" onclick="event.stopPropagation()">
+                    <button class="absolute top-4 right-4 z-10 w-8 h-8 bg-black/50 rounded-full text-white flex items-center justify-center hover:bg-white/20" onclick="window.closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <div class="relative h-64 md:h-80">
+                        <img src="${c.thumbnail}" class="w-full h-full object-cover mask-gradient">
+                        <div class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-zinc-900 to-transparent">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-2">${c.title}</h2>
+                            <div class="flex gap-4 mb-4">
+                                <button class="bg-white text-black px-6 py-2 rounded font-bold hover:bg-gray-200 flex items-center gap-2" onclick="window.playCourse('${c.id}')">
+                                    <i class="fas fa-play"></i> Assistir
+                                </button>
+                                <button class="bg-gray-600/60 text-white px-6 py-2 rounded font-bold hover:bg-gray-600/80 flex items-center gap-2" onclick="window.toggleList('${c.id}')">
+                                    <i class="fas ${inList ? 'fa-check' : 'fa-plus'}"></i> ${inList ? 'Na Lista' : 'Minha Lista'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 grid md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <div class="flex items-center gap-2 mb-4 text-sm text-gray-400">
+                                <span class="text-green-400 font-bold">98% Relevância</span>
+                                <span>${c.duration || 'N/A'}</span>
+                                <span class="border border-gray-600 px-1 text-xs">HD</span>
+                            </div>
+                            <p class="text-gray-300 leading-relaxed mb-4">${c.description}</p>
+                            
+                            <!-- Seção de Anotações Prévias -->
+                            ${Store.progress[c.id]?.notes ? `
+                                <div class="bg-zinc-800 p-3 rounded mt-4 border-l-4 border-yellow-500">
+                                    <h5 class="text-xs uppercase text-gray-400 font-bold mb-1">Suas últimas anotações:</h5>
+                                    <p class="text-sm italic text-gray-300">"${Store.progress[c.id].notes}"</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="text-sm text-gray-400">
+                            <p class="mb-2"><span class="text-gray-500">Categoria:</span> <span class="text-white hover:underline cursor-pointer">${c.category}</span></p>
+                            <p class="mb-2"><span class="text-gray-500">Dificuldade:</span> <span class="text-white">${c.difficulty}</span></p>
+                            <p class="mb-2"><span class="text-gray-500">Professor:</span> <span class="text-white">Corpo Docente</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        };
+
+        // --- Views Principais ---
+
+        function renderLogin() {
+            return `
+            <div class="w-full h-screen bg-[url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/US-en-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg')] bg-cover bg-center relative">
+                <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-transparent to-black/80"></div>
+                
+                <div class="relative z-10 px-8 py-6">
+                    <h1 class="text-netflix-red text-4xl font-bold">STUDYFLIX</h1>
+                </div>
+
+                <div class="relative z-10 flex justify-center items-center h-[calc(100vh-100px)]">
+                    <div class="bg-black/75 p-16 rounded-lg w-full max-w-md">
+                        <h2 class="text-3xl font-bold mb-8" id="auth-title">Entrar</h2>
+                        <form id="auth-form" class="flex flex-col gap-4">
+                            <div id="name-field" class="hidden">
+                                <input type="text" id="name" placeholder="Nome Completo" class="w-full p-4 bg-zinc-800 rounded text-white focus:outline-none focus:bg-zinc-700">
+                            </div>
+                            <input type="email" id="email" placeholder="Email ou número de telefone" class="w-full p-4 bg-zinc-800 rounded text-white focus:outline-none focus:bg-zinc-700" required>
+                            <input type="password" id="password" placeholder="Senha" class="w-full p-4 bg-zinc-800 rounded text-white focus:outline-none focus:bg-zinc-700" required>
+                            
+                            <button type="submit" class="bg-netflix-red text-white font-bold py-3 rounded mt-6 hover:bg-netflix-redHover transition">
+                                <span id="btn-text">Entrar</span>
+                            </button>
+
+                            <div class="flex justify-between text-xs text-gray-400 mt-2">
+                                <label class="flex items-center gap-1"><input type="checkbox"> Lembre-se de mim</label>
+                                <a href="#" class="hover:underline">Precisa de ajuda?</a>
+                            </div>
+                        </form>
+
+                        <div class="mt-16 text-gray-500">
+                            <span id="switch-text">Novo por aqui?</span> 
+                            <a href="#" id="auth-switch" class="text-white hover:underline">Assine agora.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function renderBrowse() {
+            const featured = Store.courses.find(c => c.featured) || Store.courses[0];
+            if (!featured) return `<div class="p-20 text-center">Nenhum conteúdo disponível.</div>`;
+
+            // Agrupar por categoria
+            const categories = [...new Set(Store.courses.map(c => c.category))];
+
+            return `
+            ${Navbar()}
+            
+            <!-- Hero Section -->
+            <div class="relative h-[80vh] w-full">
+                <img src="${featured.thumbnail}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-netflix-dark via-transparent to-transparent"></div>
+                
+                <div class="absolute top-[30%] left-4 md:left-12 max-w-xl p-4 slide-up">
+                    <h1 class="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">${featured.title}</h1>
+                    <p class="text-lg text-gray-200 mb-6 drop-shadow-md line-clamp-3">${featured.description}</p>
+                    <div class="flex gap-4">
+                        <button class="bg-white text-black text-lg font-bold px-8 py-2 rounded hover:bg-gray-200 transition flex items-center gap-2" onclick="window.playCourse('${featured.id}')">
+                            <i class="fas fa-play"></i> Assistir
+                        </button>
+                        <button class="bg-gray-500/70 text-white text-lg font-bold px-8 py-2 rounded hover:bg-gray-500/50 transition flex items-center gap-2" onclick="window.openModal('${featured.id}')">
+                            <i class="fas fa-info-circle"></i> Mais Informações
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="relative z-10 -mt-24 pb-20 px-4 md:px-12 space-y-12">
+                ${categories.map(cat => `
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-200 hover:text-white cursor-pointer">${cat}</h3>
+                        <div class="flex gap-4 overflow-x-auto hide-scroll-x pb-4">
+                            ${Store.courses.filter(c => c.category === cat).map(c => CourseCard(c)).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+
+                <!-- Seção Continue Assistindo (se houver progresso) -->
+                ${Object.keys(Store.progress).length > 0 ? `
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-200">Continuar Assistindo (Memória de Estudo)</h3>
+                    <div class="flex gap-4 overflow-x-auto hide-scroll-x pb-4">
+                        ${Store.courses
+                            .filter(c => Store.progress[c.id]?.watched)
+                            .map(c => CourseCard(c))
+                            .join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+
+            <!-- Modal Wrapper -->
+            <div id="modal-root">
+                ${Store.activeCourse ? DetailModal() : ''}
+            </div>
+            `;
+        }
+
+        function renderMyList() {
+            const myListCourses = Store.courses.filter(c => Store.myList.includes(c.id));
+
+            return `
+            ${Navbar()}
+            <div class="pt-24 px-4 md:px-12 min-h-screen">
+                <h2 class="text-2xl font-bold mb-6">Minha Lista de Estudos</h2>
+                ${myListCourses.length === 0 
+                    ? '<p class="text-gray-500">Você ainda não adicionou nenhum curso à sua lista.</p>' 
+                    : `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        ${myListCourses.map(c => CourseCard(c)).join('')}
+                       </div>`
+                }
+            </div>
+            <div id="modal-root"></div>
+            `;
+        }
+
+        function renderAdmin() {
+            return `
+            ${Navbar()}
+            <div class="pt-24 px-4 md:px-12 pb-20 max-w-4xl mx-auto">
+                <div class="bg-zinc-900 p-8 rounded-lg border border-zinc-800">
+                    <h2 class="text-3xl font-bold mb-6 text-netflix-red border-b border-zinc-700 pb-2">Painel de Inserção de Conteúdo</h2>
+                    <p class="mb-6 text-gray-400">Adicione materiais específicos da Anhanguera ou vídeos complementares para reforçar sua memória.</p>
+                    
+                    <form id="admin-form" class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Título do Curso/Aula</label>
+                                <input type="text" name="title" required class="w-full bg-black border border-zinc-700 p-3 rounded focus:border-netflix-red focus:outline-none text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Categoria</label>
+                                <select name="category" class="w-full bg-black border border-zinc-700 p-3 rounded focus:border-netflix-red focus:outline-none text-white">
+                                    <option>Fundamentos</option>
+                                    <option>Estrutura de Dados</option>
+                                    <option>Programação</option>
+                                    <option>Matemática</option>
+                                    <option>Banco de Dados</option>
+                                    <option>Redes</option>
+                                    <option>IA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Descrição Detalhada</label>
+                            <textarea name="description" rows="3" required class="w-full bg-black border border-zinc-700 p-3 rounded focus:border-netflix-red focus:outline-none text-white"></textarea>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">URL da Imagem (Capa)</label>
+                                <input type="url" name="thumbnail" placeholder="https://..." required class="w-full bg-black border border-zinc-700 p-3 rounded focus:border-netflix-red focus:outline-none text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Dificuldade</label>
+                                <select name="difficulty" class="w-full bg-black border border-zinc-700 p-3 rounded focus:border-netflix-red focus:outline-none text-white">
+                                    <option>Iniciante</option>
+                                    <option>Intermediário</option>
+                                    <option>Avançado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">URL do Vídeo (Embed YouTube)</label>
+                            <input type="text" name="videoUrl" placeholder="https://www.youtube.com/embed/..." required class="w-full bg-black border border-zinc-700 p-3 rounded focus:border-netflix-red focus:outline-none text-white">
+                            <p class="text-xs text-gray-500 mt-1">Dica: Use links 'embed' do YouTube para funcionar corretamente.</p>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button type="submit" class="bg-netflix-red text-white font-bold px-8 py-3 rounded hover:bg-netflix-redHover transition">
+                                Adicionar Conteúdo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            `;
+        }
+
+        function renderWatch(courseId) {
+            const course = Store.courses.find(c => c.id === courseId);
+            if (!course) return Router.navigate('browse');
+
+            const existingNotes = Store.progress[courseId]?.notes || '';
+
+            return `
+            <div class="fixed inset-0 bg-black z-50 flex flex-col">
+                <!-- Header Player -->
+                <div class="bg-black/80 p-4 flex justify-between items-center absolute top-0 w-full z-10">
+                    <div class="flex items-center gap-4">
+                        <button onclick="window.navigate('browse')" class="text-white hover:text-gray-300 text-xl">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-lg font-bold">${course.title}</h2>
+                            <p class="text-xs text-gray-400">Reproduzindo agora</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Area -->
+                <div class="flex-1 flex justify-center items-center bg-black pt-16 pb-32">
+                    <div class="w-full max-w-6xl aspect-video bg-zinc-900 shadow-2xl relative">
+                        <iframe src="${course.videoUrl}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Controls & Notes (Memory Aid) -->
+                <div class="h-48 bg-zinc-900 border-t border-zinc-700 p-6 flex flex-col md:flex-row gap-6 absolute bottom-0 w-full">
+                    <div class="md:w-1/3 border-r border-zinc-700 pr-6">
+                        <h3 class="text-white font-bold mb-2"><i class="fas fa-brain text-netflix-red mr-2"></i>Controle de Memória</h3>
+                        <p class="text-sm text-gray-400 mb-4">Marque como concluído para o sistema registrar seu progresso e lembrá-lo futuramente.</p>
+                        <button id="btn-finish-class" class="w-full bg-white text-black font-bold py-2 rounded hover:bg-gray-200 flex justify-center items-center gap-2">
+                            <i class="fas fa-check"></i> Concluir Aula
+                        </button>
+                    </div>
+                    
+                    <div class="md:w-2/3">
+                        <h3 class="text-white font-bold mb-2">Anotações Rápidas (Flash Notes)</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="notes-input" value="${existingNotes}" placeholder="Digite um conceito chave que você aprendeu nesta aula..." class="flex-1 bg-black border border-zinc-600 p-2 rounded text-white focus:border-netflix-red focus:outline-none">
+                            <button id="btn-save-notes" class="bg-zinc-700 px-4 rounded hover:bg-zinc-600 text-white font-bold">Salvar Nota</button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">* Suas anotações aparecerão nos detalhes do curso para revisão.</p>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        // ------------------------------------------------------------------
+        // 7. EVENT HANDLERS
+        // ------------------------------------------------------------------
+
+        // Global Window Methods (para onclick no HTML)
+        window.navigate = (route) => Router.navigate(route);
+        window.openModal = (id) => {
+            Store.activeCourse = Store.courses.find(c => c.id === id);
+            Router.render(); // Re-renderiza para mostrar o modal
+            // Hack para desabilitar scroll
+            document.body.style.overflow = 'hidden';
+        };
+        window.closeModal = () => {
+            Store.activeCourse = null;
+            Router.render();
+            document.body.style.overflow = 'auto';
+        };
+        window.playCourse = (id) => Router.navigate('watch', id);
+        window.toggleList = (id) => DataService.toggleMyList(id);
+
+        function attachLoginEvents() {
+            let isLogin = true;
+            const form = document.getElementById('auth-form');
+            const switchBtn = document.getElementById('auth-switch');
+            
+            switchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                isLogin = !isLogin;
+                document.getElementById('auth-title').innerText = isLogin ? 'Entrar' : 'Cadastrar';
+                document.getElementById('btn-text').innerText = isLogin ? 'Entrar' : 'Cadastrar';
+                document.getElementById('name-field').classList.toggle('hidden');
+                document.getElementById('switch-text').innerText = isLogin ? 'Novo por aqui?' : 'Já tem conta?';
+                switchBtn.innerText = isLogin ? 'Assine agora.' : 'Entrar.';
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Validação básica
+                if(password.length < 6) {
+                    showToast("Senha deve ter no mínimo 6 caracteres.", "error");
+                    return;
+                }
+
+                document.getElementById('btn-text').innerText = "Processando...";
+
+                if (isLogin) {
+                    await AuthService.login(email, password);
+                } else {
+                    const name = document.getElementById('name').value;
+                    if (!name) {
+                         showToast("Nome é obrigatório.", "error");
+                         document.getElementById('btn-text').innerText = "Cadastrar";
+                         return;
+                    }
+                    await AuthService.register(email, password, name);
+                }
+            });
+        }
+
+        function attachNavbarEvents() {
+            const logoutBtn = document.getElementById('btn-logout');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => AuthService.logout());
+            }
+
+            // Efeito scroll navbar
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    nav.classList.add('bg-black');
+                    nav.classList.remove('bg-gradient-to-b');
+                } else {
+                    nav.classList.remove('bg-black');
+                    nav.classList.add('bg-gradient-to-b');
+                }
+            });
+        }
+
+        function attachWatchEvents() {
+            const courseId = Store.routeParams;
+            
+            document.getElementById('btn-finish-class').addEventListener('click', () => {
+                const notes = document.getElementById('notes-input').value;
+                DataService.saveProgress(courseId, notes);
+            });
+
+            document.getElementById('btn-save-notes').addEventListener('click', () => {
+                const notes = document.getElementById('notes-input').value;
+                DataService.saveProgress(courseId, notes);
+            });
+        }
+
+        function attachBrowseEvents() {
+            // Eventos específicos se necessário (ex: infinite scroll)
+        }
+
+        function attachAdminEvents() {
+            const form = document.getElementById('admin-form');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const newCourse = {
+                    title: formData.get('title'),
+                    category: formData.get('category'),
+                    description: formData.get('description'),
+                    thumbnail: formData.get('thumbnail'),
+                    difficulty: formData.get('difficulty'),
+                    videoUrl: formData.get('videoUrl'),
+                    duration: "45m", // Padrão
+                    createdAt: serverTimestamp()
+                };
+
+                try {
+                    await addDoc(collection(db, "courses"), newCourse);
+                    showToast("Conteúdo adicionado com sucesso!", "success");
+                    form.reset();
+                    // Atualiza cache local
+                    await DataService.fetchCourses();
+                } catch (error) {
+                    showToast("Erro ao adicionar conteúdo.", "error");
+                    console.error(error);
+                }
+            });
+        }
+
+        // ------------------------------------------------------------------
+        // 8. INICIALIZAÇÃO
+        // ------------------------------------------------------------------
+        
+        // Iniciar Auth Listener
+        AuthService.init();
+
+    </script>
+</body>
+</html>
