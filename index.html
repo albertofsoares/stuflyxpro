@@ -4,361 +4,223 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carregando...</title>
-    <!-- Quill CSS (Editor de Texto Rico) -->
+    <!-- Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <!-- FontAwesome (Ícones) -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS VARS & RESET --- */
+        /* --- CSS BASE --- */
         :root {
-            --primary: #e50914; /* Netflix Red */
+            --primary: #e50914;
             --bg: #141414;
             --surface: #1f1f1f;
             --text: #ffffff;
             --text-sec: #b3b3b3;
+            --success: #46d369;
         }
 
         * { box-sizing: border-box; outline: none; }
-
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-        }
+        body { margin: 0; font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
         /* --- UTILITÁRIOS --- */
         .hidden { display: none !important; }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
+        .btn { padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: #f40612; }
         .btn-sec { background: rgba(109, 109, 110, 0.7); color: white; }
-        .btn-sec:hover { background: rgba(109, 109, 110, 0.4); }
+        .btn-warning { background: #e5a109; color: black; }
 
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/BR-pt-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
-            background-size: cover;
-        }
-        .login-box {
-            background: rgba(0,0,0,0.85);
-            padding: 60px 68px 40px;
-            border-radius: 4px;
-            width: 100%;
-            max-width: 450px;
-        }
-        .login-box h1 { margin-bottom: 28px; }
-        .input-group { margin-bottom: 16px; }
-        .input-group input {
-            width: 100%;
-            padding: 16px 20px;
-            background: #333;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            font-size: 16px;
-        }
+        /* --- LOGIN --- */
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/BR-pt-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg'); background-size: cover; }
+        .login-box { background: rgba(0,0,0,0.85); padding: 60px 68px 40px; border-radius: 4px; width: 100%; max-width: 450px; }
+        .login-box input { width: 100%; padding: 16px; background: #333; border: none; border-radius: 4px; color: white; margin-bottom: 16px; }
 
         /* --- NAVBAR --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 4%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 10%, transparent);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            transition: background 0.3s;
-        }
-        .nav-scrolled { background: var(--bg); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 4%; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 10%, transparent); position: fixed; top: 0; width: 100%; z-index: 100; }
         .logo { font-size: 28px; color: var(--primary); font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px #000; }
         
-        /* --- MAIN CONTENT (HOME) --- */
-        #app-content { padding-top: 80px; padding-bottom: 50px; }
+        /* --- HOME --- */
+        #app-content { padding-top: 80px; }
+        .hero-banner { height: 50vh; display: flex; flex-direction: column; justify-content: center; padding-left: 4%; background: radial-gradient(circle at top right, rgba(20,20,20,0), var(--bg)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; margin-bottom: 20px; }
         
-        .hero-banner {
-            height: 60vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-left: 4%;
-            margin-bottom: 40px;
-            background: radial-gradient(circle at top right, rgba(20,20,20,0), var(--bg)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-        }
+        .category-row { margin-bottom: 30px; padding-left: 4%; }
+        .category-title { font-size: 1.2rem; color: #e5e5e5; margin-bottom: 10px; border-left: 3px solid var(--primary); padding-left: 10px; }
+        .row-scroller { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; scrollbar-width: none; }
+        .row-scroller::-webkit-scrollbar { display: none; }
 
-        .category-row { margin-bottom: 3vw; padding-left: 4%; }
-        .category-title { font-size: 1.4vw; color: #e5e5e5; font-weight: bold; margin-bottom: 10px; }
-        .row-scroller {
-            display: flex;
-            overflow-x: auto;
-            overflow-y: hidden;
-            gap: 10px;
-            padding: 20px 0;
-            scroll-behavior: smooth;
-        }
-        .row-scroller::-webkit-scrollbar { display: none; } /* Esconder barra */
-
-        .episode-card {
-            flex: 0 0 auto;
-            width: 280px;
-            height: 160px;
-            background: #333;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .episode-card:hover { transform: scale(1.05); z-index: 10; box-shadow: 0 0 10px rgba(0,0,0,0.8); }
+        .episode-card { flex: 0 0 auto; width: 260px; height: 146px; background: #333; border-radius: 4px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.3s; }
+        .episode-card:hover { transform: scale(1.05); z-index: 10; }
         .episode-card img { width: 100%; height: 100%; object-fit: cover; }
-        .episode-info {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 10px;
-            background: rgba(0,0,0,0.8);
-            font-size: 0.9rem;
-        }
-
-        /* --- PLAYER INTERFACE --- */
-        #player-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #000; z-index: 2000;
-            display: flex; flex-direction: column;
-        }
-        .player-header { padding: 20px; position: absolute; top: 0; width: 100%; z-index: 10; display: flex; justify-content: space-between; }
+        .episode-info { position: absolute; bottom: 0; width: 100%; padding: 8px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); font-size: 0.85rem; }
         
-        /* Modo Vídeo */
-        #video-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
-        iframe { width: 100%; height: 100%; border: none; }
+        /* Barra de Progresso (Watched) */
+        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: #555; display: none; }
+        .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; }
+        .watched .progress-bar-container { display: block; }
+        .watched .progress-bar-fill { width: 100%; }
+        .watched img { opacity: 0.5; filter: grayscale(80%); } /* Visual de "já vi" */
+        .watched::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--primary); font-size: 2rem; opacity: 0.8; }
+
+        /* --- PLAYER AUTOMÁTICO --- */
+        #player-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 2000; display: flex; flex-direction: column; }
+        .player-header { padding: 20px; position: absolute; top: 0; width: 100%; z-index: 10; display: flex; justify-content: space-between; pointer-events: none; }
+        .player-header button { pointer-events: auto; }
+
+        #video-stage { flex: 1; display: flex; align-items: center; justify-content: center; background: black; }
+        /* O iframe do YouTube será injetado aqui */
+
+        #text-stage { display: flex; flex-direction: column; height: 100%; background: #141414; padding: 80px 15% 40px; }
+        #text-content { flex: 1; overflow-y: auto; font-size: 1.5rem; line-height: 1.8; color: #ddd; text-align: justify; padding-right: 15px; font-family: 'Georgia', serif; }
         
-        .next-trigger-btn {
-            position: absolute; bottom: 50px; right: 50px;
-            padding: 15px 30px; font-size: 1.2rem;
-            z-index: 50;
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-        /* Modo Leitura */
-        #text-stage {
-            display: flex; flex-direction: column; height: 100%;
-            background: linear-gradient(to bottom, #141414, #000);
-            padding: 80px 10% 40px;
-        }
-        #text-content {
-            flex: 1; overflow-y: auto;
-            font-size: 1.4rem; line-height: 1.8; color: #ddd;
-            text-align: justify; padding-right: 20px;
-            margin-bottom: 20px;
-            font-family: 'Georgia', serif; /* Melhor para leitura */
-        }
-        /* Destaque da palavra sendo lida (Opcional, simples) */
-        .highlight { background: rgba(229, 9, 20, 0.3); color: white; }
-
-        .reading-controls {
-            background: #222; padding: 15px; border-radius: 8px;
-            display: flex; gap: 20px; align-items: center; justify-content: center;
-        }
+        .reading-controls { background: #222; padding: 15px; margin-top: 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
         .speed-control { display: flex; align-items: center; gap: 10px; }
-        
-        /* --- ADMIN PANEL --- */
+
+        /* --- ADMIN --- */
         #admin-panel { padding: 40px 10%; background: #1a1a1a; min-height: 100vh; }
-        .admin-header { display: flex; justify-content: space-between; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .full-width { grid-column: span 2; }
+        input, select { width: 100%; padding: 10px; background: #333; border: 1px solid #444; color: white; border-radius: 4px; }
+        #editor-container { background: white; color: black; height: 300px; margin-bottom: 20px; }
         
-        label { display: block; margin-bottom: 5px; color: var(--text-sec); font-size: 0.9rem; }
-        input, select {
-            width: 100%; padding: 10px; background: #333; border: 1px solid #444; color: white; border-radius: 4px;
-        }
-        #editor-container { background: white; color: black; height: 250px; margin-bottom: 20px; }
-        
-        .admin-list-item {
-            background: #252525; padding: 15px; margin-bottom: 5px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .admin-list-item { background: #252525; padding: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--primary); }
+        .admin-actions button { margin-left: 5px; padding: 5px 10px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <!-- ==================== LOGIN ==================== -->
+    <!-- LOGIN -->
     <div id="login-screen">
         <div class="login-box">
-            <h1>Entrar</h1>
+            <h1 style="text-align: center;">Entrar</h1>
             <form id="login-form">
-                <div class="input-group">
-                    <input type="email" id="login-email" placeholder="Email ou número de telefone" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="login-pass" placeholder="Senha" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
-                
-                <!-- BOTÃO TEMPORÁRIO PARA CRIAR CONTA -->
-                <button type="button" class="btn btn-sec" style="width: 100%; margin-top: 10px;" onclick="window.createTempUser()">
-                    (Temp) Criar Conta
-                </button>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-pass" placeholder="Senha" required>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Acessar Plataforma</button>
+                <button type="button" class="btn btn-sec" style="width: 100%; margin-top: 10px;" onclick="window.createTempUser()">Criar Conta (Admin)</button>
             </form>
-            <p style="color: #737373; margin-top: 20px;">
-                Novo por aqui? <span style="color: white; cursor: pointer;" onclick="alert('Contate o admin para criar conta.')">Fale com o Admin.</span>
-            </p>
         </div>
     </div>
 
-    <!-- ==================== APP (Protegido) ==================== -->
+    <!-- APP PRINCIPAL -->
     <div id="app-screen" class="hidden">
         
-        <!-- Navbar -->
         <nav id="navbar">
             <div class="logo" id="site-logo-text">STUDYFLIX</div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <button id="admin-btn" class="hidden btn btn-sec" onclick="window.router('admin')">Painel Admin</button>
+            <div>
+                <button id="admin-btn" class="hidden btn btn-sec" onclick="window.router('admin')">Admin</button>
                 <button class="btn btn-primary" onclick="window.router('home')">Início</button>
                 <button class="btn btn-sec" onclick="window.doLogout()">Sair</button>
             </div>
         </nav>
 
-        <!-- Home / Lista de Episódios -->
+        <!-- HOME -->
         <div id="home-view">
             <div class="hero-banner">
-                <h1 style="font-size: 3rem; text-shadow: 2px 2px 4px black;">Continue Estudando</h1>
-                <p style="font-size: 1.2rem; max-width: 600px;">Seu futuro começa agora. Assista às aulas e revise o conteúdo automaticamente.</p>
+                <h1 style="font-size: 3rem; text-shadow: 2px 2px 4px black;">Meus Estudos</h1>
+                <p>Selecione uma matéria para continuar de onde parou.</p>
             </div>
-            
-            <div id="categories-container">
-                <!-- Linhas injetadas via JS -->
-            </div>
+            <div id="categories-container"></div>
         </div>
 
-        <!-- Admin View -->
+        <!-- ADMIN -->
         <div id="admin-view" class="hidden">
             <div id="admin-panel">
-                <div class="admin-header">
-                    <h2>Gerenciar Conteúdo</h2>
-                    <div style="font-size: 0.9rem; color: #888;">Logado como Administrador (@userpro)</div>
-                </div>
-
-                <!-- Formulário de Configuração Global -->
-                <div style="background: #2a2a2a; padding: 20px; margin-bottom: 40px; border-radius: 8px;">
-                    <h3>Configurações do Site</h3>
+                <h2>Gerenciar Aulas (CRUD)</h2>
+                
+                <div style="background: #2a2a2a; padding: 20px; border-radius: 8px; margin-bottom: 40px;">
+                    <h3 id="form-title">Nova Aula</h3>
+                    <input type="hidden" id="edit-id"> <!-- ID oculto para edição -->
+                    
                     <div class="form-grid">
-                        <div>
-                            <label>Nome do Site</label>
-                            <input type="text" id="conf-sitename" placeholder="Ex: StudyFlix Pro">
+                        <div class="full-width">
+                            <label>Série (Matéria)</label>
+                            <input type="text" id="ep-series" placeholder="Ex: Sistemas Operacionais">
                         </div>
                         <div>
-                            <label>URL do Favicon</label>
-                            <input type="text" id="conf-favicon" placeholder="https://...">
+                            <label>Temporada (Unidade)</label>
+                            <input type="number" id="ep-season" placeholder="1">
                         </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="window.saveSettings()">Salvar Configurações</button>
-                </div>
-
-                <!-- Formulário de Episódios -->
-                <div style="background: #2a2a2a; padding: 20px; border-radius: 8px;">
-                    <h3>Novo Episódio / Aula</h3>
-                    <div class="form-grid">
+                        <div>
+                            <label>Episódio (Aula)</label>
+                            <input type="number" id="ep-number" placeholder="1">
+                        </div>
                         <div class="full-width">
                             <label>Título da Aula</label>
                             <input type="text" id="ep-title">
                         </div>
-                        <div>
-                            <label>Categoria (Ex: Frontend, Banco de Dados)</label>
-                            <input type="text" id="ep-category">
-                        </div>
-                        <div>
-                            <label>Temporada / Módulo</label>
-                            <input type="number" id="ep-season" value="1">
+                        <div class="full-width">
+                            <label>Link YouTube (URL Completa)</label>
+                            <input type="text" id="ep-video" placeholder="https://www.youtube.com/watch?v=...">
                         </div>
                         <div class="full-width">
-                            <label>URL Embed do Vídeo (YouTube/Vimeo)</label>
-                            <input type="text" id="ep-video" placeholder="Ex: https://www.youtube.com/embed/VIDEO_ID">
-                        </div>
-                        <div class="full-width">
-                            <label>Texto de Apoio (Leitura Automática)</label>
-                            <div id="editor-container"></div> <!-- Quill Editor -->
+                            <label>Resumo (Leitura Automática)</label>
+                            <div id="editor-container"></div>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="window.saveEpisode()">Publicar Episódio</button>
+                    <button id="btn-save" class="btn btn-primary" onclick="window.saveEpisode()">Publicar Aula</button>
+                    <button id="btn-cancel" class="btn btn-sec hidden" onclick="window.resetForm()">Cancelar Edição</button>
                 </div>
 
-                <!-- Lista de Itens -->
-                <h3 style="margin-top: 40px;">Episódios Existentes</h3>
+                <h3>Configurações</h3>
+                <div class="form-grid" style="margin-bottom: 40px;">
+                    <input type="text" id="conf-sitename" placeholder="Nome do Site">
+                    <button class="btn btn-sec" onclick="window.saveSettings()">Salvar Configs</button>
+                </div>
+
+                <h3>Lista de Aulas</h3>
                 <div id="admin-ep-list"></div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== PLAYER OVERLAY ==================== -->
+    <!-- PLAYER OVERLAY -->
     <div id="player-overlay" class="hidden">
         <div class="player-header">
             <div class="logo">AULA EM ANDAMENTO</div>
             <button class="btn btn-sec" onclick="window.closePlayer()">FECHAR X</button>
         </div>
 
-        <!-- Fase 1: Vídeo -->
+        <!-- VÍDEO (API YOUTUBE) -->
         <div id="video-stage">
-            <div id="iframe-wrapper" style="width: 100%; height: 100%;"></div>
-            <button class="btn btn-primary next-trigger-btn" onclick="window.finishVideo()">
-                Concluir Vídeo & Ir para Texto <i class="fas fa-arrow-right"></i>
-            </button>
+            <div id="yt-player-placeholder"></div>
         </div>
 
-        <!-- Fase 2: Texto e Leitura -->
+        <!-- TEXTO (LEITURA) -->
         <div id="text-stage" class="hidden">
-            <h2 id="text-title" style="color: var(--primary);">Resumo da Aula</h2>
+            <h2 id="text-title" style="color: var(--primary);">Resumo</h2>
             <div id="text-content"></div>
             
             <div class="reading-controls">
-                <button id="tts-btn" class="btn btn-primary" onclick="window.toggleTTS()">
-                    <i class="fas fa-play"></i> Ler Texto
-                </button>
+                <div id="status-reading" style="color: var(--primary); font-weight: bold;">
+                    <i class="fas fa-volume-up"></i> Lendo Automaticamente...
+                </div>
                 
                 <div class="speed-control">
-                    <label><i class="fas fa-tachometer-alt"></i> Velocidade:</label>
-                    <input type="range" id="tts-speed" min="0.5" max="2.0" step="0.1" value="1.0">
+                    <label>Velocidade:</label>
+                    <input type="range" id="tts-speed" min="0.5" max="2.0" step="0.25" value="1.0">
                     <span id="speed-val">1.0x</span>
                 </div>
 
                 <button class="btn btn-sec" onclick="window.forceNextEpisode()">
-                    Próximo Ep. <i class="fas fa-step-forward"></i>
+                    Próximo Manual >>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Quill JS -->
+    <!-- SCRIPTS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <!-- Módulo Principal JS -->
+    <!-- Script da API do YouTube (Carregado Dinamicamente) -->
+    
     <script type="module">
-        // Importando módulos oficiais do Firebase via CDN (Versão 9+)
-        // ADICIONEI: createUserWithEmailAndPassword
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } 
+        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } 
             from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // 1. CONFIGURAÇÃO (Seus dados)
+        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCRnLXwHj_jAuZZcICdwGnqgqtBnvNIsMQ",
             authDomain: "studyflixpro.firebaseapp.com",
@@ -368,397 +230,425 @@
             appId: "1:658926227849:web:1805d4ebbaf14046c85158"
         };
 
-        // Inicializar
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- ESTADO GLOBAL ---
+        // ESTADO GLOBAL
         let currentUser = null;
         let quillEditor;
         let allEpisodes = [];
-        let currentEpisodeIndex = -1;
-        let currentCategoryEpisodes = [];
+        let watchedEpisodes = {}; // { 'idAula': true }
         
-        // Variáveis de Fala (TTS)
+        // Player
+        let ytPlayer = null;
+        let currentSeriesEpisodes = [];
+        let currentEpisodeIndex = -1;
+        
+        // TTS
         let speechSynth = window.speechSynthesis;
         let speechUtterance = null;
-        let isSpeaking = false;
 
-        // --- INICIALIZAÇÃO QUILL (Editor Rico) ---
-        // Configura o editor apenas quando o DOM estiver pronto
+        // --- INICIALIZAÇÃO ---
+        
+        // Carregar API YouTube
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Inicializar Editor
         window.addEventListener('DOMContentLoaded', () => {
             quillEditor = new Quill('#editor-container', {
                 theme: 'snow',
-                placeholder: 'Digite o resumo da aula aqui...',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'header': 1 }, { 'header': 2 }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        ['clean']
-                    ]
-                }
+                modules: { toolbar: [['bold', 'italic', 'underline'], [{'header':1},{'header':2}], [{'list':'ordered'},{'list':'bullet'}], ['clean']] }
             });
         });
 
-        // --- SISTEMA DE AUTENTICAÇÃO ---
-        
-        // Monitorar Login
+        // Autenticação
         onAuthStateChanged(auth, (user) => {
-            const loginScreen = document.getElementById('login-screen');
-            const appScreen = document.getElementById('app-screen');
-
             if (user) {
                 currentUser = user;
-                console.log("Logado:", user.email);
-                loginScreen.classList.add('hidden');
-                appScreen.classList.remove('hidden');
-
-                // Carregar Configurações e Dados
-                loadSettings();
-                loadEpisodes();
-
-                // Verificar Admin
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                
+                // Admin Check
                 if (user.email.includes('@userpro')) {
                     document.getElementById('admin-btn').classList.remove('hidden');
-                } else {
-                    document.getElementById('admin-btn').classList.add('hidden');
                 }
+
+                loadSettings();
+                loadUserData(); // Carrega histórico
+                loadEpisodes(); // Carrega aulas
             } else {
                 currentUser = null;
-                loginScreen.classList.remove('hidden');
-                appScreen.classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('app-screen').classList.add('hidden');
             }
         });
 
-        // Login Submit
-        document.getElementById('login-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
+        // --- CARREGAMENTO DE DADOS ---
 
-            signInWithEmailAndPassword(auth, email, pass)
-                .catch((error) => alert("Erro ao entrar: " + error.message));
-        });
-
-        // --- FUNÇÃO TEMPORÁRIA PARA CRIAR USUÁRIO ---
-        window.createTempUser = async () => {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
-
-            if(!email || !pass) {
-                alert("Preencha email e senha primeiro.");
-                return;
-            }
-
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                alert("Usuário criado com sucesso! O login será feito automaticamente.");
-            } catch (error) {
-                alert("Erro ao criar: " + error.message);
-            }
-        };
-
-        // Expor Logout para o HTML
-        window.doLogout = () => auth.signOut();
-
-        // --- ROTEAMENTO SPA ---
-        window.router = (route) => {
-            // Parar qualquer áudio ao mudar de tela
-            stopTTS();
-            
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('admin-view').classList.add('hidden');
-            document.getElementById('player-overlay').classList.add('hidden');
-
-            if (route === 'home') {
-                document.getElementById('home-view').classList.remove('hidden');
-                document.getElementById('navbar').classList.remove('hidden');
-            }
-            else if (route === 'admin') {
-                if(!currentUser.email.includes('@userpro')) return alert("Acesso Negado. Você precisa ter '@userpro' no email.");
-                document.getElementById('admin-view').classList.remove('hidden');
-                loadAdminList(); // Atualiza lista
-            }
-        };
-
-        // --- LÓGICA DE DADOS (FIRESTORE) ---
-
-        // 1. Carregar Configurações (Favicon, Nome)
-        function loadSettings() {
-            const docRef = doc(db, "settings", "global");
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.title = data.siteName || "StudyFlix";
-                    document.getElementById('site-logo-text').innerText = data.siteName || "STUDYFLIX";
-                    
-                    if(data.favicon) {
-                        let link = document.querySelector("link[rel~='icon']");
-                        if (!link) {
-                            link = document.createElement('link');
-                            link.rel = 'icon';
-                            document.getElementsByTagName('head')[0].appendChild(link);
-                        }
-                        link.href = data.favicon;
-                    }
-                }
+        // 1. Histórico do Usuário (Watched)
+        function loadUserData() {
+            if(!currentUser) return;
+            // Ouve em tempo real a coleção de histórico do usuário
+            const historyRef = collection(db, "users", currentUser.uid, "history");
+            onSnapshot(historyRef, (snapshot) => {
+                watchedEpisodes = {};
+                snapshot.forEach(doc => {
+                    watchedEpisodes[doc.id] = true;
+                });
+                renderHome(); // Re-renderiza para mostrar barras de progresso
             });
         }
 
-        // 2. Carregar Episódios (Home)
-        async function loadEpisodes() {
-            const q = query(collection(db, "episodes"), orderBy("createdAt", "desc"));
-            // Usamos onSnapshot para tempo real
+        // 2. Episódios
+        function loadEpisodes() {
+            const q = query(collection(db, "episodes"));
             onSnapshot(q, (snapshot) => {
                 allEpisodes = [];
-                const categories = {};
-                
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    data.id = doc.id;
-                    allEpisodes.push(data);
-
-                    if (!categories[data.category]) categories[data.category] = [];
-                    categories[data.category].push(data);
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    d.id = doc.id;
+                    d.series = d.series || "Geral";
+                    d.season = parseInt(d.season) || 1;
+                    d.episodeNumber = parseInt(d.episodeNumber) || 1;
+                    allEpisodes.push(d);
                 });
-
-                renderHome(categories);
+                renderHome();
             });
         }
 
-        function renderHome(categories) {
+        function renderHome() {
+            if(allEpisodes.length === 0) return;
+
+            // Agrupar por Série
+            const seriesMap = {};
+            allEpisodes.forEach(ep => {
+                if (!seriesMap[ep.series]) seriesMap[ep.series] = [];
+                seriesMap[ep.series].push(ep);
+            });
+
             const container = document.getElementById('categories-container');
             container.innerHTML = '';
+            
+            Object.keys(seriesMap).sort().forEach(series => {
+                let eps = seriesMap[series];
+                // Ordenar: Temp > Ep
+                eps.sort((a,b) => (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
 
-            for (const [catName, eps] of Object.entries(categories)) {
-                // Ordenar por temporada/episódio se houver campo, senão mantém ordem de criação
-                
                 let html = `
                     <div class="category-row">
-                        <div class="category-title">${catName}</div>
+                        <div class="category-title">${series}</div>
                         <div class="row-scroller">
                 `;
 
                 eps.forEach(ep => {
-                    // Tenta pegar thumb do youtube
                     const thumb = getYoutubeThumb(ep.videoUrl);
+                    // Checar se já foi assistido
+                    const isWatched = watchedEpisodes[ep.id] ? 'watched' : '';
+                    
                     html += `
-                        <div class="episode-card" onclick="window.startPlayer('${ep.id}')">
-                            <img src="${thumb}" onerror="this.src='https://via.placeholder.com/280x160?text=Aula'">
+                        <div class="episode-card ${isWatched}" onclick="window.startPlayer('${ep.id}')">
+                            <img src="${thumb}" onerror="this.src='https://via.placeholder.com/260x146?text=Aula'">
+                            <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
                             <div class="episode-info">
-                                <strong>${ep.title}</strong><br>
-                                <span style="color:#aaa; font-size:0.8em">Temp ${ep.season || 1}</span>
+                                <span style="background:var(--primary); padding:2px 5px; border-radius:2px; font-weight:bold;">T${ep.season}:E${ep.episodeNumber}</span>
+                                <span>${ep.title}</span>
                             </div>
                         </div>
                     `;
                 });
-
                 html += `</div></div>`;
                 container.innerHTML += html;
-            }
+            });
         }
 
-        function getYoutubeThumb(url) {
-            if(!url) return '';
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) 
-                ? `https://img.youtube.com/vi/${match[2]}/mqdefault.jpg` 
-                : '';
-        }
-
-        // --- PLAYER & LEITURA AUTOMÁTICA ---
+        // --- PLAYER AUTOMÁTICO (CORE) ---
 
         window.startPlayer = (id) => {
             const ep = allEpisodes.find(e => e.id === id);
             if (!ep) return;
 
-            // Definir contexto atual para "Próximo Episódio"
-            currentCategoryEpisodes = allEpisodes.filter(e => e.category === ep.category);
-            // Ordena simplificado (ideal seria um campo 'order')
-            currentEpisodeIndex = currentCategoryEpisodes.findIndex(e => e.id === id);
+            // Preparar playlist da série atual
+            currentSeriesEpisodes = allEpisodes
+                .filter(e => e.series === ep.series)
+                .sort((a,b) => (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
+            currentEpisodeIndex = currentSeriesEpisodes.findIndex(e => e.id === id);
 
-            // Setup UI
+            // UI Switch
             document.getElementById('navbar').classList.add('hidden');
             document.getElementById('player-overlay').classList.remove('hidden');
-            
-            // Setup Video
             document.getElementById('video-stage').classList.remove('hidden');
             document.getElementById('text-stage').classList.add('hidden');
-            
-            const wrapper = document.getElementById('iframe-wrapper');
-            // Autoplay=1 tenta iniciar sozinho
-            wrapper.innerHTML = `<iframe src="${ep.videoUrl}?autoplay=1" allowfullscreen allow="autoplay"></iframe>`;
 
-            // Preparar Texto para depois
-            document.getElementById('text-title').innerText = "Resumo: " + ep.title;
+            // Setup Texto (Já deixa pronto)
+            document.getElementById('text-title').innerText = ep.title;
             document.getElementById('text-content').innerHTML = ep.contentHtml;
-        };
 
-        window.finishVideo = () => {
-            // Parar vídeo (removendo iframe)
-            document.getElementById('iframe-wrapper').innerHTML = '';
-            document.getElementById('video-stage').classList.add('hidden');
+            // INICIAR YOUTUBE PLAYER
+            const videoId = extractVideoID(ep.videoUrl);
             
-            // Mostrar Texto
-            document.getElementById('text-stage').classList.remove('hidden');
-
-            // Iniciar Leitura Automática com delay curto
-            setTimeout(() => {
-                window.toggleTTS(true); // true = force start
-            }, 1000);
-        };
-
-        window.closePlayer = () => {
-            stopTTS();
-            document.getElementById('iframe-wrapper').innerHTML = '';
-            window.router('home');
-        };
-
-        // --- SISTEMA DE TTS (TEXT TO SPEECH) ---
-        
-        window.toggleTTS = (forceStart = false) => {
-            if (isSpeaking && !forceStart) {
-                // Se estiver falando, Pausar
-                speechSynth.cancel();
-                isSpeaking = false;
-                updateTTSButton();
+            if (ytPlayer) {
+                ytPlayer.loadVideoById(videoId);
             } else {
-                // Iniciar
-                speechSynth.cancel(); // Limpa fila anterior
-                
-                // Pega texto limpo (sem tags HTML) do resumo
-                const text = document.getElementById('text-content').innerText;
-                
-                speechUtterance = new SpeechSynthesisUtterance(text);
-                speechUtterance.lang = 'pt-BR';
-                speechUtterance.rate = parseFloat(document.getElementById('tts-speed').value);
-                
-                // Evento ao terminar
-                speechUtterance.onend = () => {
-                    isSpeaking = false;
-                    updateTTSButton();
-                    console.log("Leitura finalizada. Indo para próximo...");
-                    // Avançar automaticamente
-                    window.forceNextEpisode();
-                };
-
-                speechSynth.speak(speechUtterance);
-                isSpeaking = true;
-                updateTTSButton();
+                ytPlayer = new YT.Player('yt-player-placeholder', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: videoId,
+                    playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0 },
+                    events: {
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
             }
         };
 
-        window.forceNextEpisode = () => {
-            stopTTS();
+        // EVENTO: VÍDEO MUDOU DE ESTADO
+        function onPlayerStateChange(event) {
+            // YT.PlayerState.ENDED = 0
+            if (event.data === 0) {
+                console.log("Vídeo acabou! Iniciando texto...");
+                finishVideoAndStartText();
+            }
+        }
+
+        function finishVideoAndStartText() {
+            // Esconder vídeo (não destruir, apenas ocultar para manter instância se quiser)
+            // Mas para parar áudio garantido, pause.
+            if(ytPlayer) ytPlayer.stopVideo();
             
-            // Lógica simples de Próximo
+            document.getElementById('video-stage').classList.add('hidden');
+            document.getElementById('text-stage').classList.remove('hidden');
+            
+            // Iniciar Leitura Automática (TTS)
+            setTimeout(() => {
+                speakText();
+            }, 1000);
+        }
+
+        // TTS (Leitura)
+        function speakText() {
+            if(speechSynth.speaking) speechSynth.cancel();
+
+            const text = document.getElementById('text-content').innerText;
+            speechUtterance = new SpeechSynthesisUtterance(text);
+            speechUtterance.lang = 'pt-BR';
+            speechUtterance.rate = parseFloat(document.getElementById('tts-speed').value);
+
+            // EVENTO: TEXTO ACABOU DE SER LIDO
+            speechUtterance.onend = () => {
+                console.log("Texto finalizado. Salvando progresso e avançando...");
+                completeEpisodeAndNext();
+            };
+
+            speechSynth.speak(speechUtterance);
+        }
+
+        // CONCLUSÃO E PRÓXIMO
+        async function completeEpisodeAndNext() {
+            // 1. Salvar no Firestore que viu este episódio
+            const currentEp = currentSeriesEpisodes[currentEpisodeIndex];
+            if(currentEp && currentUser) {
+                try {
+                    await setDoc(doc(db, "users", currentUser.uid, "history", currentEp.id), {
+                        completedAt: serverTimestamp(),
+                        series: currentEp.series
+                    });
+                    console.log("Progresso salvo.");
+                } catch(e) { console.error("Erro ao salvar progresso:", e); }
+            }
+
+            // 2. Ir para o próximo
+            window.forceNextEpisode();
+        }
+
+        window.forceNextEpisode = () => {
+            if(speechSynth) speechSynth.cancel();
+
             const nextIndex = currentEpisodeIndex + 1;
-            if (nextIndex < currentCategoryEpisodes.length) {
-                const nextEp = currentCategoryEpisodes[nextIndex];
-                // Toast ou aviso visual seria bom aqui
-                // Pequeno delay para transição
-                setTimeout(() => window.startPlayer(nextEp.id), 500);
+            if (nextIndex < currentSeriesEpisodes.length) {
+                const nextEp = currentSeriesEpisodes[nextIndex];
+                // Pequeno delay para transição visual
+                setTimeout(() => {
+                    window.startPlayer(nextEp.id);
+                }, 1000);
             } else {
-                alert("Você concluiu todos os episódios desta categoria!");
+                alert("Parabéns! Você concluiu esta matéria.");
                 window.closePlayer();
             }
         };
 
-        function stopTTS() {
+        window.closePlayer = () => {
+            if(ytPlayer) ytPlayer.stopVideo();
             if(speechSynth) speechSynth.cancel();
-            isSpeaking = false;
-            updateTTSButton();
-        }
-
-        function updateTTSButton() {
-            const btn = document.getElementById('tts-btn');
-            if (isSpeaking) {
-                btn.innerHTML = '<i class="fas fa-pause"></i> Pausar Leitura';
-                btn.classList.replace('btn-primary', 'btn-sec');
-            } else {
-                btn.innerHTML = '<i class="fas fa-play"></i> Ler Texto';
-                btn.classList.replace('btn-sec', 'btn-primary');
-            }
-        }
-
-        // Slider de Velocidade
-        document.getElementById('tts-speed').addEventListener('input', (e) => {
-            const val = e.target.value;
-            document.getElementById('speed-val').innerText = val + 'x';
-            // Se estiver falando, precisa reiniciar para aplicar nova velocidade (limitação da API web)
-            if (isSpeaking) window.toggleTTS(true);
-        });
-
-        // --- FUNÇÕES DE ADMIN (CRUD) ---
-
-        // Salvar Configurações
-        window.saveSettings = async () => {
-            const name = document.getElementById('conf-sitename').value;
-            const fav = document.getElementById('conf-favicon').value;
-            
-            try {
-                await setDoc(doc(db, "settings", "global"), {
-                    siteName: name,
-                    favicon: fav
-                });
-                alert("Configurações salvas!");
-            } catch (e) { alert("Erro: " + e.message); }
+            document.getElementById('iframe-wrapper').innerHTML = ''; // Limpar para garantir
+            window.router('home');
         };
 
-        // Salvar Episódio (Create)
+        // --- ADMIN: CRUD COMPLETO ---
+
+        // Variável para saber se estamos editando
+        let editingId = null;
+
         window.saveEpisode = async () => {
-            const title = document.getElementById('ep-title').value;
-            const cat = document.getElementById('ep-category').value;
-            const season = document.getElementById('ep-season').value;
-            const vid = document.getElementById('ep-video').value;
-            const content = quillEditor.root.innerHTML;
+            const data = {
+                series: document.getElementById('ep-series').value,
+                season: parseInt(document.getElementById('ep-season').value),
+                episodeNumber: parseInt(document.getElementById('ep-number').value),
+                title: document.getElementById('ep-title').value,
+                videoUrl: document.getElementById('ep-video').value,
+                contentHtml: quillEditor.root.innerHTML
+            };
 
-            if (!title || !vid) return alert("Preencha os campos obrigatórios");
+            if (!data.title || !data.videoUrl) return alert("Título e Vídeo obrigatórios.");
 
             try {
-                await addDoc(collection(db, "episodes"), {
-                    title, category: cat, season, videoUrl: vid, contentHtml: content,
-                    createdAt: serverTimestamp()
-                });
-                alert("Episódio criado com sucesso!");
-                // Limpar form
-                document.getElementById('ep-title').value = '';
-                quillEditor.setText('');
-            } catch (e) { alert("Erro ao salvar: " + e.message); }
+                if (editingId) {
+                    // UPDATE
+                    await updateDoc(doc(db, "episodes", editingId), data);
+                    alert("Aula atualizada!");
+                    window.resetForm();
+                } else {
+                    // CREATE
+                    data.createdAt = serverTimestamp();
+                    await addDoc(collection(db, "episodes"), data);
+                    alert("Aula criada!");
+                    // Auto-incremento para facilitar
+                    document.getElementById('ep-number').value = data.episodeNumber + 1;
+                    document.getElementById('ep-title').value = '';
+                    quillEditor.setText('');
+                }
+            } catch(e) { alert("Erro: " + e.message); }
         };
 
-        // Listar para Admin
+        // Carregar lista Admin com Edit/Delete
         window.loadAdminList = async () => {
             const listDiv = document.getElementById('admin-ep-list');
             listDiv.innerHTML = 'Carregando...';
             
-            const q = query(collection(db, "episodes"), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "episodes"));
             const snapshot = await getDocs(q);
-            
+            const items = [];
+            snapshot.forEach(doc => { items.push({ ...doc.data(), id: doc.id }); });
+
+            // Ordenar
+            items.sort((a,b) => a.series.localeCompare(b.series) || (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
+
             listDiv.innerHTML = '';
-            snapshot.forEach(doc => {
-                const d = doc.data();
-                const item = document.createElement('div');
-                item.className = 'admin-list-item';
-                item.innerHTML = `
-                    <span><strong>${d.title}</strong> (${d.category})</span>
-                    <button class="btn" style="background:red; color:white;" onclick="window.deleteEp('${doc.id}')">Excluir</button>
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'admin-list-item';
+                div.innerHTML = `
+                    <div>
+                        <strong>${item.series}</strong> <br>
+                        <small>T${item.season}:E${item.episodeNumber} - ${item.title}</small>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="btn btn-warning" onclick="window.editEp('${item.id}')"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="btn btn-primary" style="background:red;" onclick="window.deleteEp('${item.id}')"><i class="fas fa-trash"></i></button>
+                    </div>
                 `;
-                listDiv.appendChild(item);
+                listDiv.appendChild(div);
             });
         };
 
-        // Deletar
+        // Função EDITAR
+        window.editEp = async (id) => {
+            const ep = allEpisodes.find(e => e.id === id);
+            if(!ep) return;
+
+            editingId = id;
+            document.getElementById('form-title').innerText = "Editando Aula: " + ep.title;
+            document.getElementById('btn-save').innerText = "Atualizar Aula";
+            document.getElementById('btn-cancel').classList.remove('hidden');
+
+            document.getElementById('ep-series').value = ep.series;
+            document.getElementById('ep-season').value = ep.season;
+            document.getElementById('ep-number').value = ep.episodeNumber;
+            document.getElementById('ep-title').value = ep.title;
+            document.getElementById('ep-video').value = ep.videoUrl;
+            quillEditor.root.innerHTML = ep.contentHtml;
+
+            // Rola para o formulário
+            document.getElementById('admin-panel').scrollIntoView();
+        };
+
+        // Função CANCELAR EDIÇÃO
+        window.resetForm = () => {
+            editingId = null;
+            document.getElementById('form-title').innerText = "Nova Aula";
+            document.getElementById('btn-save').innerText = "Publicar Aula";
+            document.getElementById('btn-cancel').classList.add('hidden');
+            
+            // Limpar
+            document.getElementById('ep-title').value = '';
+            document.getElementById('ep-video').value = '';
+            quillEditor.setText('');
+        };
+
+        // Função DELETE
         window.deleteEp = async (id) => {
-            if(confirm("Tem certeza que deseja apagar esta aula?")) {
+            if(confirm("Tem certeza que deseja apagar?")) {
                 await deleteDoc(doc(db, "episodes", id));
                 window.loadAdminList();
             }
         };
+
+        // --- HELPERS ---
+        function extractVideoID(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function getYoutubeThumb(url) {
+            const id = extractVideoID(url);
+            return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : '';
+        }
+
+        function loadSettings() {
+             const docRef = doc(db, "settings", "global");
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.title = data.siteName || "StudyFlix";
+                    document.getElementById('site-logo-text').innerText = data.siteName || "STUDYFLIX";
+                }
+            });
+        }
+
+        // --- SISTEMA BASICO ---
+        window.saveSettings = async () => {
+             const name = document.getElementById('conf-sitename').value;
+             await setDoc(doc(db, "settings", "global"), { siteName: name });
+             alert("Salvo!");
+        };
+        
+        window.createTempUser = async () => {
+            const e = document.getElementById('login-email').value;
+            const p = document.getElementById('login-pass').value;
+            if(e && p) createUserWithEmailAndPassword(auth, e, p).then(()=>alert("Criado!")).catch(err=>alert(err));
+        };
+        window.doLogout = () => auth.signOut();
+        
+        window.router = (r) => {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('admin-view').classList.add('hidden');
+            if(r === 'home') document.getElementById('home-view').classList.remove('hidden');
+            if(r === 'admin') {
+                if(!currentUser.email.includes('@userpro')) return alert("Acesso Negado");
+                document.getElementById('admin-view').classList.remove('hidden');
+                window.loadAdminList();
+            }
+        };
+
+        // Event listener velocidade TTS
+        document.getElementById('tts-speed').addEventListener('input', (e) => {
+             document.getElementById('speed-val').innerText = e.target.value + 'x';
+             if(speechSynth.speaking) speakText(); // Reinicia com nova vel
+        });
 
     </script>
 </body>
