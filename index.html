@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carregando...</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;,"> <!-- Placeholder Favicon -->
+    
     <!-- Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- FontAwesome -->
@@ -17,7 +19,6 @@
             --surface: #1f1f1f;
             --text: #ffffff;
             --text-sec: #b3b3b3;
-            --success: #46d369;
         }
 
         * { box-sizing: border-box; outline: none; }
@@ -59,22 +60,22 @@
         .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; }
         .watched .progress-bar-container { display: block; }
         .watched .progress-bar-fill { width: 100%; }
-        .watched img { opacity: 0.5; filter: grayscale(80%); } /* Visual de "já vi" */
-        .watched::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--primary); font-size: 2rem; opacity: 0.8; }
+        .watched img { opacity: 0.4; filter: grayscale(100%); }
+        .watched::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--primary); font-size: 3rem; opacity: 0.9; }
 
         /* --- PLAYER AUTOMÁTICO --- */
         #player-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 2000; display: flex; flex-direction: column; }
-        .player-header { padding: 20px; position: absolute; top: 0; width: 100%; z-index: 10; display: flex; justify-content: space-between; pointer-events: none; }
-        .player-header button { pointer-events: auto; }
+        /* Aumentei z-index do header para garantir clique no botão Fechar */
+        .player-header { padding: 20px; position: absolute; top: 0; width: 100%; z-index: 3000; display: flex; justify-content: space-between; pointer-events: none; }
+        .player-header button { pointer-events: auto; cursor: pointer; background: rgba(0,0,0,0.5); padding: 10px 20px; border: 1px solid white; }
+        .player-header button:hover { background: var(--primary); border-color: var(--primary); }
 
-        #video-stage { flex: 1; display: flex; align-items: center; justify-content: center; background: black; }
-        /* O iframe do YouTube será injetado aqui */
-
+        #video-stage { flex: 1; display: flex; align-items: center; justify-content: center; background: black; width: 100%; height: 100%; }
+        
         #text-stage { display: flex; flex-direction: column; height: 100%; background: #141414; padding: 80px 15% 40px; }
         #text-content { flex: 1; overflow-y: auto; font-size: 1.5rem; line-height: 1.8; color: #ddd; text-align: justify; padding-right: 15px; font-family: 'Georgia', serif; }
         
         .reading-controls { background: #222; padding: 15px; margin-top: 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .speed-control { display: flex; align-items: center; gap: 10px; }
 
         /* --- ADMIN --- */
         #admin-panel { padding: 40px 10%; background: #1a1a1a; min-height: 100vh; }
@@ -84,7 +85,6 @@
         #editor-container { background: white; color: black; height: 300px; margin-bottom: 20px; }
         
         .admin-list-item { background: #252525; padding: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--primary); }
-        .admin-actions button { margin-left: 5px; padding: 5px 10px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -126,11 +126,22 @@
         <!-- ADMIN -->
         <div id="admin-view" class="hidden">
             <div id="admin-panel">
-                <h2>Gerenciar Aulas (CRUD)</h2>
+                <h2>Gerenciar Aulas</h2>
                 
+                <!-- Configurações Globais -->
+                <div style="background: #222; padding: 15px; margin-bottom: 30px; border-radius: 8px; border: 1px solid #333;">
+                    <h3>Configurações do Site (Favicon & Título)</h3>
+                    <div class="form-grid">
+                        <input type="text" id="conf-sitename" placeholder="Nome do Site (Ex: Minha Faculdade)">
+                        <input type="text" id="conf-favicon" placeholder="URL do Favicon (.ico/.png)">
+                        <button class="btn btn-sec full-width" onclick="window.saveSettings()">Salvar Configurações</button>
+                    </div>
+                </div>
+
+                <!-- Formulário Aula -->
                 <div style="background: #2a2a2a; padding: 20px; border-radius: 8px; margin-bottom: 40px;">
                     <h3 id="form-title">Nova Aula</h3>
-                    <input type="hidden" id="edit-id"> <!-- ID oculto para edição -->
+                    <input type="hidden" id="edit-id"> 
                     
                     <div class="form-grid">
                         <div class="full-width">
@@ -150,7 +161,7 @@
                             <input type="text" id="ep-title">
                         </div>
                         <div class="full-width">
-                            <label>Link YouTube (URL Completa)</label>
+                            <label>Link YouTube</label>
                             <input type="text" id="ep-video" placeholder="https://www.youtube.com/watch?v=...">
                         </div>
                         <div class="full-width">
@@ -160,12 +171,6 @@
                     </div>
                     <button id="btn-save" class="btn btn-primary" onclick="window.saveEpisode()">Publicar Aula</button>
                     <button id="btn-cancel" class="btn btn-sec hidden" onclick="window.resetForm()">Cancelar Edição</button>
-                </div>
-
-                <h3>Configurações</h3>
-                <div class="form-grid" style="margin-bottom: 40px;">
-                    <input type="text" id="conf-sitename" placeholder="Nome do Site">
-                    <button class="btn btn-sec" onclick="window.saveSettings()">Salvar Configs</button>
                 </div>
 
                 <h3>Lista de Aulas</h3>
@@ -178,15 +183,16 @@
     <div id="player-overlay" class="hidden">
         <div class="player-header">
             <div class="logo">AULA EM ANDAMENTO</div>
-            <button class="btn btn-sec" onclick="window.closePlayer()">FECHAR X</button>
+            <!-- Botão Fechar Corrigido -->
+            <button onclick="window.closePlayer()">FECHAR <i class="fas fa-times"></i></button>
         </div>
 
-        <!-- VÍDEO (API YOUTUBE) -->
+        <!-- VÍDEO -->
         <div id="video-stage">
             <div id="yt-player-placeholder"></div>
         </div>
 
-        <!-- TEXTO (LEITURA) -->
+        <!-- TEXTO -->
         <div id="text-stage" class="hidden">
             <h2 id="text-title" style="color: var(--primary);">Resumo</h2>
             <div id="text-content"></div>
@@ -203,16 +209,13 @@
                 </div>
 
                 <button class="btn btn-sec" onclick="window.forceNextEpisode()">
-                    Próximo Manual >>
+                    Pular >>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <!-- Script da API do YouTube (Carregado Dinamicamente) -->
-    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } 
@@ -220,7 +223,6 @@
         import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } 
             from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCRnLXwHj_jAuZZcICdwGnqgqtBnvNIsMQ",
             authDomain: "studyflixpro.firebaseapp.com",
@@ -234,30 +236,24 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ESTADO GLOBAL
         let currentUser = null;
         let quillEditor;
         let allEpisodes = [];
-        let watchedEpisodes = {}; // { 'idAula': true }
+        let watchedEpisodes = {};
         
-        // Player
         let ytPlayer = null;
         let currentSeriesEpisodes = [];
         let currentEpisodeIndex = -1;
         
-        // TTS
         let speechSynth = window.speechSynthesis;
         let speechUtterance = null;
 
-        // --- INICIALIZAÇÃO ---
-        
-        // Carregar API YouTube
+        // API YouTube
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        // Inicializar Editor
         window.addEventListener('DOMContentLoaded', () => {
             quillEditor = new Quill('#editor-container', {
                 theme: 'snow',
@@ -265,21 +261,19 @@
             });
         });
 
-        // Autenticação
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-screen').classList.remove('hidden');
                 
-                // Admin Check
                 if (user.email.includes('@userpro')) {
                     document.getElementById('admin-btn').classList.remove('hidden');
                 }
 
                 loadSettings();
-                loadUserData(); // Carrega histórico
-                loadEpisodes(); // Carrega aulas
+                loadUserData();
+                loadEpisodes();
             } else {
                 currentUser = null;
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -287,23 +281,54 @@
             }
         });
 
-        // --- CARREGAMENTO DE DADOS ---
+        // --- CONFIGURAÇÕES GLOBAIS (FAVICON & TÍTULO) ---
+        function loadSettings() {
+             const docRef = doc(db, "settings", "global");
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    // Atualiza título da aba
+                    if(data.siteName) {
+                        document.title = data.siteName;
+                        document.getElementById('site-logo-text').innerText = data.siteName;
+                    }
+                    // Atualiza Favicon
+                    if(data.favicon) {
+                        let link = document.querySelector("link[rel~='icon']");
+                        if (!link) {
+                            link = document.createElement('link');
+                            link.rel = 'icon';
+                            document.getElementsByTagName('head')[0].appendChild(link);
+                        }
+                        link.href = data.favicon;
+                    }
+                }
+            });
+        }
 
-        // 1. Histórico do Usuário (Watched)
+        window.saveSettings = async () => {
+             const name = document.getElementById('conf-sitename').value;
+             const fav = document.getElementById('conf-favicon').value;
+             
+             try {
+                 await setDoc(doc(db, "settings", "global"), { siteName: name, favicon: fav });
+                 alert("Configurações atualizadas!");
+             } catch(e) { alert("Erro (Permissão): " + e.message); }
+        };
+
+        // --- CARREGAMENTO DE DADOS ---
         function loadUserData() {
             if(!currentUser) return;
-            // Ouve em tempo real a coleção de histórico do usuário
             const historyRef = collection(db, "users", currentUser.uid, "history");
             onSnapshot(historyRef, (snapshot) => {
                 watchedEpisodes = {};
                 snapshot.forEach(doc => {
                     watchedEpisodes[doc.id] = true;
                 });
-                renderHome(); // Re-renderiza para mostrar barras de progresso
+                renderHome();
             });
         }
 
-        // 2. Episódios
         function loadEpisodes() {
             const q = query(collection(db, "episodes"));
             onSnapshot(q, (snapshot) => {
@@ -322,8 +347,6 @@
 
         function renderHome() {
             if(allEpisodes.length === 0) return;
-
-            // Agrupar por Série
             const seriesMap = {};
             allEpisodes.forEach(ep => {
                 if (!seriesMap[ep.series]) seriesMap[ep.series] = [];
@@ -335,7 +358,6 @@
             
             Object.keys(seriesMap).sort().forEach(series => {
                 let eps = seriesMap[series];
-                // Ordenar: Temp > Ep
                 eps.sort((a,b) => (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
 
                 let html = `
@@ -346,7 +368,6 @@
 
                 eps.forEach(ep => {
                     const thumb = getYoutubeThumb(ep.videoUrl);
-                    // Checar se já foi assistido
                     const isWatched = watchedEpisodes[ep.id] ? 'watched' : '';
                     
                     html += `
@@ -365,29 +386,25 @@
             });
         }
 
-        // --- PLAYER AUTOMÁTICO (CORE) ---
+        // --- PLAYER AUTOMÁTICO (CORRIGIDO) ---
 
         window.startPlayer = (id) => {
             const ep = allEpisodes.find(e => e.id === id);
             if (!ep) return;
 
-            // Preparar playlist da série atual
             currentSeriesEpisodes = allEpisodes
                 .filter(e => e.series === ep.series)
                 .sort((a,b) => (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
             currentEpisodeIndex = currentSeriesEpisodes.findIndex(e => e.id === id);
 
-            // UI Switch
             document.getElementById('navbar').classList.add('hidden');
             document.getElementById('player-overlay').classList.remove('hidden');
             document.getElementById('video-stage').classList.remove('hidden');
             document.getElementById('text-stage').classList.add('hidden');
 
-            // Setup Texto (Já deixa pronto)
             document.getElementById('text-title').innerText = ep.title;
             document.getElementById('text-content').innerHTML = ep.contentHtml;
 
-            // INICIAR YOUTUBE PLAYER
             const videoId = extractVideoID(ep.videoUrl);
             
             if (ytPlayer) {
@@ -405,50 +422,35 @@
             }
         };
 
-        // EVENTO: VÍDEO MUDOU DE ESTADO
         function onPlayerStateChange(event) {
-            // YT.PlayerState.ENDED = 0
-            if (event.data === 0) {
-                console.log("Vídeo acabou! Iniciando texto...");
+            if (event.data === 0) { // ENDED
                 finishVideoAndStartText();
             }
         }
 
         function finishVideoAndStartText() {
-            // Esconder vídeo (não destruir, apenas ocultar para manter instância se quiser)
-            // Mas para parar áudio garantido, pause.
             if(ytPlayer) ytPlayer.stopVideo();
-            
             document.getElementById('video-stage').classList.add('hidden');
             document.getElementById('text-stage').classList.remove('hidden');
             
-            // Iniciar Leitura Automática (TTS)
-            setTimeout(() => {
-                speakText();
-            }, 1000);
+            setTimeout(() => { speakText(); }, 1000);
         }
 
-        // TTS (Leitura)
         function speakText() {
             if(speechSynth.speaking) speechSynth.cancel();
-
             const text = document.getElementById('text-content').innerText;
             speechUtterance = new SpeechSynthesisUtterance(text);
             speechUtterance.lang = 'pt-BR';
             speechUtterance.rate = parseFloat(document.getElementById('tts-speed').value);
 
-            // EVENTO: TEXTO ACABOU DE SER LIDO
             speechUtterance.onend = () => {
-                console.log("Texto finalizado. Salvando progresso e avançando...");
                 completeEpisodeAndNext();
             };
 
             speechSynth.speak(speechUtterance);
         }
 
-        // CONCLUSÃO E PRÓXIMO
         async function completeEpisodeAndNext() {
-            // 1. Salvar no Firestore que viu este episódio
             const currentEp = currentSeriesEpisodes[currentEpisodeIndex];
             if(currentEp && currentUser) {
                 try {
@@ -456,11 +458,8 @@
                         completedAt: serverTimestamp(),
                         series: currentEp.series
                     });
-                    console.log("Progresso salvo.");
-                } catch(e) { console.error("Erro ao salvar progresso:", e); }
+                } catch(e) { console.error("Erro save:", e); }
             }
-
-            // 2. Ir para o próximo
             window.forceNextEpisode();
         }
 
@@ -470,26 +469,30 @@
             const nextIndex = currentEpisodeIndex + 1;
             if (nextIndex < currentSeriesEpisodes.length) {
                 const nextEp = currentSeriesEpisodes[nextIndex];
-                // Pequeno delay para transição visual
-                setTimeout(() => {
-                    window.startPlayer(nextEp.id);
-                }, 1000);
+                setTimeout(() => { window.startPlayer(nextEp.id); }, 1000);
             } else {
-                alert("Parabéns! Você concluiu esta matéria.");
+                // FIM DA MATÉRIA: VOLTA PRA HOME SOZINHO
                 window.closePlayer();
             }
         };
 
+        // --- CORREÇÃO DO BOTÃO FECHAR ---
         window.closePlayer = () => {
-            if(ytPlayer) ytPlayer.stopVideo();
-            if(speechSynth) speechSynth.cancel();
-            document.getElementById('iframe-wrapper').innerHTML = ''; // Limpar para garantir
+            // Para tudo
+            if(ytPlayer) { 
+                try { ytPlayer.stopVideo(); } catch(e){} 
+            }
+            if(speechSynth) { 
+                speechSynth.cancel(); 
+            }
+            
+            // Reseta visual
+            document.getElementById('player-overlay').classList.add('hidden');
+            document.getElementById('navbar').classList.remove('hidden');
             window.router('home');
         };
 
-        // --- ADMIN: CRUD COMPLETO ---
-
-        // Variável para saber se estamos editando
+        // --- CRUD ADMIN ---
         let editingId = null;
 
         window.saveEpisode = async () => {
@@ -506,16 +509,13 @@
 
             try {
                 if (editingId) {
-                    // UPDATE
                     await updateDoc(doc(db, "episodes", editingId), data);
                     alert("Aula atualizada!");
                     window.resetForm();
                 } else {
-                    // CREATE
                     data.createdAt = serverTimestamp();
                     await addDoc(collection(db, "episodes"), data);
                     alert("Aula criada!");
-                    // Auto-incremento para facilitar
                     document.getElementById('ep-number').value = data.episodeNumber + 1;
                     document.getElementById('ep-title').value = '';
                     quillEditor.setText('');
@@ -523,17 +523,13 @@
             } catch(e) { alert("Erro: " + e.message); }
         };
 
-        // Carregar lista Admin com Edit/Delete
         window.loadAdminList = async () => {
             const listDiv = document.getElementById('admin-ep-list');
             listDiv.innerHTML = 'Carregando...';
-            
             const q = query(collection(db, "episodes"));
             const snapshot = await getDocs(q);
             const items = [];
             snapshot.forEach(doc => { items.push({ ...doc.data(), id: doc.id }); });
-
-            // Ordenar
             items.sort((a,b) => a.series.localeCompare(b.series) || (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
 
             listDiv.innerHTML = '';
@@ -541,10 +537,7 @@
                 const div = document.createElement('div');
                 div.className = 'admin-list-item';
                 div.innerHTML = `
-                    <div>
-                        <strong>${item.series}</strong> <br>
-                        <small>T${item.season}:E${item.episodeNumber} - ${item.title}</small>
-                    </div>
+                    <div><strong>${item.series}</strong><br><small>T${item.season}:E${item.episodeNumber} - ${item.title}</small></div>
                     <div class="admin-actions">
                         <button class="btn btn-warning" onclick="window.editEp('${item.id}')"><i class="fas fa-pencil-alt"></i></button>
                         <button class="btn btn-primary" style="background:red;" onclick="window.deleteEp('${item.id}')"><i class="fas fa-trash"></i></button>
@@ -554,49 +547,39 @@
             });
         };
 
-        // Função EDITAR
         window.editEp = async (id) => {
             const ep = allEpisodes.find(e => e.id === id);
             if(!ep) return;
-
             editingId = id;
-            document.getElementById('form-title').innerText = "Editando Aula: " + ep.title;
-            document.getElementById('btn-save').innerText = "Atualizar Aula";
+            document.getElementById('form-title').innerText = "Editando: " + ep.title;
+            document.getElementById('btn-save').innerText = "Atualizar";
             document.getElementById('btn-cancel').classList.remove('hidden');
-
             document.getElementById('ep-series').value = ep.series;
             document.getElementById('ep-season').value = ep.season;
             document.getElementById('ep-number').value = ep.episodeNumber;
             document.getElementById('ep-title').value = ep.title;
             document.getElementById('ep-video').value = ep.videoUrl;
             quillEditor.root.innerHTML = ep.contentHtml;
-
-            // Rola para o formulário
             document.getElementById('admin-panel').scrollIntoView();
         };
 
-        // Função CANCELAR EDIÇÃO
         window.resetForm = () => {
             editingId = null;
             document.getElementById('form-title').innerText = "Nova Aula";
-            document.getElementById('btn-save').innerText = "Publicar Aula";
+            document.getElementById('btn-save').innerText = "Publicar";
             document.getElementById('btn-cancel').classList.add('hidden');
-            
-            // Limpar
             document.getElementById('ep-title').value = '';
             document.getElementById('ep-video').value = '';
             quillEditor.setText('');
         };
 
-        // Função DELETE
         window.deleteEp = async (id) => {
-            if(confirm("Tem certeza que deseja apagar?")) {
+            if(confirm("Apagar?")) {
                 await deleteDoc(doc(db, "episodes", id));
                 window.loadAdminList();
             }
         };
 
-        // --- HELPERS ---
         function extractVideoID(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
@@ -608,24 +591,6 @@
             return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : '';
         }
 
-        function loadSettings() {
-             const docRef = doc(db, "settings", "global");
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.title = data.siteName || "StudyFlix";
-                    document.getElementById('site-logo-text').innerText = data.siteName || "STUDYFLIX";
-                }
-            });
-        }
-
-        // --- SISTEMA BASICO ---
-        window.saveSettings = async () => {
-             const name = document.getElementById('conf-sitename').value;
-             await setDoc(doc(db, "settings", "global"), { siteName: name });
-             alert("Salvo!");
-        };
-        
         window.createTempUser = async () => {
             const e = document.getElementById('login-email').value;
             const p = document.getElementById('login-pass').value;
@@ -644,10 +609,9 @@
             }
         };
 
-        // Event listener velocidade TTS
         document.getElementById('tts-speed').addEventListener('input', (e) => {
              document.getElementById('speed-val').innerText = e.target.value + 'x';
-             if(speechSynth.speaking) speakText(); // Reinicia com nova vel
+             if(speechSynth.speaking) speakText();
         });
 
     </script>
