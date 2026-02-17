@@ -211,6 +211,11 @@
                     <input type="password" id="login-pass" placeholder="Senha" required>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+                
+                <!-- BOTÃO TEMPORÁRIO PARA CRIAR CONTA -->
+                <button type="button" class="btn btn-sec" style="width: 100%; margin-top: 10px;" onclick="window.createTempUser()">
+                    (Temp) Criar Conta
+                </button>
             </form>
             <p style="color: #737373; margin-top: 20px;">
                 Novo por aqui? <span style="color: white; cursor: pointer;" onclick="alert('Contate o admin para criar conta.')">Fale com o Admin.</span>
@@ -346,8 +351,9 @@
     <!-- Módulo Principal JS -->
     <script type="module">
         // Importando módulos oficiais do Firebase via CDN (Versão 9+)
+        // ADICIONEI: createUserWithEmailAndPassword
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } 
             from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -437,6 +443,24 @@
                 .catch((error) => alert("Erro ao entrar: " + error.message));
         });
 
+        // --- FUNÇÃO TEMPORÁRIA PARA CRIAR USUÁRIO ---
+        window.createTempUser = async () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            if(!email || !pass) {
+                alert("Preencha email e senha primeiro.");
+                return;
+            }
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                alert("Usuário criado com sucesso! O login será feito automaticamente.");
+            } catch (error) {
+                alert("Erro ao criar: " + error.message);
+            }
+        };
+
         // Expor Logout para o HTML
         window.doLogout = () => auth.signOut();
 
@@ -454,7 +478,7 @@
                 document.getElementById('navbar').classList.remove('hidden');
             }
             else if (route === 'admin') {
-                if(!currentUser.email.includes('@userpro')) return alert("Acesso Negado");
+                if(!currentUser.email.includes('@userpro')) return alert("Acesso Negado. Você precisa ter '@userpro' no email.");
                 document.getElementById('admin-view').classList.remove('hidden');
                 loadAdminList(); // Atualiza lista
             }
