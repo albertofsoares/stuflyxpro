@@ -1,227 +1,99 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carregando...</title>
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;,"> <!-- Placeholder Favicon -->
+    <!-- Favicon dinâmico será injetado via JS -->
+    <link id="dynamic-favicon" rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <!-- Tailwind CSS (Estilização Rápida e Responsiva) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Quill CSS -->
+    <!-- Quill.js (Editor de Texto Rico) -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <!-- FontAwesome -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <!-- FontAwesome (Ícones) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+    <!-- Configurações Estéticas (Netflix Vibe) -->
     <style>
-        /* --- CSS BASE --- */
-        :root {
-            --primary: #e50914;
-            --bg: #141414;
-            --surface: #1f1f1f;
-            --text: #ffffff;
-            --text-sec: #b3b3b3;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #141414; /* Netflix Black */
+            color: #e5e5e5;
         }
 
-        * { box-sizing: border-box; outline: none; }
-        body { margin: 0; font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #141414; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e50914; }
 
-        /* --- UTILITÁRIOS --- */
-        .hidden { display: none !important; }
-        .btn { padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: #f40612; }
-        .btn-sec { background: rgba(109, 109, 110, 0.7); color: white; }
-        .btn-warning { background: #e5a109; color: black; }
+        /* Animações */
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- LOGIN --- */
-        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/BR-pt-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg'); background-size: cover; }
-        .login-box { background: rgba(0,0,0,0.85); padding: 60px 68px 40px; border-radius: 4px; width: 100%; max-width: 450px; }
-        .login-box input { width: 100%; padding: 16px; background: #333; border: none; border-radius: 4px; color: white; margin-bottom: 16px; }
-
-        /* --- NAVBAR --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 4%; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 10%, transparent); position: fixed; top: 0; width: 100%; z-index: 100; }
-        .logo { font-size: 28px; color: var(--primary); font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px #000; }
+        /* Utilitários do Player */
+        .player-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 50; display: flex; flex-direction: column;
+        }
         
-        /* --- HOME --- */
-        #app-content { padding-top: 80px; }
-        .hero-banner { height: 50vh; display: flex; flex-direction: column; justify-content: center; padding-left: 4%; background: radial-gradient(circle at top right, rgba(20,20,20,0), var(--bg)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; margin-bottom: 20px; }
-        
-        .category-row { margin-bottom: 30px; padding-left: 4%; }
-        .category-title { font-size: 1.2rem; color: #e5e5e5; margin-bottom: 10px; border-left: 3px solid var(--primary); padding-left: 10px; }
-        .row-scroller { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; scrollbar-width: none; }
-        .row-scroller::-webkit-scrollbar { display: none; }
+        /* Ajuste do Quill no modo Dark */
+        .ql-toolbar { background: #e5e5e5; border-radius: 8px 8px 0 0; }
+        .ql-container { background: #fff; color: #000; border-radius: 0 0 8px 8px; height: 200px; }
 
-        .episode-card { flex: 0 0 auto; width: 260px; height: 146px; background: #333; border-radius: 4px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.3s; }
-        .episode-card:hover { transform: scale(1.05); z-index: 10; }
-        .episode-card img { width: 100%; height: 100%; object-fit: cover; }
-        .episode-info { position: absolute; bottom: 0; width: 100%; padding: 8px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); font-size: 0.85rem; }
-        
-        /* Barra de Progresso (Watched) */
-        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: #555; display: none; }
-        .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; }
-        .watched .progress-bar-container { display: block; }
-        .watched .progress-bar-fill { width: 100%; }
-        .watched img { opacity: 0.4; filter: grayscale(100%); }
-        .watched::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--primary); font-size: 3rem; opacity: 0.9; }
-
-        /* --- PLAYER AUTOMÁTICO --- */
-        #player-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 2000; display: flex; flex-direction: column; }
-        /* Aumentei z-index do header para garantir clique no botão Fechar */
-        .player-header { padding: 20px; position: absolute; top: 0; width: 100%; z-index: 3000; display: flex; justify-content: space-between; pointer-events: none; }
-        .player-header button { pointer-events: auto; cursor: pointer; background: rgba(0,0,0,0.5); padding: 10px 20px; border: 1px solid white; }
-        .player-header button:hover { background: var(--primary); border-color: var(--primary); }
-
-        #video-stage { flex: 1; display: flex; align-items: center; justify-content: center; background: black; width: 100%; height: 100%; }
-        
-        #text-stage { display: flex; flex-direction: column; height: 100%; background: #141414; padding: 80px 15% 40px; }
-        #text-content { flex: 1; overflow-y: auto; font-size: 1.5rem; line-height: 1.8; color: #ddd; text-align: justify; padding-right: 15px; font-family: 'Georgia', serif; }
-        
-        .reading-controls { background: #222; padding: 15px; margin-top: 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-
-        /* --- ADMIN --- */
-        #admin-panel { padding: 40px 10%; background: #1a1a1a; min-height: 100vh; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .full-width { grid-column: span 2; }
-        input, select { width: 100%; padding: 10px; background: #333; border: 1px solid #444; color: white; border-radius: 4px; }
-        #editor-container { background: white; color: black; height: 300px; margin-bottom: 20px; }
-        
-        .admin-list-item { background: #252525; padding: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--primary); }
+        /* Card da Aula */
+        .lesson-card {
+            transition: transform 0.3s, z-index 0.3s;
+        }
+        .lesson-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN -->
-    <div id="login-screen">
-        <div class="login-box">
-            <h1 style="text-align: center;">Entrar</h1>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Email" required>
-                <input type="password" id="login-pass" placeholder="Senha" required>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Acessar Plataforma</button>
-                <button type="button" class="btn btn-sec" style="width: 100%; margin-top: 10px;" onclick="window.createTempUser()">Criar Conta (Admin)</button>
-            </form>
+    <!-- Container Principal da Aplicação -->
+    <div id="app" class="min-h-screen flex flex-col">
+        <!-- O conteúdo será injetado aqui via JavaScript -->
+        <div class="flex items-center justify-center h-screen">
+            <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-red-600"></div>
         </div>
     </div>
 
-    <!-- APP PRINCIPAL -->
-    <div id="app-screen" class="hidden">
-        
-        <nav id="navbar">
-            <div class="logo" id="site-logo-text">STUDYFLIX</div>
-            <div>
-                <button id="admin-btn" class="hidden btn btn-sec" onclick="window.router('admin')">Admin</button>
-                <button class="btn btn-primary" onclick="window.router('home')">Início</button>
-                <button class="btn btn-sec" onclick="window.doLogout()">Sair</button>
-            </div>
-        </nav>
-
-        <!-- HOME -->
-        <div id="home-view">
-            <div class="hero-banner">
-                <h1 style="font-size: 3rem; text-shadow: 2px 2px 4px black;">Meus Estudos</h1>
-                <p>Selecione uma matéria para continuar de onde parou.</p>
-            </div>
-            <div id="categories-container"></div>
-        </div>
-
-        <!-- ADMIN -->
-        <div id="admin-view" class="hidden">
-            <div id="admin-panel">
-                <h2>Gerenciar Aulas</h2>
-                
-                <!-- Configurações Globais -->
-                <div style="background: #222; padding: 15px; margin-bottom: 30px; border-radius: 8px; border: 1px solid #333;">
-                    <h3>Configurações do Site (Favicon & Título)</h3>
-                    <div class="form-grid">
-                        <input type="text" id="conf-sitename" placeholder="Nome do Site (Ex: Minha Faculdade)">
-                        <input type="text" id="conf-favicon" placeholder="URL do Favicon (.ico/.png)">
-                        <button class="btn btn-sec full-width" onclick="window.saveSettings()">Salvar Configurações</button>
-                    </div>
-                </div>
-
-                <!-- Formulário Aula -->
-                <div style="background: #2a2a2a; padding: 20px; border-radius: 8px; margin-bottom: 40px;">
-                    <h3 id="form-title">Nova Aula</h3>
-                    <input type="hidden" id="edit-id"> 
-                    
-                    <div class="form-grid">
-                        <div class="full-width">
-                            <label>Série (Matéria)</label>
-                            <input type="text" id="ep-series" placeholder="Ex: Sistemas Operacionais">
-                        </div>
-                        <div>
-                            <label>Temporada (Unidade)</label>
-                            <input type="number" id="ep-season" placeholder="1">
-                        </div>
-                        <div>
-                            <label>Episódio (Aula)</label>
-                            <input type="number" id="ep-number" placeholder="1">
-                        </div>
-                        <div class="full-width">
-                            <label>Título da Aula</label>
-                            <input type="text" id="ep-title">
-                        </div>
-                        <div class="full-width">
-                            <label>Link YouTube</label>
-                            <input type="text" id="ep-video" placeholder="https://www.youtube.com/watch?v=...">
-                        </div>
-                        <div class="full-width">
-                            <label>Resumo (Leitura Automática)</label>
-                            <div id="editor-container"></div>
-                        </div>
-                    </div>
-                    <button id="btn-save" class="btn btn-primary" onclick="window.saveEpisode()">Publicar Aula</button>
-                    <button id="btn-cancel" class="btn btn-sec hidden" onclick="window.resetForm()">Cancelar Edição</button>
-                </div>
-
-                <h3>Lista de Aulas</h3>
-                <div id="admin-ep-list"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PLAYER OVERLAY -->
-    <div id="player-overlay" class="hidden">
-        <div class="player-header">
-            <div class="logo">AULA EM ANDAMENTO</div>
-            <!-- Botão Fechar Corrigido -->
-            <button onclick="window.closePlayer()">FECHAR <i class="fas fa-times"></i></button>
-        </div>
-
-        <!-- VÍDEO -->
-        <div id="video-stage">
-            <div id="yt-player-placeholder"></div>
-        </div>
-
-        <!-- TEXTO -->
-        <div id="text-stage" class="hidden">
-            <h2 id="text-title" style="color: var(--primary);">Resumo</h2>
-            <div id="text-content"></div>
-            
-            <div class="reading-controls">
-                <div id="status-reading" style="color: var(--primary); font-weight: bold;">
-                    <i class="fas fa-volume-up"></i> Lendo Automaticamente...
-                </div>
-                
-                <div class="speed-control">
-                    <label>Velocidade:</label>
-                    <input type="range" id="tts-speed" min="0.5" max="2.0" step="0.25" value="1.0">
-                    <span id="speed-val">1.0x</span>
-                </div>
-
-                <button class="btn btn-sec" onclick="window.forceNextEpisode()">
-                    Pular >>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- Módulo Principal da Aplicação -->
     <script type="module">
+        // =================================================================
+        // 1. CONFIGURAÇÃO E IMPORTAÇÕES (FIREBASE)
+        // =================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } 
-            from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp } 
-            from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            doc, 
+            updateDoc, 
+            deleteDoc, 
+            query, 
+            orderBy, 
+            setDoc,
+            getDoc,
+            where
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCRnLXwHj_jAuZZcICdwGnqgqtBnvNIsMQ",
@@ -236,382 +108,568 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentUser = null;
-        let quillEditor;
-        let allEpisodes = [];
-        let watchedEpisodes = {};
+        // =================================================================
+        // 2. ESTADO GLOBAL DA APLICAÇÃO (State Management)
+        // =================================================================
+        const state = {
+            user: null,
+            isAdmin: false,
+            lessons: [],
+            config: { siteName: "StudyFlix", favicon: "" },
+            currentLesson: null,
+            progress: {}, // { lessonId: timestamp }
+            speechSynth: window.speechSynthesis,
+            ytPlayer: null
+        };
+
+        // Cache de elementos DOM
+        const root = document.getElementById('app');
         
-        let ytPlayer = null;
-        let currentSeriesEpisodes = [];
-        let currentEpisodeIndex = -1;
-        
-        let speechSynth = window.speechSynthesis;
-        let speechUtterance = null;
+        // Editor Quill Global
+        let quillEditor = null;
 
-        // API YouTube
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // =================================================================
+        // 3. LÓGICA DE NEGÓCIO (Business Logic)
+        // =================================================================
 
-        window.addEventListener('DOMContentLoaded', () => {
-            quillEditor = new Quill('#editor-container', {
-                theme: 'snow',
-                modules: { toolbar: [['bold', 'italic', 'underline'], [{'header':1},{'header':2}], [{'list':'ordered'},{'list':'bullet'}], ['clean']] }
-            });
-        });
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('app-screen').classList.remove('hidden');
-                
-                if (user.email.includes('@userpro')) {
-                    document.getElementById('admin-btn').classList.remove('hidden');
-                }
-
-                loadSettings();
-                loadUserData();
-                loadEpisodes();
-            } else {
-                currentUser = null;
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('app-screen').classList.add('hidden');
-            }
-        });
-
-        // --- CONFIGURAÇÕES GLOBAIS (FAVICON & TÍTULO) ---
-        function loadSettings() {
-             const docRef = doc(db, "settings", "global");
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    // Atualiza título da aba
-                    if(data.siteName) {
-                        document.title = data.siteName;
-                        document.getElementById('site-logo-text').innerText = data.siteName;
-                    }
-                    // Atualiza Favicon
-                    if(data.favicon) {
-                        let link = document.querySelector("link[rel~='icon']");
-                        if (!link) {
-                            link = document.createElement('link');
-                            link.rel = 'icon';
-                            document.getElementsByTagName('head')[0].appendChild(link);
-                        }
-                        link.href = data.favicon;
-                    }
-                }
-            });
-        }
-
-        window.saveSettings = async () => {
-             const name = document.getElementById('conf-sitename').value;
-             const fav = document.getElementById('conf-favicon').value;
-             
-             try {
-                 await setDoc(doc(db, "settings", "global"), { siteName: name, favicon: fav });
-                 alert("Configurações atualizadas!");
-             } catch(e) { alert("Erro (Permissão): " + e.message); }
-        };
-
-        // --- CARREGAMENTO DE DADOS ---
-        function loadUserData() {
-            if(!currentUser) return;
-            const historyRef = collection(db, "users", currentUser.uid, "history");
-            onSnapshot(historyRef, (snapshot) => {
-                watchedEpisodes = {};
-                snapshot.forEach(doc => {
-                    watchedEpisodes[doc.id] = true;
-                });
-                renderHome();
-            });
-        }
-
-        function loadEpisodes() {
-            const q = query(collection(db, "episodes"));
-            onSnapshot(q, (snapshot) => {
-                allEpisodes = [];
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    d.id = doc.id;
-                    d.series = d.series || "Geral";
-                    d.season = parseInt(d.season) || 1;
-                    d.episodeNumber = parseInt(d.episodeNumber) || 1;
-                    allEpisodes.push(d);
-                });
-                renderHome();
-            });
-        }
-
-        function renderHome() {
-            if(allEpisodes.length === 0) return;
-            const seriesMap = {};
-            allEpisodes.forEach(ep => {
-                if (!seriesMap[ep.series]) seriesMap[ep.series] = [];
-                seriesMap[ep.series].push(ep);
-            });
-
-            const container = document.getElementById('categories-container');
-            container.innerHTML = '';
-            
-            Object.keys(seriesMap).sort().forEach(series => {
-                let eps = seriesMap[series];
-                eps.sort((a,b) => (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
-
-                let html = `
-                    <div class="category-row">
-                        <div class="category-title">${series}</div>
-                        <div class="row-scroller">
-                `;
-
-                eps.forEach(ep => {
-                    const thumb = getYoutubeThumb(ep.videoUrl);
-                    const isWatched = watchedEpisodes[ep.id] ? 'watched' : '';
-                    
-                    html += `
-                        <div class="episode-card ${isWatched}" onclick="window.startPlayer('${ep.id}')">
-                            <img src="${thumb}" onerror="this.src='https://via.placeholder.com/260x146?text=Aula'">
-                            <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-                            <div class="episode-info">
-                                <span style="background:var(--primary); padding:2px 5px; border-radius:2px; font-weight:bold;">T${ep.season}:E${ep.episodeNumber}</span>
-                                <span>${ep.title}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-                container.innerHTML += html;
-            });
-        }
-
-        // --- PLAYER AUTOMÁTICO (CORRIGIDO) ---
-
-        window.startPlayer = (id) => {
-            const ep = allEpisodes.find(e => e.id === id);
-            if (!ep) return;
-
-            currentSeriesEpisodes = allEpisodes
-                .filter(e => e.series === ep.series)
-                .sort((a,b) => (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
-            currentEpisodeIndex = currentSeriesEpisodes.findIndex(e => e.id === id);
-
-            document.getElementById('navbar').classList.add('hidden');
-            document.getElementById('player-overlay').classList.remove('hidden');
-            document.getElementById('video-stage').classList.remove('hidden');
-            document.getElementById('text-stage').classList.add('hidden');
-
-            document.getElementById('text-title').innerText = ep.title;
-            document.getElementById('text-content').innerHTML = ep.contentHtml;
-
-            const videoId = extractVideoID(ep.videoUrl);
-            
-            if (ytPlayer) {
-                ytPlayer.loadVideoById(videoId);
-            } else {
-                ytPlayer = new YT.Player('yt-player-placeholder', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: videoId,
-                    playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0 },
-                    events: {
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-            }
-        };
-
-        function onPlayerStateChange(event) {
-            if (event.data === 0) { // ENDED
-                finishVideoAndStartText();
-            }
-        }
-
-        function finishVideoAndStartText() {
-            if(ytPlayer) ytPlayer.stopVideo();
-            document.getElementById('video-stage').classList.add('hidden');
-            document.getElementById('text-stage').classList.remove('hidden');
-            
-            setTimeout(() => { speakText(); }, 1000);
-        }
-
-        function speakText() {
-            if(speechSynth.speaking) speechSynth.cancel();
-            const text = document.getElementById('text-content').innerText;
-            speechUtterance = new SpeechSynthesisUtterance(text);
-            speechUtterance.lang = 'pt-BR';
-            speechUtterance.rate = parseFloat(document.getElementById('tts-speed').value);
-
-            speechUtterance.onend = () => {
-                completeEpisodeAndNext();
-            };
-
-            speechSynth.speak(speechUtterance);
-        }
-
-        async function completeEpisodeAndNext() {
-            const currentEp = currentSeriesEpisodes[currentEpisodeIndex];
-            if(currentEp && currentUser) {
-                try {
-                    await setDoc(doc(db, "users", currentUser.uid, "history", currentEp.id), {
-                        completedAt: serverTimestamp(),
-                        series: currentEp.series
-                    });
-                } catch(e) { console.error("Erro save:", e); }
-            }
-            window.forceNextEpisode();
-        }
-
-        window.forceNextEpisode = () => {
-            if(speechSynth) speechSynth.cancel();
-
-            const nextIndex = currentEpisodeIndex + 1;
-            if (nextIndex < currentSeriesEpisodes.length) {
-                const nextEp = currentSeriesEpisodes[nextIndex];
-                setTimeout(() => { window.startPlayer(nextEp.id); }, 1000);
-            } else {
-                // FIM DA MATÉRIA: VOLTA PRA HOME SOZINHO
-                window.closePlayer();
-            }
-        };
-
-        // --- CORREÇÃO DO BOTÃO FECHAR ---
-        window.closePlayer = () => {
-            // Para tudo
-            if(ytPlayer) { 
-                try { ytPlayer.stopVideo(); } catch(e){} 
-            }
-            if(speechSynth) { 
-                speechSynth.cancel(); 
-            }
-            
-            // Reseta visual
-            document.getElementById('player-overlay').classList.add('hidden');
-            document.getElementById('navbar').classList.remove('hidden');
-            window.router('home');
-        };
-
-        // --- CRUD ADMIN ---
-        let editingId = null;
-
-        window.saveEpisode = async () => {
-            const data = {
-                series: document.getElementById('ep-series').value,
-                season: parseInt(document.getElementById('ep-season').value),
-                episodeNumber: parseInt(document.getElementById('ep-number').value),
-                title: document.getElementById('ep-title').value,
-                videoUrl: document.getElementById('ep-video').value,
-                contentHtml: quillEditor.root.innerHTML
-            };
-
-            if (!data.title || !data.videoUrl) return alert("Título e Vídeo obrigatórios.");
-
+        // --- Autenticação ---
+        const login = async (email, password) => {
             try {
-                if (editingId) {
-                    await updateDoc(doc(db, "episodes", editingId), data);
-                    alert("Aula atualizada!");
-                    window.resetForm();
-                } else {
-                    data.createdAt = serverTimestamp();
-                    await addDoc(collection(db, "episodes"), data);
-                    alert("Aula criada!");
-                    document.getElementById('ep-number').value = data.episodeNumber + 1;
-                    document.getElementById('ep-title').value = '';
-                    quillEditor.setText('');
-                }
-            } catch(e) { alert("Erro: " + e.message); }
-        };
-
-        window.loadAdminList = async () => {
-            const listDiv = document.getElementById('admin-ep-list');
-            listDiv.innerHTML = 'Carregando...';
-            const q = query(collection(db, "episodes"));
-            const snapshot = await getDocs(q);
-            const items = [];
-            snapshot.forEach(doc => { items.push({ ...doc.data(), id: doc.id }); });
-            items.sort((a,b) => a.series.localeCompare(b.series) || (a.season - b.season) || (a.episodeNumber - b.episodeNumber));
-
-            listDiv.innerHTML = '';
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'admin-list-item';
-                div.innerHTML = `
-                    <div><strong>${item.series}</strong><br><small>T${item.season}:E${item.episodeNumber} - ${item.title}</small></div>
-                    <div class="admin-actions">
-                        <button class="btn btn-warning" onclick="window.editEp('${item.id}')"><i class="fas fa-pencil-alt"></i></button>
-                        <button class="btn btn-primary" style="background:red;" onclick="window.deleteEp('${item.id}')"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-                listDiv.appendChild(div);
-            });
-        };
-
-        window.editEp = async (id) => {
-            const ep = allEpisodes.find(e => e.id === id);
-            if(!ep) return;
-            editingId = id;
-            document.getElementById('form-title').innerText = "Editando: " + ep.title;
-            document.getElementById('btn-save').innerText = "Atualizar";
-            document.getElementById('btn-cancel').classList.remove('hidden');
-            document.getElementById('ep-series').value = ep.series;
-            document.getElementById('ep-season').value = ep.season;
-            document.getElementById('ep-number').value = ep.episodeNumber;
-            document.getElementById('ep-title').value = ep.title;
-            document.getElementById('ep-video').value = ep.videoUrl;
-            quillEditor.root.innerHTML = ep.contentHtml;
-            document.getElementById('admin-panel').scrollIntoView();
-        };
-
-        window.resetForm = () => {
-            editingId = null;
-            document.getElementById('form-title').innerText = "Nova Aula";
-            document.getElementById('btn-save').innerText = "Publicar";
-            document.getElementById('btn-cancel').classList.add('hidden');
-            document.getElementById('ep-title').value = '';
-            document.getElementById('ep-video').value = '';
-            quillEditor.setText('');
-        };
-
-        window.deleteEp = async (id) => {
-            if(confirm("Apagar?")) {
-                await deleteDoc(doc(db, "episodes", id));
-                window.loadAdminList();
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                alert("Erro ao logar: " + error.message);
             }
         };
 
-        function extractVideoID(url) {
+        const logout = () => signOut(auth);
+
+        // --- Banco de Dados: Aulas ---
+        const fetchLessons = async () => {
+            const q = query(collection(db, "lessons"), orderBy("season"), orderBy("episode"));
+            const snapshot = await getDocs(q);
+            state.lessons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderApp(); // Re-renderiza quando dados chegam
+        };
+
+        const saveLesson = async (lessonData, id = null) => {
+            try {
+                if (id) {
+                    await updateDoc(doc(db, "lessons", id), lessonData);
+                } else {
+                    await addDoc(collection(db, "lessons"), lessonData);
+                }
+                await fetchLessons();
+                closeModal();
+            } catch (e) {
+                console.error("Erro ao salvar aula:", e);
+                alert("Erro ao salvar.");
+            }
+        };
+
+        const deleteLesson = async (id) => {
+            if(confirm("Tem certeza que deseja excluir esta aula?")) {
+                await deleteDoc(doc(db, "lessons", id));
+                await fetchLessons();
+            }
+        };
+
+        // --- Banco de Dados: Configurações Globais ---
+        const fetchConfig = async () => {
+            try {
+                const docRef = doc(db, "config", "global");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    state.config = docSnap.data();
+                    document.title = state.config.siteName || "StudyFlix";
+                    if(state.config.favicon) document.getElementById('dynamic-favicon').href = state.config.favicon;
+                }
+            } catch (e) {
+                console.log("Configuração padrão usada.");
+            }
+        };
+
+        const saveConfig = async (name, favicon) => {
+            await setDoc(doc(db, "config", "global"), { siteName: name, favicon: favicon });
+            state.config = { siteName: name, favicon: favicon };
+            document.title = name;
+            document.getElementById('dynamic-favicon').href = favicon;
+            alert("Configurações salvas!");
+        };
+
+        // --- Progresso do Usuário ---
+        const fetchProgress = async () => {
+            if (!state.user) return;
+            const q = query(collection(db, "progress"), where("userId", "==", state.user.uid));
+            const snapshot = await getDocs(q);
+            const progressData = {};
+            snapshot.forEach(doc => {
+                progressData[doc.data().lessonId] = true;
+            });
+            state.progress = progressData;
+        };
+
+        const markLessonComplete = async (lessonId) => {
+            if (!state.user) return;
+            // Salva apenas se ainda não estiver salvo
+            if (!state.progress[lessonId]) {
+                await addDoc(collection(db, "progress"), {
+                    userId: state.user.uid,
+                    lessonId: lessonId,
+                    completedAt: new Date()
+                });
+                state.progress[lessonId] = true;
+                // Atualiza visualmente se estiver na home (opcional)
+            }
+        };
+
+        // --- Utilitários ---
+        const extractVideoID = (url) => {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        function getYoutubeThumb(url) {
-            const id = extractVideoID(url);
-            return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : '';
-        }
-
-        window.createTempUser = async () => {
-            const e = document.getElementById('login-email').value;
-            const p = document.getElementById('login-pass').value;
-            if(e && p) createUserWithEmailAndPassword(auth, e, p).then(()=>alert("Criado!")).catch(err=>alert(err));
         };
-        window.doLogout = () => auth.signOut();
-        
-        window.router = (r) => {
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('admin-view').classList.add('hidden');
-            if(r === 'home') document.getElementById('home-view').classList.remove('hidden');
-            if(r === 'admin') {
-                if(!currentUser.email.includes('@userpro')) return alert("Acesso Negado");
-                document.getElementById('admin-view').classList.remove('hidden');
-                window.loadAdminList();
+
+        // =================================================================
+        // 4. RENDERIZAÇÃO (UI Components)
+        // =================================================================
+
+        const renderApp = () => {
+            root.innerHTML = '';
+            
+            if (!state.user) {
+                renderLogin();
+                return;
+            }
+
+            if (state.currentLesson) {
+                renderPlayer(); // Modo Imersivo
+            } else {
+                renderHome();   // Dashboard
             }
         };
 
-        document.getElementById('tts-speed').addEventListener('input', (e) => {
-             document.getElementById('speed-val').innerText = e.target.value + 'x';
-             if(speechSynth.speaking) speakText();
+        // --- TELA DE LOGIN ---
+        const renderLogin = () => {
+            root.innerHTML = `
+                <div class="flex items-center justify-center min-h-screen bg-black bg-opacity-90" style="background-image: url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/US-en-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg'); background-blend-mode: overlay;">
+                    <div class="bg-black bg-opacity-80 p-12 rounded-lg shadow-lg max-w-md w-full">
+                        <h1 class="text-4xl font-bold text-red-600 mb-8 text-center">Entrar</h1>
+                        <form id="loginForm" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2">Email</label>
+                                <input type="email" id="email" class="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="voce@exemplo.com" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2">Senha</label>
+                                <input type="password" id="password" class="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="******" required>
+                            </div>
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition duration-200">Acessar</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                login(document.getElementById('email').value, document.getElementById('password').value);
+            });
+        };
+
+        // --- DASHBOARD (HOME) ---
+        const renderHome = () => {
+            // Agrupar aulas por Série (Matéria)
+            const groupedLessons = state.lessons.reduce((acc, lesson) => {
+                if (!acc[lesson.series]) acc[lesson.series] = [];
+                acc[lesson.series].push(lesson);
+                return acc;
+            }, {});
+
+            // Header HTML
+            let html = `
+                <nav class="bg-black bg-opacity-90 fixed w-full z-40 px-8 py-4 flex justify-between items-center border-b border-gray-800">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl font-bold text-red-600 tracking-tighter">${state.config.siteName}</span>
+                    </div>
+                    <div class="flex gap-4 items-center">
+                        ${state.isAdmin ? `<button id="btnAdmin" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm">Admin</button>` : ''}
+                        ${state.isAdmin ? `<button id="btnConfig" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm"><i class="fas fa-cog"></i></button>` : ''}
+                        <button id="btnLogout" class="text-gray-400 hover:text-white text-sm">Sair</button>
+                    </div>
+                </nav>
+                
+                <div class="pt-24 pb-12 px-8 fade-in">
+            `;
+
+            // Renderizar linhas por Matéria
+            if (Object.keys(groupedLessons).length === 0) {
+                html += `<div class="text-center mt-20 text-gray-500">Nenhuma aula cadastrada ainda.</div>`;
+            } else {
+                for (const [series, lessons] of Object.entries(groupedLessons)) {
+                    html += `
+                        <div class="mb-8">
+                            <h2 class="text-xl font-semibold text-white mb-4 pl-2 border-l-4 border-red-600">${series}</h2>
+                            <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
+                    `;
+                    
+                    // Ordenar por Temporada e Episódio
+                    lessons.sort((a, b) => (a.season - b.season) || (a.episode - b.episode));
+
+                    lessons.forEach(lesson => {
+                        const isCompleted = state.progress[lesson.id];
+                        const thumbnail = `https://img.youtube.com/vi/${extractVideoID(lesson.videoUrl)}/mqdefault.jpg`;
+                        
+                        html += `
+                            <div class="lesson-card flex-none w-64 bg-gray-900 rounded-md overflow-hidden relative shadow-lg group" onclick="window.startLesson('${lesson.id}')">
+                                <div class="relative h-36">
+                                    <img src="${thumbnail}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition">
+                                    <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-xs px-2 py-1 rounded">T${lesson.season}:E${lesson.episode}</div>
+                                    ${isCompleted ? '<div class="absolute top-2 right-2 text-green-500 bg-black bg-opacity-70 rounded-full p-1"><i class="fas fa-check"></i></div>' : ''}
+                                </div>
+                                <div class="p-3">
+                                    <h3 class="font-bold text-sm text-gray-200 truncate">${lesson.title}</h3>
+                                    <div class="w-full bg-gray-800 h-1 mt-3 rounded-full overflow-hidden">
+                                        <div class="h-full bg-red-600" style="width: ${isCompleted ? '100%' : '0%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div></div>`;
+                }
+            }
+
+            html += `</div>`; // Fechamento do container
+            
+            // Injeção de Modais (Escondidos por padrão)
+            html += getAdminModalTemplate();
+            html += getConfigModalTemplate();
+
+            root.innerHTML = html;
+
+            // Event Listeners
+            document.getElementById('btnLogout').onclick = logout;
+            if(state.isAdmin) {
+                document.getElementById('btnAdmin').onclick = () => openAdminModal();
+                document.getElementById('btnConfig').onclick = () => openConfigModal();
+            }
+        };
+
+        // --- PLAYER IMERSIVO (Lógica Principal) ---
+        const renderPlayer = () => {
+            const lesson = state.currentLesson;
+            const videoId = extractVideoID(lesson.videoUrl);
+
+            root.innerHTML = `
+                <div class="player-overlay fade-in">
+                    <!-- Controle Superior -->
+                    <div class="absolute top-4 right-4 z-[60]">
+                        <button onclick="window.closePlayer()" class="text-white bg-red-600 hover:bg-red-700 rounded-full w-12 h-12 flex items-center justify-center shadow-lg transform hover:scale-110 transition">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- ESTÁGIO 1: VÍDEO -->
+                    <div id="videoStage" class="flex-1 w-full h-full flex items-center justify-center bg-black">
+                        <div id="youtube-player"></div>
+                    </div>
+
+                    <!-- ESTÁGIO 2: LEITURA & AUDIO (Inicialmente Oculto) -->
+                    <div id="textStage" class="hidden flex-1 w-full h-full bg-gray-900 text-gray-200 p-8 overflow-y-auto flex flex-col items-center">
+                        <div class="max-w-3xl w-full py-10">
+                            <h1 class="text-3xl font-bold text-white mb-6">${lesson.title}</h1>
+                            <div class="prose prose-invert prose-lg mb-10 border-b border-gray-700 pb-8">
+                                ${lesson.content}
+                            </div>
+                            
+                            <div class="flex items-center justify-center gap-4 bg-gray-800 p-4 rounded-lg">
+                                <div class="animate-pulse w-3 h-3 bg-red-500 rounded-full"></div>
+                                <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Leitura Automática em Progresso</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Iniciar YouTube Player
+            if (window.YT) {
+                initYTPlayer(videoId);
+            } else {
+                // Carregar API se não existir
+                const tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/iframe_api";
+                const firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                window.onYouTubeIframeAPIReady = () => initYTPlayer(videoId);
+            }
+        };
+
+        // Funções de Controle do Player
+        let ytPlayerInstance = null;
+        
+        const initYTPlayer = (videoId) => {
+            ytPlayerInstance = new YT.Player('youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: videoId,
+                playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0 },
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        };
+
+        const onPlayerStateChange = (event) => {
+            // 0 = Ended
+            if (event.data === 0) {
+                transitionToText();
+            }
+        };
+
+        const transitionToText = () => {
+            const videoStage = document.getElementById('videoStage');
+            const textStage = document.getElementById('textStage');
+            
+            if(videoStage) videoStage.classList.add('hidden');
+            if(textStage) textStage.classList.remove('hidden');
+
+            // Iniciar TTS
+            startTTS(state.currentLesson.content);
+        };
+
+        const startTTS = (htmlContent) => {
+            // Cancelar falas anteriores
+            state.speechSynth.cancel();
+
+            // Extrair texto limpo do HTML
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = htmlContent;
+            const text = tempDiv.textContent || tempDiv.innerText || "";
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.1; // Um pouco mais rápido para melhor fluidez
+
+            utterance.onend = () => {
+                finishLesson();
+            };
+
+            state.speechSynth.speak(utterance);
+        };
+
+        const finishLesson = async () => {
+            // 1. Salvar progresso
+            await markLessonComplete(state.currentLesson.id);
+
+            // 2. Achar próxima aula
+            const allLessons = state.lessons.filter(l => l.series === state.currentLesson.series);
+            allLessons.sort((a, b) => (a.season - b.season) || (a.episode - b.episode));
+            
+            const currentIndex = allLessons.findIndex(l => l.id === state.currentLesson.id);
+            const nextLesson = allLessons[currentIndex + 1];
+
+            if (nextLesson) {
+                // Flash message ou transição visual
+                alert("Aula concluída! Iniciando próxima aula...");
+                state.currentLesson = nextLesson;
+                renderPlayer(); // Reinicia o ciclo
+            } else {
+                alert("Parabéns! Você finalizou esta matéria.");
+                closePlayer();
+            }
+        };
+
+        // Torna acessível globalmente
+        window.closePlayer = () => {
+            if(state.speechSynth) state.speechSynth.cancel();
+            state.currentLesson = null;
+            renderHome();
+        };
+
+        window.startLesson = (id) => {
+            state.currentLesson = state.lessons.find(l => l.id === id);
+            renderPlayer();
+        };
+
+        // =================================================================
+        // 5. PAINEL ADMIN E MODAIS
+        // =================================================================
+
+        const getAdminModalTemplate = () => `
+            <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+                <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <div class="p-6 border-b border-gray-700 flex justify-between items-center sticky top-0 bg-gray-800 z-10">
+                        <h2 class="text-2xl font-bold text-white">Gerenciar Aulas</h2>
+                        <button onclick="window.closeModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Formulário -->
+                        <form id="lessonForm" class="space-y-4 mb-8 bg-gray-700 p-4 rounded">
+                            <input type="hidden" id="lessonId">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input id="series" type="text" placeholder="Matéria (ex: Algoritmos)" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
+                                <input id="season" type="number" placeholder="Temporada/Unidade" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
+                                <input id="episode" type="number" placeholder="Episódio" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
+                            </div>
+                            <input id="title" type="text" placeholder="Título da Aula" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
+                            <input id="videoUrl" type="text" placeholder="URL do YouTube" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
+                            
+                            <!-- Quill Wrapper -->
+                            <div class="bg-white text-black rounded">
+                                <div id="editor-container"></div>
+                            </div>
+
+                            <div class="flex justify-end gap-2 mt-4">
+                                <button type="button" onclick="resetForm()" class="px-4 py-2 bg-gray-600 rounded text-white">Limpar</button>
+                                <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white font-bold">Salvar Aula</button>
+                            </div>
+                        </form>
+
+                        <!-- Lista Simples de Aulas -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-gray-300">
+                                <thead class="text-xs uppercase bg-gray-900 text-gray-400">
+                                    <tr>
+                                        <th class="p-3">Matéria</th>
+                                        <th class="p-3">T:E</th>
+                                        <th class="p-3">Título</th>
+                                        <th class="p-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminLessonList" class="divide-y divide-gray-700">
+                                    <!-- Preenchido via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const getConfigModalTemplate = () => `
+            <div id="configModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+                <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+                    <h2 class="text-xl font-bold mb-4">Configurações do Site</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm mb-1">Nome do Site</label>
+                            <input id="confSiteName" type="text" class="w-full bg-gray-700 p-2 rounded text-white" value="${state.config.siteName}">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1">URL do Favicon</label>
+                            <input id="confFavicon" type="text" class="w-full bg-gray-700 p-2 rounded text-white" value="${state.config.favicon || ''}">
+                        </div>
+                        <button onclick="window.saveGlobalConfig()" class="w-full bg-blue-600 py-2 rounded font-bold mt-4">Salvar Configurações</button>
+                        <button onclick="document.getElementById('configModal').classList.add('hidden')" class="w-full bg-gray-600 py-2 rounded mt-2">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Lógica do Modal Admin
+        window.openAdminModal = () => {
+            const modal = document.getElementById('adminModal');
+            modal.classList.remove('hidden');
+            
+            // Renderizar lista
+            const tbody = document.getElementById('adminLessonList');
+            tbody.innerHTML = state.lessons.map(l => `
+                <tr class="hover:bg-gray-700">
+                    <td class="p-3">${l.series}</td>
+                    <td class="p-3">${l.season}:${l.episode}</td>
+                    <td class="p-3 font-semibold text-white">${l.title}</td>
+                    <td class="p-3 text-right space-x-2">
+                        <button onclick="window.editLesson('${l.id}')" class="text-blue-400"><i class="fas fa-edit"></i></button>
+                        <button onclick="window.removeLesson('${l.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Init Quill se não existir
+            if(!quillEditor) {
+                quillEditor = new Quill('#editor-container', {
+                    theme: 'snow',
+                    placeholder: 'Conteúdo de texto da aula...',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],
+                            ['blockquote', 'code-block'],
+                            [{ 'header': 1 }, { 'header': 2 }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'color': [] }, { 'background': [] }],
+                            ['clean']
+                        ]
+                    }
+                });
+            }
+
+            // Bind Form Submit
+            const form = document.getElementById('lessonForm');
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const data = {
+                    series: document.getElementById('series').value,
+                    season: parseInt(document.getElementById('season').value),
+                    episode: parseInt(document.getElementById('episode').value),
+                    title: document.getElementById('title').value,
+                    videoUrl: document.getElementById('videoUrl').value,
+                    content: quillEditor.root.innerHTML,
+                    updatedAt: new Date()
+                };
+                const id = document.getElementById('lessonId').value;
+                saveLesson(data, id || null);
+            };
+        };
+
+        window.closeModal = () => {
+            document.getElementById('adminModal').classList.add('hidden');
+            window.resetForm();
+        };
+
+        window.resetForm = () => {
+            document.getElementById('lessonForm').reset();
+            document.getElementById('lessonId').value = "";
+            if(quillEditor) quillEditor.root.innerHTML = "";
+        };
+
+        window.editLesson = (id) => {
+            const lesson = state.lessons.find(l => l.id === id);
+            if(!lesson) return;
+            
+            document.getElementById('lessonId').value = lesson.id;
+            document.getElementById('series').value = lesson.series;
+            document.getElementById('season').value = lesson.season;
+            document.getElementById('episode').value = lesson.episode;
+            document.getElementById('title').value = lesson.title;
+            document.getElementById('videoUrl').value = lesson.videoUrl;
+            quillEditor.root.innerHTML = lesson.content;
+        };
+
+        window.removeLesson = (id) => deleteLesson(id);
+
+        // Lógica Config
+        window.openConfigModal = () => document.getElementById('configModal').classList.remove('hidden');
+        window.saveGlobalConfig = () => {
+            const name = document.getElementById('confSiteName').value;
+            const fav = document.getElementById('confFavicon').value;
+            saveConfig(name, fav);
+            document.getElementById('configModal').classList.add('hidden');
+        };
+
+        // =================================================================
+        // 6. INICIALIZAÇÃO
+        // =================================================================
+        onAuthStateChanged(auth, async (user) => {
+            state.user = user;
+            if (user) {
+                // Verificação simples de admin (Segurança Real deve ser feita nas Security Rules do Firestore)
+                state.isAdmin = user.email.includes("@userpro"); 
+                
+                await Promise.all([fetchConfig(), fetchLessons(), fetchProgress()]);
+            } else {
+                renderLogin();
+            }
         });
 
     </script>
