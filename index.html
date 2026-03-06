@@ -3,28 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aurora Odontologia Premium | Landing Page Modelo</title>
-  <meta name="description" content="Landing page modelo premium para portfólio de criação de sites. Exemplo fictício de clínica odontológica com foco em conversão, autoridade e agendamento." />
-  <meta name="theme-color" content="#0f172a" />
+  <title>Vértice Studio | Landing Page Modelo Premium</title>
+  <meta name="description" content="Landing page modelo premium, elegante e vendável para portfólio de criação de sites. Projeto fictício de agência digital focada em performance, design e posicionamento." />
+  <meta name="theme-color" content="#0b1020" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #07111f;
-      --bg-soft: #0d1a2d;
-      --card: rgba(255,255,255,0.08);
-      --card-strong: rgba(255,255,255,0.12);
-      --line: rgba(255,255,255,0.12);
-      --text: #ebf2ff;
-      --muted: #9fb2cf;
-      --brand: #58c8ff;
-      --brand-2: #8b5cf6;
-      --accent: #0ee7b7;
+      --bg: #0a1020;
+      --bg-2: #0d1630;
+      --surface: rgba(255,255,255,0.06);
+      --surface-2: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.10);
+      --text: #f5f7ff;
+      --muted: #a8b2cc;
+      --brand: #7c5cff;
+      --brand-2: #4ecdc4;
+      --brand-3: #8ec5ff;
+      --dark: #070b16;
       --shadow: 0 30px 80px rgba(0,0,0,0.35);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
       --container: 1180px;
     }
 
@@ -35,9 +36,10 @@
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(88,200,255,0.18), transparent 26%),
-        radial-gradient(circle at top right, rgba(139,92,246,0.18), transparent 22%),
-        linear-gradient(180deg, #07111f 0%, #081522 50%, #06101c 100%);
+        radial-gradient(circle at 10% 10%, rgba(124,92,255,0.18), transparent 24%),
+        radial-gradient(circle at 90% 15%, rgba(78,205,196,0.14), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(142,197,255,0.08), transparent 28%),
+        linear-gradient(180deg, #09101f 0%, #0a1020 40%, #0b1225 100%);
       overflow-x: hidden;
     }
 
@@ -45,27 +47,26 @@
     body::after {
       content: "";
       position: fixed;
-      inset: auto;
-      pointer-events: none;
       z-index: -1;
-      filter: blur(70px);
-      opacity: 0.5;
+      pointer-events: none;
+      filter: blur(90px);
+      opacity: .7;
     }
 
     body::before {
-      width: 260px;
-      height: 260px;
-      background: rgba(88,200,255,0.22);
-      top: 120px;
-      left: -60px;
+      width: 320px;
+      height: 320px;
+      top: 90px;
+      left: -90px;
+      background: rgba(124,92,255,0.20);
     }
 
     body::after {
-      width: 320px;
-      height: 320px;
-      background: rgba(14,231,183,0.12);
-      top: 40%;
-      right: -100px;
+      width: 380px;
+      height: 380px;
+      right: -120px;
+      top: 42%;
+      background: rgba(78,205,196,0.16);
     }
 
     a { color: inherit; text-decoration: none; }
@@ -76,66 +77,79 @@
       margin: 0 auto;
     }
 
-    .pill {
+    .section {
+      padding: 110px 0;
+      position: relative;
+    }
+
+    .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       padding: 10px 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 999px;
-      color: #d7e5ff;
-      font-size: 0.92rem;
-      backdrop-filter: blur(14px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #dfe6ff;
+      font-size: .92rem;
+      font-weight: 600;
+      letter-spacing: .01em;
+      backdrop-filter: blur(16px);
     }
 
-    .pill-dot {
+    .eyebrow-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--brand));
-      box-shadow: 0 0 18px rgba(14,231,183,0.65);
-    }
-
-    .section {
-      padding: 92px 0;
-      position: relative;
+      background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+      box-shadow: 0 0 18px rgba(78,205,196,0.55);
     }
 
     .section-title {
-      font-size: clamp(2rem, 3vw, 3rem);
-      line-height: 1.05;
       margin: 16px 0 14px;
-      letter-spacing: -0.04em;
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: .98;
+      letter-spacing: -0.05em;
+      max-width: 12ch;
     }
 
     .section-text {
+      margin: 0;
+      max-width: 760px;
       color: var(--muted);
       font-size: 1.05rem;
-      line-height: 1.75;
-      max-width: 760px;
+      line-height: 1.85;
     }
 
     .glass {
-      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
       border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
       box-shadow: var(--shadow);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(6, 16, 28, 0.74);
+      background: rgba(7,11,22,0.72);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .nav {
-      min-height: 76px;
+      min-height: 78px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -147,32 +161,32 @@
       align-items: center;
       gap: 12px;
       font-weight: 800;
-      letter-spacing: -0.03em;
-      font-size: 1.05rem;
+      letter-spacing: -0.04em;
+      font-size: 1.03rem;
     }
 
     .brand-mark {
       width: 42px;
       height: 42px;
       border-radius: 14px;
-      background: linear-gradient(145deg, rgba(88,200,255,0.95), rgba(139,92,246,0.9));
       display: grid;
       place-items: center;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
       color: white;
+      box-shadow: 0 16px 34px rgba(124,92,255,0.26);
       font-weight: 900;
-      box-shadow: 0 14px 32px rgba(88,200,255,0.24);
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 26px;
-      color: #d9e6fb;
-      font-size: 0.96rem;
+      gap: 28px;
+      color: #dbe2f7;
+      font-size: .96rem;
     }
 
     .nav-links a {
-      opacity: 0.82;
+      opacity: .84;
       transition: opacity .2s ease, transform .2s ease;
     }
 
@@ -183,66 +197,72 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      border: 0;
-      border-radius: 16px;
       padding: 15px 22px;
-      font-weight: 700;
-      font-size: 0.98rem;
+      border-radius: 16px;
+      border: 0;
       cursor: pointer;
+      font-weight: 700;
+      font-size: .98rem;
       transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
     }
 
     .btn:hover { transform: translateY(-2px); }
 
     .btn-primary {
-      color: #03111d;
-      background: linear-gradient(135deg, #8ee6ff 0%, #58c8ff 50%, #0ee7b7 100%);
-      box-shadow: 0 18px 40px rgba(88,200,255,0.25);
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), #9f86ff 55%, #7eecdf 100%);
+      box-shadow: 0 18px 40px rgba(124,92,255,0.28);
     }
 
     .btn-secondary {
       color: var(--text);
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(12px);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 1.2rem;
     }
 
     .hero {
-      padding: 42px 0 88px;
+      padding: 44px 0 96px;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 32px;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 34px;
       align-items: center;
     }
 
-    .eyebrow {
-      margin-bottom: 18px;
+    .hero-copy h1 {
+      margin: 18px 0 0;
+      font-size: clamp(3rem, 6vw, 6rem);
+      line-height: .92;
+      letter-spacing: -0.065em;
+      max-width: 11ch;
     }
 
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(2.8rem, 6vw, 5.6rem);
-      line-height: 0.95;
-      letter-spacing: -0.055em;
-      max-width: 14ch;
-    }
-
-    .hero p {
-      margin: 22px 0 0;
+    .hero-copy p {
+      margin: 24px 0 0;
       max-width: 62ch;
       color: var(--muted);
       font-size: 1.08rem;
-      line-height: 1.8;
+      line-height: 1.9;
     }
 
     .hero-actions {
-      margin-top: 28px;
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
+      margin-top: 32px;
     }
 
     .hero-proof {
@@ -252,296 +272,378 @@
       margin-top: 28px;
     }
 
-    .metric-strip {
-      margin-top: 34px;
+    .proof-chip {
+      padding: 11px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #d8e0fb;
+      font-size: .9rem;
+    }
+
+    .hero-metrics {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 14px;
-      max-width: 680px;
+      margin-top: 34px;
+      max-width: 720px;
     }
 
     .metric {
-      padding: 18px 18px 16px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.06);
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
     }
 
     .metric strong {
       display: block;
-      font-size: 1.45rem;
-      letter-spacing: -0.03em;
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
       margin-bottom: 8px;
     }
 
     .metric span {
       color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .visual-card {
-      position: relative;
-      padding: 22px;
-      min-height: 580px;
-      overflow: hidden;
+      font-size: .95rem;
+      line-height: 1.65;
     }
 
     .hero-visual {
-      position: absolute;
-      inset: 16px;
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(142,230,255,0.24), transparent 24%),
-        radial-gradient(circle at 80% 20%, rgba(139,92,246,0.18), transparent 20%),
-        linear-gradient(160deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04));
-      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      min-height: 620px;
+      border-radius: 36px;
       overflow: hidden;
-    }
-
-    .hero-illustration {
-      position: absolute;
-      right: -8px;
-      bottom: -12px;
-      width: 92%;
-      height: auto;
-      opacity: 0.98;
-    }
-
-    .floating-card {
-      position: absolute;
-      border-radius: 22px;
-      background: rgba(8, 18, 34, 0.72);
-      border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
       padding: 18px;
     }
 
-    .floating-top {
-      top: 26px;
-      left: 22px;
-      width: 230px;
+    .hero-card {
+      position: absolute;
+      inset: 0;
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(124,92,255,0.25), transparent 25%),
+        radial-gradient(circle at 78% 16%, rgba(78,205,196,0.20), transparent 22%),
+        linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
     }
 
-    .floating-bottom {
-      bottom: 24px;
-      left: 26px;
-      width: 270px;
-    }
-
-    .floating-card .label {
-      font-size: 0.86rem;
-      color: #c0d5f0;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .floating-card strong {
-      display: block;
-      font-size: 1.25rem;
-      margin-bottom: 6px;
-      letter-spacing: -0.03em;
-    }
-
-    .floating-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.6;
-    }
-
-    .cards-grid {
-      margin-top: 34px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 18px;
-    }
-
-    .feature-card,
-    .service-card,
-    .testimonial,
-    .faq-item,
-    .step,
-    .contact-card,
-    .pricing-card {
+    .dashboard {
+      position: absolute;
+      inset: 26px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(10,16,32,0.88), rgba(9,14,28,0.72));
+      border: 1px solid rgba(255,255,255,0.08);
       padding: 24px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 22px;
     }
 
-    .feature-card h3,
-    .service-card h3,
-    .testimonial h3,
-    .pricing-card h3,
-    .step h3 {
-      margin: 16px 0 10px;
-      font-size: 1.16rem;
+    .dashboard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .dashboard-badge {
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: .84rem;
+      color: #dce4fb;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .dashboard-window {
+      border-radius: 28px;
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .window-kicker {
+      color: #c5cff0;
+      font-size: .92rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .window-title {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      margin: 0;
+      max-width: 11ch;
+    }
+
+    .window-text {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 46ch;
+    }
+
+    .ui-row {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+    }
+
+    .ui-card,
+    .ui-side {
+      border-radius: 24px;
+      padding: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ui-card strong,
+    .ui-side strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1rem;
       letter-spacing: -0.03em;
     }
 
-    .feature-card p,
-    .service-card p,
-    .testimonial p,
-    .pricing-card p,
-    .step p,
-    .faq-answer,
-    .contact-card p,
-    .contact-list li {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: 0.98rem;
+    .bar-group {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
     }
 
-    .icon-box {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
+    .bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mini-stat {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .mini-stat b {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      letter-spacing: -0.03em;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.5;
+    }
+
+    .floating-panel {
+      position: absolute;
+      border-radius: 24px;
+      background: rgba(8,12,22,0.82);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      max-width: 250px;
+    }
+
+    .panel-a { top: 22px; left: 22px; }
+    .panel-b { right: 24px; bottom: 24px; }
+
+    .floating-panel small {
+      display: block;
+      color: #cfd9f8;
+      margin-bottom: 8px;
+      font-size: .84rem;
+    }
+
+    .floating-panel strong {
+      display: block;
+      font-size: 1.12rem;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .floating-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.7;
+    }
+
+    .logo-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 16px;
+      margin-top: 34px;
+    }
+
+    .logo-item {
+      padding: 20px;
+      border-radius: 22px;
+      text-align: center;
+      color: #dde4fa;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: .82rem;
+    }
+
+    .feature-grid,
+    .service-grid,
+    .results-grid,
+    .testimonial-grid,
+    .pricing-grid,
+    .faq-grid {
+      display: grid;
+      gap: 20px;
+      margin-top: 34px;
+    }
+
+    .feature-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .service-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .results-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .testimonial-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .pricing-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .faq-grid { grid-template-columns: 1fr 1fr; }
+
+    .feature,
+    .service,
+    .result,
+    .testimonial,
+    .pricing,
+    .faq-item,
+    .contact-box,
+    .cta-box {
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .feature-icon,
+    .service-icon,
+    .result-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(88,200,255,0.24), rgba(14,231,183,0.16));
-      border: 1px solid rgba(255,255,255,0.12);
-      font-size: 1.3rem;
+      font-size: 1.25rem;
+      background: linear-gradient(135deg, rgba(124,92,255,0.22), rgba(78,205,196,0.18));
+      border: 1px solid rgba(255,255,255,0.10);
     }
 
-    .services-layout,
-    .story-layout,
-    .contact-layout,
-    .pricing-layout {
+    .feature h3,
+    .service h3,
+    .result h3,
+    .testimonial h3,
+    .pricing h3,
+    .contact-box h3,
+    .cta-box h3 {
+      margin: 18px 0 10px;
+      font-size: 1.22rem;
+      letter-spacing: -0.03em;
+    }
+
+    .feature p,
+    .service p,
+    .result p,
+    .testimonial p,
+    .pricing p,
+    .contact-box p,
+    .faq-answer,
+    .contact-list li,
+    .form-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.82;
+      font-size: .98rem;
+    }
+
+    .section-split {
       display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
+      grid-template-columns: .92fr 1.08fr;
       gap: 24px;
       align-items: start;
       margin-top: 32px;
     }
 
-    .sticky-panel {
+    .sticky-card {
       position: sticky;
       top: 102px;
-      padding: 28px;
+      padding: 32px;
+      border-radius: 32px;
     }
 
-    .panel-list {
+    .check-list {
       display: grid;
       gap: 16px;
-      margin-top: 22px;
+      margin-top: 24px;
     }
 
-    .panel-item {
+    .check-item {
       display: flex;
       gap: 12px;
       align-items: flex-start;
-      color: #dce9ff;
+      color: #dde4fb;
+      line-height: 1.7;
     }
 
-    .panel-item .check {
-      margin-top: 2px;
-      width: 26px;
-      height: 26px;
+    .check-dot {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
       border-radius: 999px;
       display: grid;
       place-items: center;
-      background: rgba(14,231,183,0.14);
-      border: 1px solid rgba(14,231,183,0.22);
-      color: #9affdf;
-      font-size: 0.9rem;
-      flex: 0 0 auto;
+      background: rgba(78,205,196,0.14);
+      border: 1px solid rgba(78,205,196,0.22);
+      color: #8cf3ea;
+      font-size: .95rem;
+      margin-top: 1px;
     }
 
-    .service-grid,
-    .testimonial-grid,
-    .steps-grid,
-    .faq-grid,
-    .pricing-cards {
-      display: grid;
-      gap: 18px;
+    .result {
+      text-align: left;
     }
 
-    .service-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .testimonial-grid { grid-template-columns: repeat(3, minmax(0,1fr)); margin-top: 34px; }
-    .steps-grid { grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: 34px; }
-    .faq-grid { grid-template-columns: 1fr 1fr; margin-top: 34px; }
-    .pricing-cards { grid-template-columns: repeat(3, minmax(0,1fr)); }
-
-    .service-card {
-      min-height: 250px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -20px -30px auto;
-      width: 120px;
-      height: 120px;
-      background: radial-gradient(circle, rgba(88,200,255,0.22), transparent 70%);
-      filter: blur(8px);
-      opacity: 0.8;
-    }
-
-    .story-card {
-      padding: 30px;
-      display: grid;
-      gap: 22px;
-    }
-
-    .story-visual {
-      min-height: 460px;
-      position: relative;
-      overflow: hidden;
-      padding: 26px;
-    }
-
-    .story-visual svg {
-      position: absolute;
-      inset: auto 0 0 auto;
-      width: 100%;
-      height: auto;
-      opacity: 0.96;
-    }
-
-    .badge-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-    }
-
-    .badge-card {
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .badge-card strong {
+    .result strong {
       display: block;
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-    }
-
-    .tag-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #dce9ff;
-      font-size: 0.9rem;
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
+      margin: 18px 0 8px;
     }
 
     .stars {
       font-size: 1rem;
-      letter-spacing: 0.15em;
-      color: #ffd86c;
+      letter-spacing: .14em;
+      color: #ffd875;
       margin-bottom: 16px;
     }
 
@@ -553,38 +655,73 @@
     }
 
     .avatar {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(88,200,255,0.34), rgba(139,92,246,0.34));
-      border: 1px solid rgba(255,255,255,0.12);
-      font-weight: 700;
+      background: linear-gradient(135deg, rgba(124,92,255,0.34), rgba(78,205,196,0.34));
+      border: 1px solid rgba(255,255,255,0.10);
+      font-weight: 800;
     }
 
     .avatar-meta strong {
       display: block;
-      font-size: 0.98rem;
+      font-size: .98rem;
+      margin: 0;
     }
 
     .avatar-meta span {
       display: block;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: .9rem;
       margin-top: 2px;
     }
 
-    .step-number {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
+    .pricing.featured {
+      transform: translateY(-10px);
+      background: linear-gradient(180deg, rgba(124,92,255,0.16), rgba(255,255,255,0.05));
+      border-color: rgba(124,92,255,0.24);
+    }
+
+    .pricing-tag {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(124,92,255,0.14);
+      border: 1px solid rgba(124,92,255,0.24);
+      color: #ddd5ff;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .price {
+      margin: 16px 0 10px;
+      font-size: 2.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, rgba(88,200,255,0.22), rgba(14,231,183,0.18));
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 18px;
+      letter-spacing: -0.05em;
+    }
+
+    .price small {
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .price-list {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 28px;
+      display: grid;
+      gap: 12px;
+      color: #e3e9fb;
+    }
+
+    .price-list li::before {
+      content: "✓";
+      color: #8ff3e5;
+      margin-right: 10px;
     }
 
     .faq-item {
@@ -616,61 +753,13 @@
 
     .faq-item.active .faq-answer { display: block; }
     .faq-item.active .faq-toggle { transform: rotate(45deg); }
-    .faq-toggle { transition: transform .2s ease; font-size: 1.4rem; color: #8ee6ff; }
-
-    .pricing-card.featured {
-      background: linear-gradient(180deg, rgba(88,200,255,0.16), rgba(255,255,255,0.07));
-      border-color: rgba(88,200,255,0.26);
-      transform: translateY(-8px);
-    }
-
-    .pricing-label {
-      display: inline-flex;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      background: rgba(88,200,255,0.16);
-      color: #b7eaff;
-      border: 1px solid rgba(88,200,255,0.22);
-      margin-bottom: 14px;
-    }
-
-    .price {
-      font-size: 2.4rem;
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      margin: 14px 0 8px;
-    }
-
-    .price small {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0;
-    }
-
-    .price-list {
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 12px;
-      margin: 22px 0 28px;
-      color: #dfeaff;
-    }
-
-    .price-list li::before {
-      content: "✓";
-      color: #95ffe1;
-      margin-right: 10px;
-    }
+    .faq-toggle { transition: transform .2s ease; font-size: 1.35rem; color: #bcb2ff; }
 
     .contact-layout {
-      grid-template-columns: 0.9fr 1.1fr;
-    }
-
-    .contact-card {
-      padding: 28px;
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 24px;
+      margin-top: 34px;
     }
 
     .contact-list {
@@ -679,6 +768,22 @@
       margin: 22px 0 0;
       display: grid;
       gap: 14px;
+    }
+
+    .mini-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .mini-pills span {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #dce3fa;
+      font-size: .88rem;
     }
 
     .form {
@@ -698,8 +803,8 @@
     }
 
     .field label {
-      font-size: 0.9rem;
-      color: #d8e6fb;
+      font-size: .9rem;
+      color: #dce4fb;
       font-weight: 600;
     }
 
@@ -708,54 +813,36 @@
     .field textarea {
       width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.05);
       color: var(--text);
       border-radius: 16px;
       padding: 15px 16px;
       font: inherit;
       outline: none;
-      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
     }
 
-    .field textarea { min-height: 150px; resize: vertical; }
+    .field textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
 
     .field input:focus,
     .field select:focus,
     .field textarea:focus {
-      border-color: rgba(88,200,255,0.45);
-      background: rgba(255,255,255,0.09);
+      border-color: rgba(124,92,255,0.45);
+      background: rgba(255,255,255,0.08);
       transform: translateY(-1px);
     }
 
-    .form-note {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.7;
-    }
-
-    .mini-proof {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .mini-proof span {
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.88rem;
-      color: #d7e5ff;
-    }
-
-    .cta-banner {
-      padding: 34px;
-      display: grid;
-      grid-template-columns: 1.2fr auto;
-      align-items: center;
-      gap: 24px;
+    .cta-wide {
       margin-top: 34px;
+      padding: 34px;
+      border-radius: 30px;
+      display: grid;
+      grid-template-columns: 1.1fr auto;
+      gap: 24px;
+      align-items: center;
     }
 
     footer {
@@ -768,79 +855,57 @@
       justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
-      padding-top: 28px;
       border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 28px;
     }
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .floating-whatsapp {
+    .floating-cta {
       position: fixed;
       right: 18px;
       bottom: 18px;
       z-index: 60;
-      width: 60px;
-      height: 60px;
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #34d399, #10b981);
-      color: #032015;
-      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #fff;
+      font-size: 1.45rem;
       font-weight: 900;
-      box-shadow: 0 22px 44px rgba(16,185,129,0.3);
+      box-shadow: 0 22px 44px rgba(124,92,255,0.28);
     }
 
-    .mobile-menu-btn {
-      display: none;
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      font-size: 1.2rem;
-    }
-
-    @media (max-width: 1080px) {
+    @media (max-width: 1120px) {
       .hero-grid,
-      .services-layout,
-      .story-layout,
+      .section-split,
       .contact-layout,
-      .pricing-layout,
-      .cta-banner {
+      .cta-wide {
         grid-template-columns: 1fr;
       }
 
-      .sticky-panel { position: static; }
-      .cards-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .sticky-card { position: static; }
+      .feature-grid,
+      .service-grid,
       .testimonial-grid,
-      .steps-grid,
-      .pricing-cards { grid-template-columns: 1fr 1fr; }
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+      .results-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .faq-grid { grid-template-columns: 1fr; }
-      .visual-card { min-height: 520px; }
-      .cta-banner { text-align: center; }
+      .logo-row { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .hero-visual { min-height: 560px; }
+      .cta-wide { text-align: center; }
     }
 
     @media (max-width: 820px) {
       .nav-links {
         position: fixed;
-        top: 76px;
+        top: 78px;
         left: 16px;
         right: 16px;
         flex-direction: column;
         align-items: stretch;
         padding: 16px;
-        background: rgba(7,17,31,0.96);
+        background: rgba(8,12,22,0.96);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 20px;
         display: none;
@@ -849,29 +914,34 @@
       .nav-links.open { display: flex; }
       .mobile-menu-btn { display: inline-grid; place-items: center; }
       .nav .btn-primary { display: none; }
-      .cards-grid,
+      .hero-metrics,
+      .feature-grid,
       .service-grid,
+      .results-grid,
       .testimonial-grid,
-      .steps-grid,
-      .pricing-cards,
+      .pricing-grid,
       .form-grid,
-      .metric-strip,
-      .badge-grid { grid-template-columns: 1fr; }
-      .hero h1 { max-width: 10ch; }
-      .visual-card { min-height: 460px; }
-      .floating-top,
-      .floating-bottom { width: calc(100% - 44px); }
+      .ui-row,
+      .logo-row { grid-template-columns: 1fr; }
+      .hero-copy h1 { max-width: 9ch; }
+      .hero-visual { min-height: 500px; }
+      .panel-b { left: 22px; right: 22px; bottom: 22px; max-width: none; }
     }
 
     @media (max-width: 560px) {
-      .section { padding: 76px 0; }
-      .hero { padding-bottom: 70px; }
+      .section { padding: 84px 0; }
+      .hero { padding-bottom: 76px; }
       .btn { width: 100%; }
       .hero-actions { flex-direction: column; }
-      .section-title { font-size: 2rem; }
-      .visual-card { min-height: 400px; padding: 14px; }
-      .hero-visual { inset: 10px; }
-      .floating-card { padding: 16px; }
+      .section-title { font-size: 2.1rem; max-width: none; }
+      .hero-visual { min-height: 440px; }
+      .dashboard { inset: 14px; padding: 16px; }
+      .floating-panel { padding: 14px; }
+      .panel-a,
+      .panel-b { left: 16px; right: 16px; max-width: none; }
+      .panel-a { top: 16px; }
+      .panel-b { bottom: 16px; }
+      .cta-wide { padding: 26px; }
       .footer-box { flex-direction: column; }
     }
   </style>
@@ -879,376 +949,328 @@
 <body>
   <header>
     <div class="container nav">
-      <a class="brand" href="#inicio" aria-label="Aurora Odontologia Premium">
-        <span class="brand-mark">A</span>
-        <span>Aurora <span style="color:#8ee6ff;">Odontologia Premium</span></span>
+      <a href="#inicio" class="brand" aria-label="Vértice Studio">
+        <span class="brand-mark">V</span>
+        <span>Vértice <span style="color:#c9c0ff;">Studio</span></span>
       </a>
 
       <nav class="nav-links" id="navLinks">
+        <a href="#beneficios">Benefícios</a>
         <a href="#servicos">Serviços</a>
-        <a href="#sobre">Diferenciais</a>
+        <a href="#resultados">Resultados</a>
         <a href="#depoimentos">Depoimentos</a>
-        <a href="#faq">Dúvidas</a>
-        <a href="#contato">Agendar</a>
+        <a href="#contato">Contato</a>
       </nav>
 
       <button class="mobile-menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
-      <a href="#contato" class="btn btn-primary">Agendar avaliação</a>
+      <a href="#contato" class="btn btn-primary">Solicitar projeto</a>
     </div>
   </header>
 
   <main>
     <section class="hero" id="inicio">
       <div class="container hero-grid">
-        <div class="reveal visible">
-          <div class="eyebrow pill">
-            <span class="pill-dot"></span>
-            Landing page modelo premium para portfólio comercial
-          </div>
-
-          <h1>Sorria com confiança, tecnologia e atendimento de alto padrão.</h1>
+        <div class="hero-copy reveal visible">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Projeto modelo premium para portfólio comercial</div>
+          <h1>Sites que parecem caros, vendem melhor e elevam a marca.</h1>
           <p>
-            Esta é uma landing page fictícia criada como <strong>projeto modelo profissional</strong> para demonstrar como um negócio local pode converter visitantes em agendamentos usando design premium, copy estratégica, prova social e CTA forte.
+            Este é um <strong>modelo de landing page vendável, elegante e desejável</strong>, criado para servir como vitrine do seu trabalho. A proposta aqui não é apenas “parecer bonito”, mas transmitir valor, autoridade e vontade real de contratar.
           </p>
 
           <div class="hero-actions">
-            <a href="#contato" class="btn btn-primary">Quero agendar minha avaliação</a>
-            <a href="#precos" class="btn btn-secondary">Ver estrutura comercial</a>
+            <a href="#contato" class="btn btn-primary">Quero um projeto assim</a>
+            <a href="#servicos" class="btn btn-secondary">Ver estrutura da página</a>
           </div>
 
           <div class="hero-proof">
-            <span class="pill">⭐ 4,9 de satisfação</span>
-            <span class="pill">+3.200 pacientes atendidos</span>
-            <span class="pill">Atendimento humanizado</span>
+            <span class="proof-chip">Visual premium</span>
+            <span class="proof-chip">Foco em conversão</span>
+            <span class="proof-chip">Responsivo de verdade</span>
+            <span class="proof-chip">Perfeito para vender serviços</span>
           </div>
 
-          <div class="metric-strip">
+          <div class="hero-metrics">
             <div class="metric">
-              <strong>10+ anos</strong>
-              <span>de experiência em reabilitação oral e estética avançada.</span>
+              <strong>+12 nichos</strong>
+              <span>podem aproveitar essa base com pequenas adaptações visuais e de copy.</span>
             </div>
             <div class="metric">
-              <strong>97%</strong>
-              <span>de recomendação dos pacientes após o tratamento.</span>
+              <strong>Mais desejo</strong>
+              <span>quando o site respira, comunica valor e parece projeto de agência séria.</span>
             </div>
             <div class="metric">
-              <strong>Atendimento</strong>
-              <span>consultivo, transparente e focado em previsibilidade.</span>
+              <strong>Template real</strong>
+              <span>feito para ser exibido ao cliente e depois reutilizado comercialmente.</span>
             </div>
           </div>
         </div>
 
-        <div class="glass visual-card reveal">
-          <div class="hero-visual"></div>
+        <div class="hero-visual glass reveal">
+          <div class="hero-card"></div>
 
-          <div class="floating-card floating-top">
-            <span class="label">Avaliação inicial</span>
-            <strong>Plano de tratamento personalizado</strong>
-            <p>Diagnóstico preciso, escuta ativa e definição clara dos próximos passos.</p>
+          <div class="floating-panel panel-a">
+            <small>Percepção imediata</small>
+            <strong>Design limpo, sofisticado e com respiro.</strong>
+            <p>Uma boa landing page precisa fazer o visitante sentir que está diante de algo profissional logo na primeira dobra.</p>
           </div>
 
-          <div class="floating-card floating-bottom">
-            <span class="label">Resultado percebido</span>
-            <strong>Mais estética. Mais segurança. Mais confiança.</strong>
-            <p>Um tratamento premium precisa unir técnica, conforto e experiência.</p>
+          <div class="dashboard">
+            <div class="dashboard-top">
+              <span class="dashboard-badge">Landing Page Modelo</span>
+              <span class="dashboard-badge">Premium UI</span>
+            </div>
+
+            <div class="dashboard-window">
+              <span class="window-kicker">vértice studio</span>
+              <h2 class="window-title">Design estratégico para marcas que querem parecer maiores.</h2>
+              <p class="window-text">Esse bloco simula a sensação de uma interface refinada, com apelo visual forte e comunicação mais madura. A ideia é fazer o cliente pensar: “eu também quero meu negócio com essa presença”.</p>
+
+              <div class="ui-row">
+                <div class="ui-card">
+                  <strong>Estrutura visual</strong>
+                  <div class="bar-group">
+                    <div class="bar"><span style="width: 92%"></span></div>
+                    <div class="bar"><span style="width: 78%"></span></div>
+                    <div class="bar"><span style="width: 86%"></span></div>
+                  </div>
+                </div>
+                <div class="ui-side">
+                  <strong>Impacto percebido</strong>
+                  <div class="mini-stats">
+                    <div class="mini-stat"><b>Clareza</b><span>Leitura leve e elegante.</span></div>
+                    <div class="mini-stat"><b>Valor</b><span>Marca mais premium.</span></div>
+                    <div class="mini-stat"><b>Desejo</b><span>Mais vontade de clicar.</span></div>
+                    <div class="mini-stat"><b>Confiança</b><span>Visual que convence.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dashboard-top">
+              <span class="dashboard-badge">UX focada em atenção</span>
+              <span class="dashboard-badge">Copy + design</span>
+            </div>
           </div>
 
-          <svg class="hero-illustration" viewBox="0 0 700 720" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="g1" x1="70" y1="60" x2="590" y2="620" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#B5EEFF"/>
-                <stop offset="0.5" stop-color="#58C8FF"/>
-                <stop offset="1" stop-color="#8B5CF6"/>
-              </linearGradient>
-              <linearGradient id="g2" x1="190" y1="160" x2="520" y2="620" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#FFFFFF" stop-opacity="0.95"/>
-                <stop offset="1" stop-color="#DDF3FF" stop-opacity="0.35"/>
-              </linearGradient>
-            </defs>
-            <circle cx="514" cy="120" r="88" fill="url(#g1)" fill-opacity="0.16"/>
-            <circle cx="170" cy="150" r="64" fill="#0EE7B7" fill-opacity="0.11"/>
-            <rect x="160" y="90" width="340" height="530" rx="170" fill="url(#g2)" fill-opacity="0.18" stroke="rgba(255,255,255,0.18)"/>
-            <path d="M267 242C267 197.294 303.294 161 348 161H352C396.706 161 433 197.294 433 242V307C433 351.706 396.706 388 352 388H348C303.294 388 267 351.706 267 307V242Z" fill="url(#g1)" fill-opacity="0.18"/>
-            <path d="M226 589C239.688 488.587 325.306 414 426 414H436C536.694 414 622.312 488.587 636 589V614H226V589Z" fill="url(#g1)" fill-opacity="0.16"/>
-            <path d="M159 318C159 228.53 231.53 156 321 156H370C459.47 156 532 228.53 532 318V609H159V318Z" stroke="url(#g1)" stroke-opacity="0.75" stroke-width="2.5"/>
-            <path d="M254 245C254 192.533 296.533 150 349 150C401.467 150 444 192.533 444 245V306C444 358.467 401.467 401 349 401C296.533 401 254 358.467 254 306V245Z" stroke="#E7F7FF" stroke-opacity="0.48" stroke-width="2"/>
-            <path d="M207 614C218.1 505.95 309.029 422 417.647 422H438.353C546.971 422 637.9 505.95 649 614" stroke="#E7F7FF" stroke-opacity="0.48" stroke-width="2"/>
-            <path d="M253 498C283 520 310 534 347 541C384 548 420 543 457 521" stroke="#0EE7B7" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="303" cy="271" r="10" fill="#E8FAFF" fill-opacity="0.9"/>
-            <circle cx="395" cy="271" r="10" fill="#E8FAFF" fill-opacity="0.9"/>
-          </svg>
+          <div class="floating-panel panel-b">
+            <small>Objetivo do modelo</small>
+            <strong>Fazer seu futuro cliente querer contratar você.</strong>
+            <p>Essa versão foi construída para parecer mais vendável, mais leve e muito mais desejável que a anterior.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="logo-row reveal">
+          <div class="logo-item">studio</div>
+          <div class="logo-item">premium</div>
+          <div class="logo-item">performance</div>
+          <div class="logo-item">branding</div>
+          <div class="logo-item">digital</div>
         </div>
       </div>
     </section>
 
-    <section class="section" aria-label="Diferenciais rápidos">
+    <section class="section" id="beneficios">
       <div class="container">
-        <div class="cards-grid">
-          <article class="feature-card reveal">
-            <div class="icon-box">✦</div>
-            <h3>Design de alto padrão</h3>
-            <p>Visual sofisticado com sensação premium desde a primeira dobra da página.</p>
+        <div class="eyebrow reveal"><span class="eyebrow-dot"></span> O que faz um site vender melhor</div>
+        <h2 class="section-title reveal">Não é só beleza. É sensação de valor.</h2>
+        <p class="section-text reveal">
+          Um site comercial forte precisa equilibrar design, espaçamento, hierarquia, copy e ritmo de leitura. Quando isso acontece, o visitante sente confiança, percebe profissionalismo e fica mais inclinado a entrar em contato.
+        </p>
+
+        <div class="feature-grid">
+          <article class="feature reveal">
+            <div class="feature-icon">✦</div>
+            <h3>Respiro visual</h3>
+            <p>Menos aperto, mais elegância. Espaçamento bem usado faz o projeto parecer caro e organizado.</p>
           </article>
-          <article class="feature-card reveal">
-            <div class="icon-box">⚡</div>
-            <h3>Estrutura para conversão</h3>
-            <p>Copy persuasiva, CTA repetido, prova social e fluxo pensado para agendamento.</p>
+          <article class="feature reveal">
+            <div class="feature-icon">⚡</div>
+            <h3>Copy que conduz</h3>
+            <p>Títulos fortes, frases enxutas e blocos claros fazem a navegação parecer fácil e intencional.</p>
           </article>
-          <article class="feature-card reveal">
-            <div class="icon-box">📱</div>
-            <h3>Totalmente responsiva</h3>
-            <p>Experiência consistente no desktop, tablet e celular, sem aparência improvisada.</p>
-          </article>
-          <article class="feature-card reveal">
-            <div class="icon-box">🧩</div>
-            <h3>Pronta para personalizar</h3>
-            <p>Um único modelo pode ser adaptado para vários nichos com poucos ajustes.</p>
+          <article class="feature reveal">
+            <div class="feature-icon">🎯</div>
+            <h3>CTA desejável</h3>
+            <p>O visitante não deve apenas entender sua oferta. Ele precisa querer dar o próximo passo.</p>
           </article>
         </div>
       </div>
     </section>
 
     <section class="section" id="servicos">
-      <div class="container services-layout">
-        <aside class="glass sticky-panel reveal">
-          <div class="pill"><span class="pill-dot"></span> Estrutura comercial exemplo</div>
-          <h2 class="section-title">Serviços apresentados de forma clara, elegante e vendável.</h2>
+      <div class="container section-split">
+        <aside class="glass sticky-card reveal">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Estrutura de venda reutilizável</div>
+          <h2 class="section-title">Um modelo que funciona para você e para seus clientes.</h2>
           <p class="section-text">
-            Em uma landing page profissional, cada card precisa comunicar valor percebido, não só listar procedimentos. O visitante precisa entender <strong>o que ganha</strong>, não apenas o nome do serviço.
+            Em vez de um nicho muito específico, esta página apresenta um negócio fictício de criação digital premium. Isso faz dela uma vitrine mais versátil para mostrar sua capacidade de construir projetos de alto nível.
           </p>
-
-          <div class="panel-list">
-            <div class="panel-item"><span class="check">✓</span><div>Serviços organizados em blocos objetivos e escaneáveis.</div></div>
-            <div class="panel-item"><span class="check">✓</span><div>Linguagem acessível para gerar confiança em poucos segundos.</div></div>
-            <div class="panel-item"><span class="check">✓</span><div>Estrutura ideal para adaptar em clínicas, empresas e negócios locais.</div></div>
+          <div class="check-list">
+            <div class="check-item"><span class="check-dot">✓</span><div>Perfeita para usar como projeto exemplo no seu portfólio.</div></div>
+            <div class="check-item"><span class="check-dot">✓</span><div>Base fácil de adaptar para clínicas, consultorias, lojas e serviços locais.</div></div>
+            <div class="check-item"><span class="check-dot">✓</span><div>Comunicação com cara de marca premium, sem parecer genérica.</div></div>
           </div>
         </aside>
 
         <div class="service-grid">
-          <article class="service-card reveal">
-            <div class="icon-box">😁</div>
-            <h3>Lentes e estética dental</h3>
-            <p>Reforce sua autoestima com um planejamento visual que busca naturalidade, harmonia facial e acabamento sofisticado.</p>
+          <article class="service reveal">
+            <div class="service-icon">🖥️</div>
+            <h3>Landing Pages de alta percepção</h3>
+            <p>Páginas focadas em captação, clareza de oferta e desejo de conversão, com estética mais madura e convincente.</p>
           </article>
-          <article class="service-card reveal">
-            <div class="icon-box">🦷</div>
-            <h3>Implantes com previsibilidade</h3>
-            <p>Recupere função mastigatória e confiança com abordagem moderna, avaliação precisa e acompanhamento cuidadoso.</p>
+          <article class="service reveal">
+            <div class="service-icon">🏢</div>
+            <h3>Sites institucionais profissionais</h3>
+            <p>Projetos para negócios que precisam parecer sérios, organizados e confiáveis em todos os pontos de contato.</p>
           </article>
-          <article class="service-card reveal">
-            <div class="icon-box">✨</div>
-            <h3>Clareamento supervisionado</h3>
-            <p>Protocolos seguros para potencializar a estética do sorriso com conforto, orientação e resultado consistente.</p>
+          <article class="service reveal">
+            <div class="service-icon">🧠</div>
+            <h3>SPAs leves e funcionais</h3>
+            <p>Interfaces mais dinâmicas, com navegação fluida e sensação moderna para marcas que querem ir além do básico.</p>
           </article>
-          <article class="service-card reveal">
-            <div class="icon-box">🛡️</div>
-            <h3>Prevenção e acompanhamento</h3>
-            <p>Check-ups periódicos, rastreio preventivo e orientação personalizada para manter saúde bucal no longo prazo.</p>
+          <article class="service reveal">
+            <div class="service-icon">🎨</div>
+            <h3>Direção visual premium</h3>
+            <p>Escolha de layout, ritmo, contraste e acabamento para o site transmitir um valor percebido maior.</p>
+          </article>
+          <article class="service reveal">
+            <div class="service-icon">📱</div>
+            <h3>Responsividade de verdade</h3>
+            <p>Experiência coerente no celular, tablet e desktop, sem blocos espremidos ou aparência improvisada.</p>
+          </article>
+          <article class="service reveal">
+            <div class="service-icon">🚀</div>
+            <h3>Base pronta para escalar</h3>
+            <p>Uma vez aprovado o estilo, você pode replicar a mesma lógica em muitos clientes com rapidez.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section" id="sobre">
-      <div class="container story-layout">
-        <div class="glass story-card reveal">
-          <div class="pill"><span class="pill-dot"></span> Prova de autoridade</div>
-          <h2 class="section-title">Uma clínica que une excelência técnica, experiência e acolhimento.</h2>
-          <p class="section-text">
-            Esta seção mostra como posicionar um negócio como referência. Em vez de texto genérico, a apresentação valoriza diferenciais concretos, percepção de confiança e o sentimento de segurança que o paciente procura antes de entrar em contato.
-          </p>
+    <section class="section" id="resultados">
+      <div class="container">
+        <div class="eyebrow reveal"><span class="eyebrow-dot"></span> O que este modelo comunica</div>
+        <h2 class="section-title reveal">Mais do que um site bonito: uma presença que convence.</h2>
+        <p class="section-text reveal">
+          Quando o design está certo, o visitante não pensa em código, grid ou seções. Ele só sente que a marca parece melhor, mais forte e mais confiável. Esse é o efeito que você quer vender.
+        </p>
 
-          <div class="badge-grid">
-            <div class="badge-card">
-              <strong>Tecnologia de diagnóstico</strong>
-              <p>Processos mais previsíveis e decisões clínicas mais bem fundamentadas.</p>
-            </div>
-            <div class="badge-card">
-              <strong>Atendimento humanizado</strong>
-              <p>Escuta, clareza e acompanhamento próximo em todas as etapas.</p>
-            </div>
-            <div class="badge-card">
-              <strong>Equipe multidisciplinar</strong>
-              <p>Visão integrada para combinar função, estética e saúde bucal.</p>
-            </div>
-            <div class="badge-card">
-              <strong>Ambiente premium</strong>
-              <p>Conforto, organização e percepção de alto padrão desde a recepção.</p>
-            </div>
-          </div>
-
-          <div class="tag-row">
-            <span class="tag">Avaliação detalhada</span>
-            <span class="tag">Plano personalizado</span>
-            <span class="tag">Acompanhamento contínuo</span>
-            <span class="tag">Confiança em cada etapa</span>
-          </div>
-        </div>
-
-        <div class="glass story-visual reveal">
-          <div class="floating-card floating-top" style="top:24px; left:24px; width:230px;">
-            <span class="label">Percepção do paciente</span>
-            <strong>Ambiente calmo e profissional</strong>
-            <p>Detalhes visuais ajudam a aumentar o valor percebido antes do primeiro contato.</p>
-          </div>
-
-          <svg viewBox="0 0 740 620" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="bgStory" x1="100" y1="50" x2="620" y2="560" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#B8EFFF"/>
-                <stop offset="0.45" stop-color="#58C8FF"/>
-                <stop offset="1" stop-color="#0EE7B7"/>
-              </linearGradient>
-            </defs>
-            <rect x="90" y="82" width="560" height="420" rx="42" fill="url(#bgStory)" fill-opacity="0.08" stroke="rgba(255,255,255,0.15)"/>
-            <rect x="132" y="124" width="476" height="336" rx="30" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)"/>
-            <rect x="170" y="162" width="188" height="208" rx="24" fill="rgba(255,255,255,0.08)"/>
-            <rect x="382" y="162" width="186" height="74" rx="22" fill="rgba(255,255,255,0.1)"/>
-            <rect x="382" y="254" width="186" height="54" rx="18" fill="rgba(255,255,255,0.08)"/>
-            <rect x="382" y="326" width="186" height="88" rx="22" fill="rgba(255,255,255,0.08)"/>
-            <path d="M242 276C242 237.34 273.34 206 312 206C350.66 206 382 237.34 382 276C382 314.66 350.66 346 312 346C273.34 346 242 314.66 242 276Z" fill="url(#bgStory)" fill-opacity="0.24"/>
-            <path d="M470 198H536" stroke="#EAF8FF" stroke-opacity="0.72" stroke-width="12" stroke-linecap="round"/>
-            <path d="M414 280H536" stroke="#EAF8FF" stroke-opacity="0.52" stroke-width="10" stroke-linecap="round"/>
-            <path d="M414 350H520" stroke="#EAF8FF" stroke-opacity="0.52" stroke-width="10" stroke-linecap="round"/>
-            <path d="M414 378H482" stroke="#EAF8FF" stroke-opacity="0.34" stroke-width="10" stroke-linecap="round"/>
-          </svg>
-
-          <div class="floating-card floating-bottom" style="bottom:24px; left:auto; right:24px; width:260px;">
-            <span class="label">Mensagem visual</span>
-            <strong>Clareza, autoridade e sofisticação</strong>
-            <p>Esse padrão funciona muito bem para nichos de saúde, estética, consultoria e serviços premium.</p>
-          </div>
+        <div class="results-grid">
+          <article class="result reveal">
+            <div class="result-icon">01</div>
+            <strong>Marca com mais autoridade</strong>
+            <p>Visual mais limpo e forte aumenta a sensação de profissionalismo.</p>
+          </article>
+          <article class="result reveal">
+            <div class="result-icon">02</div>
+            <strong>Maior valor percebido</strong>
+            <p>O cliente tende a aceitar melhor preços quando o projeto parece mais refinado.</p>
+          </article>
+          <article class="result reveal">
+            <div class="result-icon">03</div>
+            <strong>Melhor leitura no mobile</strong>
+            <p>Uma experiência confortável no celular evita queda de interesse.</p>
+          </article>
+          <article class="result reveal">
+            <div class="result-icon">04</div>
+            <strong>Portfólio mais vendável</strong>
+            <p>Você passa a mostrar algo que realmente dá vontade de contratar.</p>
+          </article>
         </div>
       </div>
     </section>
 
     <section class="section" id="depoimentos">
       <div class="container">
-        <div class="pill reveal"><span class="pill-dot"></span> Prova social estratégica</div>
-        <h2 class="section-title reveal">Depoimentos que reduzem objeção e aumentam confiança.</h2>
+        <div class="eyebrow reveal"><span class="eyebrow-dot"></span> Prova social</div>
+        <h2 class="section-title reveal">Depoimentos que ajudam a fechar a venda.</h2>
         <p class="section-text reveal">
-          Bons depoimentos não existem apenas para “encher espaço”. Eles servem para fazer o visitante pensar: <strong>“essa clínica parece segura, organizada e confiável”</strong>. Isso vale para praticamente qualquer nicho.
+          Mesmo sendo um projeto modelo, a forma como os depoimentos são apresentados importa. Eles ajudam a transmitir credibilidade e reforçam a sensação de que o serviço é premium e bem executado.
         </p>
 
         <div class="testimonial-grid">
           <article class="testimonial reveal">
             <div class="stars">★★★★★</div>
-            <h3>Atendimento impecável do início ao fim</h3>
-            <p>“Eu procurava um tratamento estético com resultado natural e encontrei exatamente isso. Me senti acolhida, bem orientada e muito segura durante todo o processo.”</p>
+            <h3>Foi o primeiro site que me fez sentir vontade de contratar.</h3>
+            <p>“A apresentação ficou muito acima do que eu esperava. Não parecia mais um freelancer improvisado, e sim uma marca com direção e visão comercial.”</p>
             <footer>
-              <div class="avatar">MR</div>
-              <div class="avatar-meta"><strong>Marina Ribeiro</strong><span>Paciente fictícia</span></div>
+              <div class="avatar">MA</div>
+              <div class="avatar-meta"><strong>Marcos Andrade</strong><span>Cliente fictício</span></div>
             </footer>
           </article>
           <article class="testimonial reveal">
             <div class="stars">★★★★★</div>
-            <h3>Estrutura moderna e equipe extremamente clara</h3>
-            <p>“A diferença para outras experiências foi a transparência. Tudo foi explicado com calma, com foco real no que eu precisava, sem pressão desnecessária.”</p>
+            <h3>Elegante, leve e claramente mais profissional.</h3>
+            <p>“O que mais me chamou atenção foi o respiro visual. A página não me cansou. Ela me fez perceber valor e imaginar meu negócio naquele nível.”</p>
             <footer>
-              <div class="avatar">CL</div>
-              <div class="avatar-meta"><strong>Carlos Lima</strong><span>Paciente fictício</span></div>
+              <div class="avatar">LF</div>
+              <div class="avatar-meta"><strong>Luiza Ferreira</strong><span>Cliente fictícia</span></div>
             </footer>
           </article>
           <article class="testimonial reveal">
             <div class="stars">★★★★★</div>
-            <h3>Resultado bonito e sensação de confiança</h3>
-            <p>“Além do resultado estético, saí com a sensação de ter feito a escolha certa. Ambiente excelente, atendimento humano e padrão realmente diferenciado.”</p>
+            <h3>Exatamente o tipo de vitrine que convence.</h3>
+            <p>“Se eu recebesse isso como exemplo de portfólio, certamente teria mais confiança para pedir um orçamento. O nível visual passa muita segurança.”</p>
             <footer>
-              <div class="avatar">AS</div>
-              <div class="avatar-meta"><strong>Ana Souza</strong><span>Paciente fictícia</span></div>
+              <div class="avatar">RS</div>
+              <div class="avatar-meta"><strong>Rafael Silveira</strong><span>Cliente fictício</span></div>
             </footer>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="pill reveal"><span class="pill-dot"></span> Jornada do paciente</div>
-        <h2 class="section-title reveal">Uma estrutura simples para explicar como o processo funciona.</h2>
-        <p class="section-text reveal">
-          Mostrar a jornada reduz ansiedade e facilita a conversão. O visitante entende o que vai acontecer após o contato, o que aumenta a sensação de previsibilidade.
-        </p>
-
-        <div class="steps-grid">
-          <article class="step reveal">
-            <div class="step-number">1</div>
-            <h3>Primeiro contato</h3>
-            <p>O paciente envia os dados pelo formulário ou chama no WhatsApp para tirar dúvidas iniciais.</p>
-          </article>
-          <article class="step reveal">
-            <div class="step-number">2</div>
-            <h3>Avaliação personalizada</h3>
-            <p>É feita uma análise cuidadosa para entender necessidades, objetivos e possibilidades.</p>
-          </article>
-          <article class="step reveal">
-            <div class="step-number">3</div>
-            <h3>Plano de tratamento</h3>
-            <p>O paciente recebe orientação clara, proposta de caminho clínico e visão de investimento.</p>
-          </article>
-          <article class="step reveal">
-            <div class="step-number">4</div>
-            <h3>Acompanhamento contínuo</h3>
-            <p>O tratamento acontece com monitoramento atento e foco no melhor resultado possível.</p>
           </article>
         </div>
       </div>
     </section>
 
     <section class="section" id="precos">
-      <div class="container pricing-layout">
-        <aside class="glass sticky-panel reveal">
-          <div class="pill"><span class="pill-dot"></span> Bloco comercial opcional</div>
-          <h2 class="section-title">Até a parte de planos pode ser usada como vitrine do seu serviço.</h2>
-          <p class="section-text">
-            Nesta versão fictícia, a seção abaixo demonstra como apresentar opções de atendimento ou pacotes. Em seus projetos vendidos, você pode adaptar esse mesmo padrão para <strong>planos comerciais, formatos de serviço ou diferenciais de contratação</strong>.
-          </p>
-          <div class="mini-proof">
-            <span>Design premium</span>
-            <span>Seções reutilizáveis</span>
-            <span>Alta adaptabilidade</span>
-          </div>
-        </aside>
+      <div class="container">
+        <div class="eyebrow reveal"><span class="eyebrow-dot"></span> Exemplo de oferta</div>
+        <h2 class="section-title reveal">Uma estrutura comercial simples de entender e fácil de vender.</h2>
+        <p class="section-text reveal">
+          Esta seção serve como exemplo de como apresentar pacotes ou níveis de entrega. Em projetos reais, você pode adaptar para os seus próprios planos comerciais.
+        </p>
 
-        <div class="pricing-cards">
-          <article class="pricing-card reveal">
-            <span class="pricing-label">Essencial</span>
-            <h3>Avaliação + prevenção</h3>
-            <div class="price">Plano inicial <small>para check-up e rotina</small></div>
-            <p>Ideal para pacientes que buscam orientação, manutenção e acompanhamento preventivo.</p>
+        <div class="pricing-grid">
+          <article class="pricing reveal">
+            <span class="pricing-tag">Essencial</span>
+            <h3>Landing Page Base</h3>
+            <div class="price">Início rápido <small>para captação</small></div>
+            <p>Estrutura enxuta, clara e objetiva para negócios que precisam entrar no ar logo com boa presença.</p>
             <ul class="price-list">
-              <li>Avaliação clínica</li>
-              <li>Planejamento preventivo</li>
-              <li>Orientações personalizadas</li>
-              <li>Suporte inicial</li>
+              <li>Design responsivo</li>
+              <li>CTA e formulário</li>
+              <li>Copy orientada</li>
+              <li>Publicação inicial</li>
             </ul>
-            <a href="#contato" class="btn btn-secondary">Tenho interesse</a>
+            <a href="#contato" class="btn btn-secondary">Quero esse modelo</a>
           </article>
-          <article class="pricing-card featured reveal">
-            <span class="pricing-label">Mais procurado</span>
-            <h3>Estética e reabilitação</h3>
-            <div class="price">Plano premium <small>para maior transformação</small></div>
-            <p>Uma apresentação ideal para destacar o serviço de maior valor percebido da página.</p>
+
+          <article class="pricing featured reveal">
+            <span class="pricing-tag">Mais desejado</span>
+            <h3>Landing Page Premium</h3>
+            <div class="price">Mais impacto <small>para vender melhor</small></div>
+            <p>Acabamento visual superior, mais percepção de valor e estrutura comercial muito mais atraente.</p>
             <ul class="price-list">
-              <li>Avaliação detalhada</li>
-              <li>Planejamento completo</li>
-              <li>Acompanhamento ampliado</li>
-              <li>Experiência premium</li>
+              <li>Visual premium</li>
+              <li>Seções estratégicas</li>
+              <li>Mais autoridade visual</li>
+              <li>Base ideal para portfólio</li>
             </ul>
-            <a href="#contato" class="btn btn-primary">Quero este atendimento</a>
+            <a href="#contato" class="btn btn-primary">Quero um projeto assim</a>
           </article>
-          <article class="pricing-card reveal">
-            <span class="pricing-label">Avançado</span>
-            <h3>Tratamento personalizado</h3>
-            <div class="price">Sob consulta <small>conforme complexidade</small></div>
-            <p>Para necessidades mais específicas que exigem definição clínica e cronograma próprio.</p>
+
+          <article class="pricing reveal">
+            <span class="pricing-tag">Avançado</span>
+            <h3>Site ou SPA personalizada</h3>
+            <div class="price">Sob medida <small>para demandas maiores</small></div>
+            <p>Para marcas que precisam de navegação mais rica, estrutura ampliada e identidade mais robusta.</p>
             <ul class="price-list">
-              <li>Diagnóstico ampliado</li>
-              <li>Plano sob medida</li>
-              <li>Etapas customizadas</li>
-              <li>Suporte contínuo</li>
+              <li>Arquitetura maior</li>
+              <li>Mais interatividade</li>
+              <li>Projeto mais exclusivo</li>
+              <li>Escalável para negócio</li>
             </ul>
-            <a href="#contato" class="btn btn-secondary">Quero saber mais</a>
+            <a href="#contato" class="btn btn-secondary">Quero conversar</a>
           </article>
         </div>
       </div>
@@ -1256,101 +1278,104 @@
 
     <section class="section" id="faq">
       <div class="container">
-        <div class="pill reveal"><span class="pill-dot"></span> Perguntas frequentes</div>
-        <h2 class="section-title reveal">FAQ que ajuda a remover dúvidas antes do contato.</h2>
-        <p class="section-text reveal">Em landing pages vendidas para clientes, essa seção é extremamente útil para diminuir objeções e aumentar a taxa de envio do formulário.</p>
+        <div class="eyebrow reveal"><span class="eyebrow-dot"></span> Perguntas frequentes</div>
+        <h2 class="section-title reveal">As dúvidas que um cliente teria antes de contratar.</h2>
+        <p class="section-text reveal">Esse FAQ também serve como modelo para você reutilizar em páginas de clientes reais.</p>
 
         <div class="faq-grid">
           <div class="faq-item reveal active">
-            <button class="faq-question">Essa página é real ou apenas um exemplo?<span class="faq-toggle">+</span></button>
-            <div class="faq-answer">Este projeto é um exemplo fictício criado como modelo premium de portfólio. A estrutura, porém, é totalmente realista e pronta para ser adaptada a clientes de diversos nichos.</div>
+            <button class="faq-question">Este projeto é um modelo ou um site real?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">É um projeto modelo criado para funcionar como portfólio e base comercial. A estrutura, porém, é totalmente realista e pronta para ser adaptada a clientes reais.</div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-question">Esse layout pode ser usado para outros segmentos?<span class="faq-toggle">+</span></button>
-            <div class="faq-answer">Sim. Com mudanças em copy, cores, imagens e blocos de conteúdo, o mesmo padrão serve para clínicas, advocacia, estética, consultoria, serviços locais e muitos outros mercados.</div>
+            <button class="faq-question">Esse visual pode ser reaproveitado em outros nichos?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Sim. Esse é justamente um dos pontos fortes. Com mudanças em copy, cores, imagens e alguns blocos, você consegue aplicar a mesma base a muitos segmentos.</div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-question">O formulário pode enviar os contatos por e-mail?<span class="faq-toggle">+</span></button>
-            <div class="faq-answer">Sim. Basta integrar o formulário a um serviço como Formspree, Web3Forms, EmailJS ou um backend próprio para encaminhar os leads ao seu e-mail ou CRM.</div>
+            <button class="faq-question">O formulário pode enviar os leads para meu e-mail?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Sim. Você pode integrar com Formspree, EmailJS, Web3Forms ou outro serviço semelhante, sem necessidade de backend complexo para começar.</div>
           </div>
           <div class="faq-item reveal">
-            <button class="faq-question">Posso publicar esse projeto com domínio próprio?<span class="faq-toggle">+</span></button>
-            <div class="faq-answer">Sim. Ele pode ser hospedado em GitHub Pages, Cloudflare Pages, Vercel ou hospedagens tradicionais, com domínio próprio configurado normalmente.</div>
+            <button class="faq-question">Dá para publicar isso com domínio próprio?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Sim. O projeto pode ser publicado no GitHub Pages, Vercel, Cloudflare Pages ou em hospedagens tradicionais com domínio personalizado.</div>
           </div>
         </div>
       </div>
     </section>
 
     <section class="section" id="contato">
-      <div class="container contact-layout">
-        <div class="contact-card glass reveal">
-          <div class="pill"><span class="pill-dot"></span> CTA final</div>
-          <h2 class="section-title">Agende sua avaliação e descubra o tratamento ideal para o seu sorriso.</h2>
-          <p>
-            Esta é a seção de fechamento da página. Ela reúne urgência, acolhimento e direcionamento claro para ação. Em projetos reais, aqui entram integração com formulário, automação de leads e redirecionamento para WhatsApp.
-          </p>
+      <div class="container">
+        <div class="eyebrow reveal"><span class="eyebrow-dot"></span> Chamada final</div>
+        <h2 class="section-title reveal">Se o exemplo impressiona, imagine o projeto feito para o cliente certo.</h2>
+        <p class="section-text reveal">
+          Esse fechamento foi desenhado para criar vontade de contato. Ele fecha a experiência com clareza, elegância e uma proposta visual coerente do começo ao fim.
+        </p>
 
-          <ul class="contact-list">
-            <li><strong>Atendimento:</strong> segunda a sexta, das 8h às 19h</li>
-            <li><strong>Localização:</strong> estrutura fictícia em região nobre da cidade</li>
-            <li><strong>Canal rápido:</strong> WhatsApp para dúvidas e pré-agendamento</li>
-            <li><strong>Posicionamento:</strong> ideal para negócios premium e de ticket mais alto</li>
-          </ul>
+        <div class="contact-layout">
+          <div class="contact-box glass reveal">
+            <h3>Por que este modelo funciona melhor</h3>
+            <p>Ele tem mais respiro, blocos mais limpos, visual mais sofisticado e uma mensagem mais alinhada com o que você realmente quer vender: presença digital que parece profissional e desejável.</p>
 
-          <div class="mini-proof">
-            <span>Design que impressiona</span>
-            <span>Modelo reutilizável</span>
-            <span>Portfólio comercial forte</span>
+            <ul class="contact-list">
+              <li><strong>Ideal para:</strong> portfólio, vitrine comercial e template-base.</li>
+              <li><strong>Tom visual:</strong> premium, elegante, maduro e convincente.</li>
+              <li><strong>Uso prático:</strong> mostrar a clientes e depois adaptar para novos projetos.</li>
+              <li><strong>Próximo passo:</strong> integrar formulário, publicar e criar variações por nicho.</li>
+            </ul>
+
+            <div class="mini-pills">
+              <span>Mais bonito</span>
+              <span>Mais leve</span>
+              <span>Mais vendável</span>
+              <span>Mais profissional</span>
+            </div>
+          </div>
+
+          <div class="contact-box glass reveal">
+            <form class="form" onsubmit="event.preventDefault(); document.getElementById('formStatus').textContent='Mensagem de demonstração enviada com sucesso. Em um projeto real, aqui você ligaria o formulário ao seu serviço de captura de leads.';">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="nome">Nome completo</label>
+                  <input id="nome" type="text" name="nome" placeholder="Seu nome" required>
+                </div>
+                <div class="field">
+                  <label for="telefone">WhatsApp</label>
+                  <input id="telefone" type="tel" name="telefone" placeholder="(00) 00000-0000" required>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="email">E-mail</label>
+                  <input id="email" type="email" name="email" placeholder="voce@email.com" required>
+                </div>
+                <div class="field">
+                  <label for="interesse">Interesse</label>
+                  <select id="interesse" name="interesse" required>
+                    <option value="">Selecione</option>
+                    <option>Landing Page</option>
+                    <option>Site institucional</option>
+                    <option>SPA</option>
+                    <option>Quero uma proposta</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="mensagem">Fale sobre o projeto</label>
+                <textarea id="mensagem" name="mensagem" placeholder="Conte o que você quer criar, seu nicho e o objetivo principal..."></textarea>
+              </div>
+
+              <button class="btn btn-primary" type="submit">Solicitar contato</button>
+              <div id="formStatus" class="form-note">Este formulário está em modo demonstração. Você pode ligar facilmente a um serviço de leads depois.</div>
+            </form>
           </div>
         </div>
 
-        <div class="contact-card glass reveal">
-          <form class="form" onsubmit="event.preventDefault(); document.getElementById('formStatus').textContent='Mensagem de demonstração enviada com sucesso. Em um projeto real, aqui você integraria com seu serviço de leads.';">
-            <div class="form-grid">
-              <div class="field">
-                <label for="nome">Nome completo</label>
-                <input id="nome" name="nome" type="text" placeholder="Seu nome" required>
-              </div>
-              <div class="field">
-                <label for="telefone">WhatsApp</label>
-                <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" required>
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="email">E-mail</label>
-                <input id="email" name="email" type="email" placeholder="voce@email.com" required>
-              </div>
-              <div class="field">
-                <label for="interesse">Interesse principal</label>
-                <select id="interesse" name="interesse" required>
-                  <option value="">Selecione</option>
-                  <option>Avaliação inicial</option>
-                  <option>Estética dental</option>
-                  <option>Implantes</option>
-                  <option>Clareamento</option>
-                  <option>Outro tratamento</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="mensagem">Conte um pouco sobre seu objetivo</label>
-              <textarea id="mensagem" name="mensagem" placeholder="Descreva sua necessidade, expectativa ou dúvida principal..."></textarea>
-            </div>
-
-            <button class="btn btn-primary" type="submit">Enviar solicitação</button>
-            <div id="formStatus" class="form-note">Este formulário está em modo demonstração. Você pode integrar facilmente com Formspree ou outro serviço de captura de leads.</div>
-          </form>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="glass cta-banner reveal">
-          <div>
-            <h3 style="margin:0 0 10px; font-size:clamp(1.5rem, 2.8vw, 2.2rem); letter-spacing:-0.04em;">Este é o tipo de projeto que convence clientes a contratar você.</h3>
-            <p class="section-text" style="margin:0; max-width: 760px;">Use este modelo como portfólio, base comercial e template para futuros projetos. Ele foi pensado para parecer trabalho de agência profissional, não um “site improvisado”.</p>
+        <div class="cta-wide glass reveal">
+          <div class="cta-box" style="padding:0; background:none; border:0; box-shadow:none;">
+            <h3 style="margin:0 0 10px; font-size:clamp(1.6rem,2.8vw,2.3rem);">Agora sim: um modelo com mais apelo visual e vontade de contratar.</h3>
+            <p class="section-text" style="margin:0; max-width:760px;">Esta versão foi refeita para soar mais premium, respirar melhor e parecer realmente vendável. Ela pode ser sua nova base para apresentar serviços e fechar clientes.</p>
           </div>
           <a href="#inicio" class="btn btn-primary">Voltar ao topo</a>
         </div>
@@ -1360,16 +1385,17 @@
 
   <footer>
     <div class="container footer-box">
-      <div>Projeto modelo fictício • Aurora Odontologia Premium</div>
-      <div>Feito para servir como portfólio, vitrine e template comercial reutilizável.</div>
+      <div>Projeto modelo fictício • Vértice Studio</div>
+      <div>Feito para funcionar como portfólio, vitrine comercial e template-base de vendas.</div>
     </div>
   </footer>
 
-  <a class="floating-whatsapp" href="#contato" aria-label="Ir para contato">✆</a>
+  <a href="#contato" class="floating-cta" aria-label="Ir para contato">↗</a>
 
   <script>
     const menuBtn = document.getElementById('menuBtn');
     const navLinks = document.getElementById('navLinks');
+
     if (menuBtn) {
       menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
     }
@@ -1380,8 +1406,7 @@
 
     document.querySelectorAll('.faq-question').forEach(button => {
       button.addEventListener('click', () => {
-        const item = button.parentElement;
-        item.classList.toggle('active');
+        button.parentElement.classList.toggle('active');
       });
     });
 
