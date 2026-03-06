@@ -1,704 +1,1402 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carregando...</title>
-    <!-- Favicon dinâmico será injetado via JS -->
-    <link id="dynamic-favicon" rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurora Odontologia Premium | Landing Page Modelo</title>
+  <meta name="description" content="Landing page modelo premium para portfólio de criação de sites. Exemplo fictício de clínica odontológica com foco em conversão, autoridade e agendamento." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1a2d;
+      --card: rgba(255,255,255,0.08);
+      --card-strong: rgba(255,255,255,0.12);
+      --line: rgba(255,255,255,0.12);
+      --text: #ebf2ff;
+      --muted: #9fb2cf;
+      --brand: #58c8ff;
+      --brand-2: #8b5cf6;
+      --accent: #0ee7b7;
+      --shadow: 0 30px 80px rgba(0,0,0,0.35);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --container: 1180px;
+    }
 
-    <!-- Tailwind CSS (Estilização Rápida e Responsiva) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Quill.js (Editor de Texto Rico) -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(88,200,255,0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(139,92,246,0.18), transparent 22%),
+        linear-gradient(180deg, #07111f 0%, #081522 50%, #06101c 100%);
+      overflow-x: hidden;
+    }
 
-    <!-- FontAwesome (Ícones) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(70px);
+      opacity: 0.5;
+    }
 
-    <!-- Configurações Estéticas (Netflix Vibe) -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #141414; /* Netflix Black */
-            color: #e5e5e5;
-        }
+    body::before {
+      width: 260px;
+      height: 260px;
+      background: rgba(88,200,255,0.22);
+      top: 120px;
+      left: -60px;
+    }
 
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #141414; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #e50914; }
+    body::after {
+      width: 320px;
+      height: 320px;
+      background: rgba(14,231,183,0.12);
+      top: 40%;
+      right: -100px;
+    }
 
-        /* Animações */
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
-        /* Utilitários do Player */
-        .player-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 50; display: flex; flex-direction: column;
-        }
-        
-        /* Ajuste do Quill no modo Dark */
-        .ql-toolbar { background: #e5e5e5; border-radius: 8px 8px 0 0; }
-        .ql-container { background: #fff; color: #000; border-radius: 0 0 8px 8px; height: 200px; }
+    .container {
+      width: min(calc(100% - 32px), var(--container));
+      margin: 0 auto;
+    }
 
-        /* Card da Aula */
-        .lesson-card {
-            transition: transform 0.3s, z-index 0.3s;
-        }
-        .lesson-card:hover {
-            transform: scale(1.05);
-            z-index: 10;
-            cursor: pointer;
-        }
-    </style>
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      color: #d7e5ff;
+      font-size: 0.92rem;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .pill-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--brand));
+      box-shadow: 0 0 18px rgba(14,231,183,0.65);
+    }
+
+    .section {
+      padding: 92px 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.05;
+      margin: 16px 0 14px;
+      letter-spacing: -0.04em;
+    }
+
+    .section-text {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 760px;
+    }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(6, 16, 28, 0.74);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.05rem;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(88,200,255,0.95), rgba(139,92,246,0.9));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 14px 32px rgba(88,200,255,0.24);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      color: #d9e6fb;
+      font-size: 0.96rem;
+    }
+
+    .nav-links a {
+      opacity: 0.82;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .nav-links a:hover { opacity: 1; transform: translateY(-1px); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 22px;
+      font-weight: 700;
+      font-size: 0.98rem;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      color: #03111d;
+      background: linear-gradient(135deg, #8ee6ff 0%, #58c8ff 50%, #0ee7b7 100%);
+      box-shadow: 0 18px 40px rgba(88,200,255,0.25);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      padding: 42px 0 88px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      max-width: 14ch;
+    }
+
+    .hero p {
+      margin: 22px 0 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .metric-strip {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 680px;
+    }
+
+    .metric {
+      padding: 18px 18px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .visual-card {
+      position: relative;
+      padding: 22px;
+      min-height: 580px;
+      overflow: hidden;
+    }
+
+    .hero-visual {
+      position: absolute;
+      inset: 16px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(142,230,255,0.24), transparent 24%),
+        radial-gradient(circle at 80% 20%, rgba(139,92,246,0.18), transparent 20%),
+        linear-gradient(160deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+
+    .hero-illustration {
+      position: absolute;
+      right: -8px;
+      bottom: -12px;
+      width: 92%;
+      height: auto;
+      opacity: 0.98;
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 22px;
+      background: rgba(8, 18, 34, 0.72);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .floating-top {
+      top: 26px;
+      left: 22px;
+      width: 230px;
+    }
+
+    .floating-bottom {
+      bottom: 24px;
+      left: 26px;
+      width: 270px;
+    }
+
+    .floating-card .label {
+      font-size: 0.86rem;
+      color: #c0d5f0;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+      letter-spacing: -0.03em;
+    }
+
+    .floating-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .cards-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 18px;
+    }
+
+    .feature-card,
+    .service-card,
+    .testimonial,
+    .faq-item,
+    .step,
+    .contact-card,
+    .pricing-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .feature-card h3,
+    .service-card h3,
+    .testimonial h3,
+    .pricing-card h3,
+    .step h3 {
+      margin: 16px 0 10px;
+      font-size: 1.16rem;
+      letter-spacing: -0.03em;
+    }
+
+    .feature-card p,
+    .service-card p,
+    .testimonial p,
+    .pricing-card p,
+    .step p,
+    .faq-answer,
+    .contact-card p,
+    .contact-list li {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 0.98rem;
+    }
+
+    .icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(88,200,255,0.24), rgba(14,231,183,0.16));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 1.3rem;
+    }
+
+    .services-layout,
+    .story-layout,
+    .contact-layout,
+    .pricing-layout {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 32px;
+    }
+
+    .sticky-panel {
+      position: sticky;
+      top: 102px;
+      padding: 28px;
+    }
+
+    .panel-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .panel-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: #dce9ff;
+    }
+
+    .panel-item .check {
+      margin-top: 2px;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(14,231,183,0.14);
+      border: 1px solid rgba(14,231,183,0.22);
+      color: #9affdf;
+      font-size: 0.9rem;
+      flex: 0 0 auto;
+    }
+
+    .service-grid,
+    .testimonial-grid,
+    .steps-grid,
+    .faq-grid,
+    .pricing-cards {
+      display: grid;
+      gap: 18px;
+    }
+
+    .service-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .testimonial-grid { grid-template-columns: repeat(3, minmax(0,1fr)); margin-top: 34px; }
+    .steps-grid { grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: 34px; }
+    .faq-grid { grid-template-columns: 1fr 1fr; margin-top: 34px; }
+    .pricing-cards { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+    .service-card {
+      min-height: 250px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20px -30px auto;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(88,200,255,0.22), transparent 70%);
+      filter: blur(8px);
+      opacity: 0.8;
+    }
+
+    .story-card {
+      padding: 30px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .story-visual {
+      min-height: 460px;
+      position: relative;
+      overflow: hidden;
+      padding: 26px;
+    }
+
+    .story-visual svg {
+      position: absolute;
+      inset: auto 0 0 auto;
+      width: 100%;
+      height: auto;
+      opacity: 0.96;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .badge-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .badge-card strong {
+      display: block;
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #dce9ff;
+      font-size: 0.9rem;
+    }
+
+    .stars {
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      color: #ffd86c;
+      margin-bottom: 16px;
+    }
+
+    .testimonial footer {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(88,200,255,0.34), rgba(139,92,246,0.34));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 700;
+    }
+
+    .avatar-meta strong {
+      display: block;
+      font-size: 0.98rem;
+    }
+
+    .avatar-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      background: linear-gradient(135deg, rgba(88,200,255,0.22), rgba(14,231,183,0.18));
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 18px;
+    }
+
+    .faq-item {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      color: var(--text);
+      padding: 22px 22px 18px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .faq-answer {
+      padding: 0 22px 22px;
+      display: none;
+    }
+
+    .faq-item.active .faq-answer { display: block; }
+    .faq-item.active .faq-toggle { transform: rotate(45deg); }
+    .faq-toggle { transition: transform .2s ease; font-size: 1.4rem; color: #8ee6ff; }
+
+    .pricing-card.featured {
+      background: linear-gradient(180deg, rgba(88,200,255,0.16), rgba(255,255,255,0.07));
+      border-color: rgba(88,200,255,0.26);
+      transform: translateY(-8px);
+    }
+
+    .pricing-label {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: rgba(88,200,255,0.16);
+      color: #b7eaff;
+      border: 1px solid rgba(88,200,255,0.22);
+      margin-bottom: 14px;
+    }
+
+    .price {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      margin: 14px 0 8px;
+    }
+
+    .price small {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .price-list {
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin: 22px 0 28px;
+      color: #dfeaff;
+    }
+
+    .price-list li::before {
+      content: "✓";
+      color: #95ffe1;
+      margin-right: 10px;
+    }
+
+    .contact-layout {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+
+    .contact-card {
+      padding: 28px;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 0.9rem;
+      color: #d8e6fb;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 15px 16px;
+      font: inherit;
+      outline: none;
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+
+    .field textarea { min-height: 150px; resize: vertical; }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(88,200,255,0.45);
+      background: rgba(255,255,255,0.09);
+      transform: translateY(-1px);
+    }
+
+    .form-note {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .mini-proof {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .mini-proof span {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.88rem;
+      color: #d7e5ff;
+    }
+
+    .cta-banner {
+      padding: 34px;
+      display: grid;
+      grid-template-columns: 1.2fr auto;
+      align-items: center;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    footer {
+      padding: 28px 0 48px;
+      color: var(--muted);
+    }
+
+    .footer-box {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .floating-whatsapp {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 60;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: #032015;
+      font-size: 1.5rem;
+      font-weight: 900;
+      box-shadow: 0 22px 44px rgba(16,185,129,0.3);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .services-layout,
+      .story-layout,
+      .contact-layout,
+      .pricing-layout,
+      .cta-banner {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-panel { position: static; }
+      .cards-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .testimonial-grid,
+      .steps-grid,
+      .pricing-cards { grid-template-columns: 1fr 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .visual-card { min-height: 520px; }
+      .cta-banner { text-align: center; }
+    }
+
+    @media (max-width: 820px) {
+      .nav-links {
+        position: fixed;
+        top: 76px;
+        left: 16px;
+        right: 16px;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+        background: rgba(7,17,31,0.96);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        display: none;
+      }
+
+      .nav-links.open { display: flex; }
+      .mobile-menu-btn { display: inline-grid; place-items: center; }
+      .nav .btn-primary { display: none; }
+      .cards-grid,
+      .service-grid,
+      .testimonial-grid,
+      .steps-grid,
+      .pricing-cards,
+      .form-grid,
+      .metric-strip,
+      .badge-grid { grid-template-columns: 1fr; }
+      .hero h1 { max-width: 10ch; }
+      .visual-card { min-height: 460px; }
+      .floating-top,
+      .floating-bottom { width: calc(100% - 44px); }
+    }
+
+    @media (max-width: 560px) {
+      .section { padding: 76px 0; }
+      .hero { padding-bottom: 70px; }
+      .btn { width: 100%; }
+      .hero-actions { flex-direction: column; }
+      .section-title { font-size: 2rem; }
+      .visual-card { min-height: 400px; padding: 14px; }
+      .hero-visual { inset: 10px; }
+      .floating-card { padding: 16px; }
+      .footer-box { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#inicio" aria-label="Aurora Odontologia Premium">
+        <span class="brand-mark">A</span>
+        <span>Aurora <span style="color:#8ee6ff;">Odontologia Premium</span></span>
+      </a>
 
-    <!-- Container Principal da Aplicação -->
-    <div id="app" class="min-h-screen flex flex-col">
-        <!-- O conteúdo será injetado aqui via JavaScript -->
-        <div class="flex items-center justify-center h-screen">
-            <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-red-600"></div>
-        </div>
+      <nav class="nav-links" id="navLinks">
+        <a href="#servicos">Serviços</a>
+        <a href="#sobre">Diferenciais</a>
+        <a href="#depoimentos">Depoimentos</a>
+        <a href="#faq">Dúvidas</a>
+        <a href="#contato">Agendar</a>
+      </nav>
+
+      <button class="mobile-menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+      <a href="#contato" class="btn btn-primary">Agendar avaliação</a>
     </div>
+  </header>
 
-    <!-- Módulo Principal da Aplicação -->
-    <script type="module">
-        // =================================================================
-        // 1. CONFIGURAÇÃO E IMPORTAÇÕES (FIREBASE)
-        // =================================================================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword,
-            onAuthStateChanged, 
-            signOut 
-        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            addDoc, 
-            getDocs, 
-            doc, 
-            updateDoc, 
-            deleteDoc, 
-            query, 
-            orderBy, 
-            setDoc,
-            getDoc,
-            where
-        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div class="reveal visible">
+          <div class="eyebrow pill">
+            <span class="pill-dot"></span>
+            Landing page modelo premium para portfólio comercial
+          </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCRnLXwHj_jAuZZcICdwGnqgqtBnvNIsMQ",
-            authDomain: "studyflixpro.firebaseapp.com",
-            projectId: "studyflixpro",
-            storageBucket: "studyflixpro.firebasestorage.app",
-            messagingSenderId: "658926227849",
-            appId: "1:658926227849:web:1805d4ebbaf14046c85158"
-        };
+          <h1>Sorria com confiança, tecnologia e atendimento de alto padrão.</h1>
+          <p>
+            Esta é uma landing page fictícia criada como <strong>projeto modelo profissional</strong> para demonstrar como um negócio local pode converter visitantes em agendamentos usando design premium, copy estratégica, prova social e CTA forte.
+          </p>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+          <div class="hero-actions">
+            <a href="#contato" class="btn btn-primary">Quero agendar minha avaliação</a>
+            <a href="#precos" class="btn btn-secondary">Ver estrutura comercial</a>
+          </div>
 
-        // =================================================================
-        // 2. ESTADO GLOBAL DA APLICAÇÃO (State Management)
-        // =================================================================
-        const state = {
-            user: null,
-            isAdmin: false,
-            lessons: [],
-            config: { siteName: "StudyFlix", favicon: "" },
-            currentLesson: null,
-            progress: {}, // { lessonId: timestamp }
-            speechSynth: window.speechSynthesis,
-            ytPlayer: null
-        };
+          <div class="hero-proof">
+            <span class="pill">⭐ 4,9 de satisfação</span>
+            <span class="pill">+3.200 pacientes atendidos</span>
+            <span class="pill">Atendimento humanizado</span>
+          </div>
 
-        // Cache de elementos DOM
-        const root = document.getElementById('app');
-        
-        // Editor Quill Global
-        let quillEditor = null;
-
-        // =================================================================
-        // 3. LÓGICA DE NEGÓCIO (Business Logic)
-        // =================================================================
-
-        // --- Autenticação ---
-        const login = async (email, password) => {
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                alert("Erro ao logar: " + error.message);
-            }
-        };
-
-        const register = async (email, password) => {
-            try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                alert("Conta criada com sucesso! Bem-vindo.");
-                // O onAuthStateChanged detectará o login automaticamente
-            } catch (error) {
-                alert("Erro ao criar conta: " + error.message);
-            }
-        };
-
-        const logout = () => signOut(auth);
-
-        // --- Banco de Dados: Aulas ---
-        const fetchLessons = async () => {
-            const q = query(collection(db, "lessons"), orderBy("season"), orderBy("episode"));
-            const snapshot = await getDocs(q);
-            state.lessons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderApp(); // Re-renderiza quando dados chegam
-        };
-
-        const saveLesson = async (lessonData, id = null) => {
-            try {
-                if (id) {
-                    await updateDoc(doc(db, "lessons", id), lessonData);
-                } else {
-                    await addDoc(collection(db, "lessons"), lessonData);
-                }
-                await fetchLessons();
-                closeModal();
-            } catch (e) {
-                console.error("Erro ao salvar aula:", e);
-                alert("Erro ao salvar.");
-            }
-        };
-
-        const deleteLesson = async (id) => {
-            if(confirm("Tem certeza que deseja excluir esta aula?")) {
-                await deleteDoc(doc(db, "lessons", id));
-                await fetchLessons();
-            }
-        };
-
-        // --- Banco de Dados: Configurações Globais ---
-        const fetchConfig = async () => {
-            try {
-                const docRef = doc(db, "config", "global");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    state.config = docSnap.data();
-                    document.title = state.config.siteName || "StudyFlix";
-                    if(state.config.favicon) document.getElementById('dynamic-favicon').href = state.config.favicon;
-                }
-            } catch (e) {
-                console.log("Configuração padrão usada.");
-            }
-        };
-
-        const saveConfig = async (name, favicon) => {
-            await setDoc(doc(db, "config", "global"), { siteName: name, favicon: favicon });
-            state.config = { siteName: name, favicon: favicon };
-            document.title = name;
-            document.getElementById('dynamic-favicon').href = favicon;
-            alert("Configurações salvas!");
-        };
-
-        // --- Progresso do Usuário ---
-        const fetchProgress = async () => {
-            if (!state.user) return;
-            const q = query(collection(db, "progress"), where("userId", "==", state.user.uid));
-            const snapshot = await getDocs(q);
-            const progressData = {};
-            snapshot.forEach(doc => {
-                progressData[doc.data().lessonId] = true;
-            });
-            state.progress = progressData;
-        };
-
-        const markLessonComplete = async (lessonId) => {
-            if (!state.user) return;
-            // Salva apenas se ainda não estiver salvo
-            if (!state.progress[lessonId]) {
-                await addDoc(collection(db, "progress"), {
-                    userId: state.user.uid,
-                    lessonId: lessonId,
-                    completedAt: new Date()
-                });
-                state.progress[lessonId] = true;
-                // Atualiza visualmente se estiver na home (opcional)
-            }
-        };
-
-        // --- Utilitários ---
-        const extractVideoID = (url) => {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        };
-
-        // =================================================================
-        // 4. RENDERIZAÇÃO (UI Components)
-        // =================================================================
-
-        const renderApp = () => {
-            root.innerHTML = '';
-            
-            if (!state.user) {
-                renderLogin();
-                return;
-            }
-
-            if (state.currentLesson) {
-                renderPlayer(); // Modo Imersivo
-            } else {
-                renderHome();   // Dashboard
-            }
-        };
-
-        // --- TELA DE LOGIN ---
-        const renderLogin = () => {
-            root.innerHTML = `
-                <div class="flex items-center justify-center min-h-screen bg-black bg-opacity-90" style="background-image: url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/US-en-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg'); background-blend-mode: overlay;">
-                    <div class="bg-black bg-opacity-80 p-12 rounded-lg shadow-lg max-w-md w-full">
-                        <h1 class="text-4xl font-bold text-red-600 mb-8 text-center">StudyFlix</h1>
-                        <form id="loginForm" class="space-y-6">
-                            <div>
-                                <label class="block text-gray-400 text-sm mb-2">Email</label>
-                                <input type="email" id="email" class="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="voce@exemplo.com" required>
-                            </div>
-                            <div>
-                                <label class="block text-gray-400 text-sm mb-2">Senha</label>
-                                <input type="password" id="password" class="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600" placeholder="******" required>
-                            </div>
-                            <div class="flex flex-col gap-3">
-                                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition duration-200">Entrar</button>
-                                <button type="button" id="btnRegister" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded transition duration-200">Criar Nova Conta</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-            
-            // Listener do Login (Submit do form)
-            document.getElementById('loginForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                login(document.getElementById('email').value, document.getElementById('password').value);
-            });
-
-            // Listener do Cadastro (Clique do botão)
-            document.getElementById('btnRegister').addEventListener('click', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                if(!email || !password) {
-                    alert("Preencha email e senha para criar uma conta.");
-                    return;
-                }
-                register(email, password);
-            });
-        };
-
-        // --- DASHBOARD (HOME) ---
-        const renderHome = () => {
-            // Agrupar aulas por Série (Matéria)
-            const groupedLessons = state.lessons.reduce((acc, lesson) => {
-                if (!acc[lesson.series]) acc[lesson.series] = [];
-                acc[lesson.series].push(lesson);
-                return acc;
-            }, {});
-
-            // Header HTML
-            let html = `
-                <nav class="bg-black bg-opacity-90 fixed w-full z-40 px-8 py-4 flex justify-between items-center border-b border-gray-800">
-                    <div class="flex items-center gap-4">
-                        <span class="text-3xl font-bold text-red-600 tracking-tighter">${state.config.siteName}</span>
-                    </div>
-                    <div class="flex gap-4 items-center">
-                        ${state.isAdmin ? `<button id="btnAdmin" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm">Admin</button>` : ''}
-                        ${state.isAdmin ? `<button id="btnConfig" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm"><i class="fas fa-cog"></i></button>` : ''}
-                        <button id="btnLogout" class="text-gray-400 hover:text-white text-sm">Sair</button>
-                    </div>
-                </nav>
-                
-                <div class="pt-24 pb-12 px-8 fade-in">
-            `;
-
-            // Renderizar linhas por Matéria
-            if (Object.keys(groupedLessons).length === 0) {
-                html += `<div class="text-center mt-20 text-gray-500">Nenhuma aula cadastrada ainda.</div>`;
-            } else {
-                for (const [series, lessons] of Object.entries(groupedLessons)) {
-                    html += `
-                        <div class="mb-8">
-                            <h2 class="text-xl font-semibold text-white mb-4 pl-2 border-l-4 border-red-600">${series}</h2>
-                            <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
-                    `;
-                    
-                    // Ordenar por Temporada e Episódio
-                    lessons.sort((a, b) => (a.season - b.season) || (a.episode - b.episode));
-
-                    lessons.forEach(lesson => {
-                        const isCompleted = state.progress[lesson.id];
-                        const thumbnail = `https://img.youtube.com/vi/${extractVideoID(lesson.videoUrl)}/mqdefault.jpg`;
-                        
-                        html += `
-                            <div class="lesson-card flex-none w-64 bg-gray-900 rounded-md overflow-hidden relative shadow-lg group" onclick="window.startLesson('${lesson.id}')">
-                                <div class="relative h-36">
-                                    <img src="${thumbnail}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition">
-                                    <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-xs px-2 py-1 rounded">T${lesson.season}:E${lesson.episode}</div>
-                                    ${isCompleted ? '<div class="absolute top-2 right-2 text-green-500 bg-black bg-opacity-70 rounded-full p-1"><i class="fas fa-check"></i></div>' : ''}
-                                </div>
-                                <div class="p-3">
-                                    <h3 class="font-bold text-sm text-gray-200 truncate">${lesson.title}</h3>
-                                    <div class="w-full bg-gray-800 h-1 mt-3 rounded-full overflow-hidden">
-                                        <div class="h-full bg-red-600" style="width: ${isCompleted ? '100%' : '0%'}"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    html += `</div></div>`;
-                }
-            }
-
-            html += `</div>`; // Fechamento do container
-            
-            // Injeção de Modais (Escondidos por padrão)
-            html += getAdminModalTemplate();
-            html += getConfigModalTemplate();
-
-            root.innerHTML = html;
-
-            // Event Listeners
-            document.getElementById('btnLogout').onclick = logout;
-            if(state.isAdmin) {
-                document.getElementById('btnAdmin').onclick = () => openAdminModal();
-                document.getElementById('btnConfig').onclick = () => openConfigModal();
-            }
-        };
-
-        // --- PLAYER IMERSIVO (Lógica Principal) ---
-        const renderPlayer = () => {
-            const lesson = state.currentLesson;
-            const videoId = extractVideoID(lesson.videoUrl);
-
-            root.innerHTML = `
-                <div class="player-overlay fade-in">
-                    <!-- Controle Superior -->
-                    <div class="absolute top-4 right-4 z-[60]">
-                        <button onclick="window.closePlayer()" class="text-white bg-red-600 hover:bg-red-700 rounded-full w-12 h-12 flex items-center justify-center shadow-lg transform hover:scale-110 transition">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
-                    </div>
-
-                    <!-- ESTÁGIO 1: VÍDEO -->
-                    <div id="videoStage" class="flex-1 w-full h-full flex items-center justify-center bg-black">
-                        <div id="youtube-player"></div>
-                    </div>
-
-                    <!-- ESTÁGIO 2: LEITURA & AUDIO (Inicialmente Oculto) -->
-                    <div id="textStage" class="hidden flex-1 w-full h-full bg-gray-900 text-gray-200 p-8 overflow-y-auto flex flex-col items-center">
-                        <div class="max-w-3xl w-full py-10">
-                            <h1 class="text-3xl font-bold text-white mb-6">${lesson.title}</h1>
-                            <div class="prose prose-invert prose-lg mb-10 border-b border-gray-700 pb-8">
-                                ${lesson.content}
-                            </div>
-                            
-                            <div class="flex items-center justify-center gap-4 bg-gray-800 p-4 rounded-lg">
-                                <div class="animate-pulse w-3 h-3 bg-red-500 rounded-full"></div>
-                                <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Leitura Automática em Progresso</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // Iniciar YouTube Player
-            if (window.YT) {
-                initYTPlayer(videoId);
-            } else {
-                // Carregar API se não existir
-                const tag = document.createElement('script');
-                tag.src = "https://www.youtube.com/iframe_api";
-                const firstScriptTag = document.getElementsByTagName('script')[0];
-                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                window.onYouTubeIframeAPIReady = () => initYTPlayer(videoId);
-            }
-        };
-
-        // Funções de Controle do Player
-        let ytPlayerInstance = null;
-        
-        const initYTPlayer = (videoId) => {
-            ytPlayerInstance = new YT.Player('youtube-player', {
-                height: '100%',
-                width: '100%',
-                videoId: videoId,
-                playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0 },
-                events: {
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        };
-
-        const onPlayerStateChange = (event) => {
-            // 0 = Ended
-            if (event.data === 0) {
-                transitionToText();
-            }
-        };
-
-        const transitionToText = () => {
-            const videoStage = document.getElementById('videoStage');
-            const textStage = document.getElementById('textStage');
-            
-            if(videoStage) videoStage.classList.add('hidden');
-            if(textStage) textStage.classList.remove('hidden');
-
-            // Iniciar TTS
-            startTTS(state.currentLesson.content);
-        };
-
-        const startTTS = (htmlContent) => {
-            // Cancelar falas anteriores
-            state.speechSynth.cancel();
-
-            // Extrair texto limpo do HTML
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = htmlContent;
-            const text = tempDiv.textContent || tempDiv.innerText || "";
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'pt-BR';
-            utterance.rate = 1.1; // Um pouco mais rápido para melhor fluidez
-
-            utterance.onend = () => {
-                finishLesson();
-            };
-
-            state.speechSynth.speak(utterance);
-        };
-
-        const finishLesson = async () => {
-            // 1. Salvar progresso
-            await markLessonComplete(state.currentLesson.id);
-
-            // 2. Achar próxima aula
-            const allLessons = state.lessons.filter(l => l.series === state.currentLesson.series);
-            allLessons.sort((a, b) => (a.season - b.season) || (a.episode - b.episode));
-            
-            const currentIndex = allLessons.findIndex(l => l.id === state.currentLesson.id);
-            const nextLesson = allLessons[currentIndex + 1];
-
-            if (nextLesson) {
-                // Flash message ou transição visual
-                alert("Aula concluída! Iniciando próxima aula...");
-                state.currentLesson = nextLesson;
-                renderPlayer(); // Reinicia o ciclo
-            } else {
-                alert("Parabéns! Você finalizou esta matéria.");
-                closePlayer();
-            }
-        };
-
-        // Torna acessível globalmente
-        window.closePlayer = () => {
-            if(state.speechSynth) state.speechSynth.cancel();
-            state.currentLesson = null;
-            renderHome();
-        };
-
-        window.startLesson = (id) => {
-            state.currentLesson = state.lessons.find(l => l.id === id);
-            renderPlayer();
-        };
-
-        // =================================================================
-        // 5. PAINEL ADMIN E MODAIS
-        // =================================================================
-
-        const getAdminModalTemplate = () => `
-            <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-                <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <div class="p-6 border-b border-gray-700 flex justify-between items-center sticky top-0 bg-gray-800 z-10">
-                        <h2 class="text-2xl font-bold text-white">Gerenciar Aulas</h2>
-                        <button onclick="window.closeModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-                    </div>
-                    
-                    <div class="p-6">
-                        <!-- Formulário -->
-                        <form id="lessonForm" class="space-y-4 mb-8 bg-gray-700 p-4 rounded">
-                            <input type="hidden" id="lessonId">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <input id="series" type="text" placeholder="Matéria (ex: Algoritmos)" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
-                                <input id="season" type="number" placeholder="Temporada/Unidade" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
-                                <input id="episode" type="number" placeholder="Episódio" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
-                            </div>
-                            <input id="title" type="text" placeholder="Título da Aula" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
-                            <input id="videoUrl" type="text" placeholder="URL do YouTube" class="bg-gray-800 text-white p-2 rounded border border-gray-600 w-full" required>
-                            
-                            <!-- Quill Wrapper -->
-                            <div class="bg-white text-black rounded">
-                                <div id="editor-container"></div>
-                            </div>
-
-                            <div class="flex justify-end gap-2 mt-4">
-                                <button type="button" onclick="resetForm()" class="px-4 py-2 bg-gray-600 rounded text-white">Limpar</button>
-                                <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white font-bold">Salvar Aula</button>
-                            </div>
-                        </form>
-
-                        <!-- Lista Simples de Aulas -->
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-gray-300">
-                                <thead class="text-xs uppercase bg-gray-900 text-gray-400">
-                                    <tr>
-                                        <th class="p-3">Matéria</th>
-                                        <th class="p-3">T:E</th>
-                                        <th class="p-3">Título</th>
-                                        <th class="p-3 text-right">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminLessonList" class="divide-y divide-gray-700">
-                                    <!-- Preenchido via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+          <div class="metric-strip">
+            <div class="metric">
+              <strong>10+ anos</strong>
+              <span>de experiência em reabilitação oral e estética avançada.</span>
             </div>
-        `;
-
-        const getConfigModalTemplate = () => `
-            <div id="configModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-                <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                    <h2 class="text-xl font-bold mb-4">Configurações do Site</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm mb-1">Nome do Site</label>
-                            <input id="confSiteName" type="text" class="w-full bg-gray-700 p-2 rounded text-white" value="${state.config.siteName}">
-                        </div>
-                        <div>
-                            <label class="block text-sm mb-1">URL do Favicon</label>
-                            <input id="confFavicon" type="text" class="w-full bg-gray-700 p-2 rounded text-white" value="${state.config.favicon || ''}">
-                        </div>
-                        <button onclick="window.saveGlobalConfig()" class="w-full bg-blue-600 py-2 rounded font-bold mt-4">Salvar Configurações</button>
-                        <button onclick="document.getElementById('configModal').classList.add('hidden')" class="w-full bg-gray-600 py-2 rounded mt-2">Cancelar</button>
-                    </div>
-                </div>
+            <div class="metric">
+              <strong>97%</strong>
+              <span>de recomendação dos pacientes após o tratamento.</span>
             </div>
-        `;
+            <div class="metric">
+              <strong>Atendimento</strong>
+              <span>consultivo, transparente e focado em previsibilidade.</span>
+            </div>
+          </div>
+        </div>
 
-        // Lógica do Modal Admin
-        window.openAdminModal = () => {
-            const modal = document.getElementById('adminModal');
-            modal.classList.remove('hidden');
-            
-            // Renderizar lista
-            const tbody = document.getElementById('adminLessonList');
-            tbody.innerHTML = state.lessons.map(l => `
-                <tr class="hover:bg-gray-700">
-                    <td class="p-3">${l.series}</td>
-                    <td class="p-3">${l.season}:${l.episode}</td>
-                    <td class="p-3 font-semibold text-white">${l.title}</td>
-                    <td class="p-3 text-right space-x-2">
-                        <button onclick="window.editLesson('${l.id}')" class="text-blue-400"><i class="fas fa-edit"></i></button>
-                        <button onclick="window.removeLesson('${l.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+        <div class="glass visual-card reveal">
+          <div class="hero-visual"></div>
 
-            // Init Quill se não existir
-            if(!quillEditor) {
-                quillEditor = new Quill('#editor-container', {
-                    theme: 'snow',
-                    placeholder: 'Conteúdo de texto da aula...',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline', 'strike'],
-                            ['blockquote', 'code-block'],
-                            [{ 'header': 1 }, { 'header': 2 }],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            [{ 'color': [] }, { 'background': [] }],
-                            ['clean']
-                        ]
-                    }
-                });
-            }
+          <div class="floating-card floating-top">
+            <span class="label">Avaliação inicial</span>
+            <strong>Plano de tratamento personalizado</strong>
+            <p>Diagnóstico preciso, escuta ativa e definição clara dos próximos passos.</p>
+          </div>
 
-            // Bind Form Submit
-            const form = document.getElementById('lessonForm');
-            form.onsubmit = (e) => {
-                e.preventDefault();
-                const data = {
-                    series: document.getElementById('series').value,
-                    season: parseInt(document.getElementById('season').value),
-                    episode: parseInt(document.getElementById('episode').value),
-                    title: document.getElementById('title').value,
-                    videoUrl: document.getElementById('videoUrl').value,
-                    content: quillEditor.root.innerHTML,
-                    updatedAt: new Date()
-                };
-                const id = document.getElementById('lessonId').value;
-                saveLesson(data, id || null);
-            };
-        };
+          <div class="floating-card floating-bottom">
+            <span class="label">Resultado percebido</span>
+            <strong>Mais estética. Mais segurança. Mais confiança.</strong>
+            <p>Um tratamento premium precisa unir técnica, conforto e experiência.</p>
+          </div>
 
-        window.closeModal = () => {
-            document.getElementById('adminModal').classList.add('hidden');
-            window.resetForm();
-        };
+          <svg class="hero-illustration" viewBox="0 0 700 720" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="g1" x1="70" y1="60" x2="590" y2="620" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#B5EEFF"/>
+                <stop offset="0.5" stop-color="#58C8FF"/>
+                <stop offset="1" stop-color="#8B5CF6"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="190" y1="160" x2="520" y2="620" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFFFFF" stop-opacity="0.95"/>
+                <stop offset="1" stop-color="#DDF3FF" stop-opacity="0.35"/>
+              </linearGradient>
+            </defs>
+            <circle cx="514" cy="120" r="88" fill="url(#g1)" fill-opacity="0.16"/>
+            <circle cx="170" cy="150" r="64" fill="#0EE7B7" fill-opacity="0.11"/>
+            <rect x="160" y="90" width="340" height="530" rx="170" fill="url(#g2)" fill-opacity="0.18" stroke="rgba(255,255,255,0.18)"/>
+            <path d="M267 242C267 197.294 303.294 161 348 161H352C396.706 161 433 197.294 433 242V307C433 351.706 396.706 388 352 388H348C303.294 388 267 351.706 267 307V242Z" fill="url(#g1)" fill-opacity="0.18"/>
+            <path d="M226 589C239.688 488.587 325.306 414 426 414H436C536.694 414 622.312 488.587 636 589V614H226V589Z" fill="url(#g1)" fill-opacity="0.16"/>
+            <path d="M159 318C159 228.53 231.53 156 321 156H370C459.47 156 532 228.53 532 318V609H159V318Z" stroke="url(#g1)" stroke-opacity="0.75" stroke-width="2.5"/>
+            <path d="M254 245C254 192.533 296.533 150 349 150C401.467 150 444 192.533 444 245V306C444 358.467 401.467 401 349 401C296.533 401 254 358.467 254 306V245Z" stroke="#E7F7FF" stroke-opacity="0.48" stroke-width="2"/>
+            <path d="M207 614C218.1 505.95 309.029 422 417.647 422H438.353C546.971 422 637.9 505.95 649 614" stroke="#E7F7FF" stroke-opacity="0.48" stroke-width="2"/>
+            <path d="M253 498C283 520 310 534 347 541C384 548 420 543 457 521" stroke="#0EE7B7" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="303" cy="271" r="10" fill="#E8FAFF" fill-opacity="0.9"/>
+            <circle cx="395" cy="271" r="10" fill="#E8FAFF" fill-opacity="0.9"/>
+          </svg>
+        </div>
+      </div>
+    </section>
 
-        window.resetForm = () => {
-            document.getElementById('lessonForm').reset();
-            document.getElementById('lessonId').value = "";
-            if(quillEditor) quillEditor.root.innerHTML = "";
-        };
+    <section class="section" aria-label="Diferenciais rápidos">
+      <div class="container">
+        <div class="cards-grid">
+          <article class="feature-card reveal">
+            <div class="icon-box">✦</div>
+            <h3>Design de alto padrão</h3>
+            <p>Visual sofisticado com sensação premium desde a primeira dobra da página.</p>
+          </article>
+          <article class="feature-card reveal">
+            <div class="icon-box">⚡</div>
+            <h3>Estrutura para conversão</h3>
+            <p>Copy persuasiva, CTA repetido, prova social e fluxo pensado para agendamento.</p>
+          </article>
+          <article class="feature-card reveal">
+            <div class="icon-box">📱</div>
+            <h3>Totalmente responsiva</h3>
+            <p>Experiência consistente no desktop, tablet e celular, sem aparência improvisada.</p>
+          </article>
+          <article class="feature-card reveal">
+            <div class="icon-box">🧩</div>
+            <h3>Pronta para personalizar</h3>
+            <p>Um único modelo pode ser adaptado para vários nichos com poucos ajustes.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        window.editLesson = (id) => {
-            const lesson = state.lessons.find(l => l.id === id);
-            if(!lesson) return;
-            
-            document.getElementById('lessonId').value = lesson.id;
-            document.getElementById('series').value = lesson.series;
-            document.getElementById('season').value = lesson.season;
-            document.getElementById('episode').value = lesson.episode;
-            document.getElementById('title').value = lesson.title;
-            document.getElementById('videoUrl').value = lesson.videoUrl;
-            quillEditor.root.innerHTML = lesson.content;
-        };
+    <section class="section" id="servicos">
+      <div class="container services-layout">
+        <aside class="glass sticky-panel reveal">
+          <div class="pill"><span class="pill-dot"></span> Estrutura comercial exemplo</div>
+          <h2 class="section-title">Serviços apresentados de forma clara, elegante e vendável.</h2>
+          <p class="section-text">
+            Em uma landing page profissional, cada card precisa comunicar valor percebido, não só listar procedimentos. O visitante precisa entender <strong>o que ganha</strong>, não apenas o nome do serviço.
+          </p>
 
-        window.removeLesson = (id) => deleteLesson(id);
+          <div class="panel-list">
+            <div class="panel-item"><span class="check">✓</span><div>Serviços organizados em blocos objetivos e escaneáveis.</div></div>
+            <div class="panel-item"><span class="check">✓</span><div>Linguagem acessível para gerar confiança em poucos segundos.</div></div>
+            <div class="panel-item"><span class="check">✓</span><div>Estrutura ideal para adaptar em clínicas, empresas e negócios locais.</div></div>
+          </div>
+        </aside>
 
-        // Lógica Config
-        window.openConfigModal = () => document.getElementById('configModal').classList.remove('hidden');
-        window.saveGlobalConfig = () => {
-            const name = document.getElementById('confSiteName').value;
-            const fav = document.getElementById('confFavicon').value;
-            saveConfig(name, fav);
-            document.getElementById('configModal').classList.add('hidden');
-        };
+        <div class="service-grid">
+          <article class="service-card reveal">
+            <div class="icon-box">😁</div>
+            <h3>Lentes e estética dental</h3>
+            <p>Reforce sua autoestima com um planejamento visual que busca naturalidade, harmonia facial e acabamento sofisticado.</p>
+          </article>
+          <article class="service-card reveal">
+            <div class="icon-box">🦷</div>
+            <h3>Implantes com previsibilidade</h3>
+            <p>Recupere função mastigatória e confiança com abordagem moderna, avaliação precisa e acompanhamento cuidadoso.</p>
+          </article>
+          <article class="service-card reveal">
+            <div class="icon-box">✨</div>
+            <h3>Clareamento supervisionado</h3>
+            <p>Protocolos seguros para potencializar a estética do sorriso com conforto, orientação e resultado consistente.</p>
+          </article>
+          <article class="service-card reveal">
+            <div class="icon-box">🛡️</div>
+            <h3>Prevenção e acompanhamento</h3>
+            <p>Check-ups periódicos, rastreio preventivo e orientação personalizada para manter saúde bucal no longo prazo.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        // =================================================================
-        // 6. INICIALIZAÇÃO
-        // =================================================================
-        onAuthStateChanged(auth, async (user) => {
-            state.user = user;
-            if (user) {
-                // Verificação simples de admin (Segurança Real deve ser feita nas Security Rules do Firestore)
-                state.isAdmin = user.email.includes("@userpro"); 
-                
-                await Promise.all([fetchConfig(), fetchLessons(), fetchProgress()]);
-            } else {
-                renderLogin();
-            }
-        });
+    <section class="section" id="sobre">
+      <div class="container story-layout">
+        <div class="glass story-card reveal">
+          <div class="pill"><span class="pill-dot"></span> Prova de autoridade</div>
+          <h2 class="section-title">Uma clínica que une excelência técnica, experiência e acolhimento.</h2>
+          <p class="section-text">
+            Esta seção mostra como posicionar um negócio como referência. Em vez de texto genérico, a apresentação valoriza diferenciais concretos, percepção de confiança e o sentimento de segurança que o paciente procura antes de entrar em contato.
+          </p>
 
-    </script>
+          <div class="badge-grid">
+            <div class="badge-card">
+              <strong>Tecnologia de diagnóstico</strong>
+              <p>Processos mais previsíveis e decisões clínicas mais bem fundamentadas.</p>
+            </div>
+            <div class="badge-card">
+              <strong>Atendimento humanizado</strong>
+              <p>Escuta, clareza e acompanhamento próximo em todas as etapas.</p>
+            </div>
+            <div class="badge-card">
+              <strong>Equipe multidisciplinar</strong>
+              <p>Visão integrada para combinar função, estética e saúde bucal.</p>
+            </div>
+            <div class="badge-card">
+              <strong>Ambiente premium</strong>
+              <p>Conforto, organização e percepção de alto padrão desde a recepção.</p>
+            </div>
+          </div>
+
+          <div class="tag-row">
+            <span class="tag">Avaliação detalhada</span>
+            <span class="tag">Plano personalizado</span>
+            <span class="tag">Acompanhamento contínuo</span>
+            <span class="tag">Confiança em cada etapa</span>
+          </div>
+        </div>
+
+        <div class="glass story-visual reveal">
+          <div class="floating-card floating-top" style="top:24px; left:24px; width:230px;">
+            <span class="label">Percepção do paciente</span>
+            <strong>Ambiente calmo e profissional</strong>
+            <p>Detalhes visuais ajudam a aumentar o valor percebido antes do primeiro contato.</p>
+          </div>
+
+          <svg viewBox="0 0 740 620" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="bgStory" x1="100" y1="50" x2="620" y2="560" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#B8EFFF"/>
+                <stop offset="0.45" stop-color="#58C8FF"/>
+                <stop offset="1" stop-color="#0EE7B7"/>
+              </linearGradient>
+            </defs>
+            <rect x="90" y="82" width="560" height="420" rx="42" fill="url(#bgStory)" fill-opacity="0.08" stroke="rgba(255,255,255,0.15)"/>
+            <rect x="132" y="124" width="476" height="336" rx="30" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)"/>
+            <rect x="170" y="162" width="188" height="208" rx="24" fill="rgba(255,255,255,0.08)"/>
+            <rect x="382" y="162" width="186" height="74" rx="22" fill="rgba(255,255,255,0.1)"/>
+            <rect x="382" y="254" width="186" height="54" rx="18" fill="rgba(255,255,255,0.08)"/>
+            <rect x="382" y="326" width="186" height="88" rx="22" fill="rgba(255,255,255,0.08)"/>
+            <path d="M242 276C242 237.34 273.34 206 312 206C350.66 206 382 237.34 382 276C382 314.66 350.66 346 312 346C273.34 346 242 314.66 242 276Z" fill="url(#bgStory)" fill-opacity="0.24"/>
+            <path d="M470 198H536" stroke="#EAF8FF" stroke-opacity="0.72" stroke-width="12" stroke-linecap="round"/>
+            <path d="M414 280H536" stroke="#EAF8FF" stroke-opacity="0.52" stroke-width="10" stroke-linecap="round"/>
+            <path d="M414 350H520" stroke="#EAF8FF" stroke-opacity="0.52" stroke-width="10" stroke-linecap="round"/>
+            <path d="M414 378H482" stroke="#EAF8FF" stroke-opacity="0.34" stroke-width="10" stroke-linecap="round"/>
+          </svg>
+
+          <div class="floating-card floating-bottom" style="bottom:24px; left:auto; right:24px; width:260px;">
+            <span class="label">Mensagem visual</span>
+            <strong>Clareza, autoridade e sofisticação</strong>
+            <p>Esse padrão funciona muito bem para nichos de saúde, estética, consultoria e serviços premium.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="depoimentos">
+      <div class="container">
+        <div class="pill reveal"><span class="pill-dot"></span> Prova social estratégica</div>
+        <h2 class="section-title reveal">Depoimentos que reduzem objeção e aumentam confiança.</h2>
+        <p class="section-text reveal">
+          Bons depoimentos não existem apenas para “encher espaço”. Eles servem para fazer o visitante pensar: <strong>“essa clínica parece segura, organizada e confiável”</strong>. Isso vale para praticamente qualquer nicho.
+        </p>
+
+        <div class="testimonial-grid">
+          <article class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <h3>Atendimento impecável do início ao fim</h3>
+            <p>“Eu procurava um tratamento estético com resultado natural e encontrei exatamente isso. Me senti acolhida, bem orientada e muito segura durante todo o processo.”</p>
+            <footer>
+              <div class="avatar">MR</div>
+              <div class="avatar-meta"><strong>Marina Ribeiro</strong><span>Paciente fictícia</span></div>
+            </footer>
+          </article>
+          <article class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <h3>Estrutura moderna e equipe extremamente clara</h3>
+            <p>“A diferença para outras experiências foi a transparência. Tudo foi explicado com calma, com foco real no que eu precisava, sem pressão desnecessária.”</p>
+            <footer>
+              <div class="avatar">CL</div>
+              <div class="avatar-meta"><strong>Carlos Lima</strong><span>Paciente fictício</span></div>
+            </footer>
+          </article>
+          <article class="testimonial reveal">
+            <div class="stars">★★★★★</div>
+            <h3>Resultado bonito e sensação de confiança</h3>
+            <p>“Além do resultado estético, saí com a sensação de ter feito a escolha certa. Ambiente excelente, atendimento humano e padrão realmente diferenciado.”</p>
+            <footer>
+              <div class="avatar">AS</div>
+              <div class="avatar-meta"><strong>Ana Souza</strong><span>Paciente fictícia</span></div>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="pill reveal"><span class="pill-dot"></span> Jornada do paciente</div>
+        <h2 class="section-title reveal">Uma estrutura simples para explicar como o processo funciona.</h2>
+        <p class="section-text reveal">
+          Mostrar a jornada reduz ansiedade e facilita a conversão. O visitante entende o que vai acontecer após o contato, o que aumenta a sensação de previsibilidade.
+        </p>
+
+        <div class="steps-grid">
+          <article class="step reveal">
+            <div class="step-number">1</div>
+            <h3>Primeiro contato</h3>
+            <p>O paciente envia os dados pelo formulário ou chama no WhatsApp para tirar dúvidas iniciais.</p>
+          </article>
+          <article class="step reveal">
+            <div class="step-number">2</div>
+            <h3>Avaliação personalizada</h3>
+            <p>É feita uma análise cuidadosa para entender necessidades, objetivos e possibilidades.</p>
+          </article>
+          <article class="step reveal">
+            <div class="step-number">3</div>
+            <h3>Plano de tratamento</h3>
+            <p>O paciente recebe orientação clara, proposta de caminho clínico e visão de investimento.</p>
+          </article>
+          <article class="step reveal">
+            <div class="step-number">4</div>
+            <h3>Acompanhamento contínuo</h3>
+            <p>O tratamento acontece com monitoramento atento e foco no melhor resultado possível.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="precos">
+      <div class="container pricing-layout">
+        <aside class="glass sticky-panel reveal">
+          <div class="pill"><span class="pill-dot"></span> Bloco comercial opcional</div>
+          <h2 class="section-title">Até a parte de planos pode ser usada como vitrine do seu serviço.</h2>
+          <p class="section-text">
+            Nesta versão fictícia, a seção abaixo demonstra como apresentar opções de atendimento ou pacotes. Em seus projetos vendidos, você pode adaptar esse mesmo padrão para <strong>planos comerciais, formatos de serviço ou diferenciais de contratação</strong>.
+          </p>
+          <div class="mini-proof">
+            <span>Design premium</span>
+            <span>Seções reutilizáveis</span>
+            <span>Alta adaptabilidade</span>
+          </div>
+        </aside>
+
+        <div class="pricing-cards">
+          <article class="pricing-card reveal">
+            <span class="pricing-label">Essencial</span>
+            <h3>Avaliação + prevenção</h3>
+            <div class="price">Plano inicial <small>para check-up e rotina</small></div>
+            <p>Ideal para pacientes que buscam orientação, manutenção e acompanhamento preventivo.</p>
+            <ul class="price-list">
+              <li>Avaliação clínica</li>
+              <li>Planejamento preventivo</li>
+              <li>Orientações personalizadas</li>
+              <li>Suporte inicial</li>
+            </ul>
+            <a href="#contato" class="btn btn-secondary">Tenho interesse</a>
+          </article>
+          <article class="pricing-card featured reveal">
+            <span class="pricing-label">Mais procurado</span>
+            <h3>Estética e reabilitação</h3>
+            <div class="price">Plano premium <small>para maior transformação</small></div>
+            <p>Uma apresentação ideal para destacar o serviço de maior valor percebido da página.</p>
+            <ul class="price-list">
+              <li>Avaliação detalhada</li>
+              <li>Planejamento completo</li>
+              <li>Acompanhamento ampliado</li>
+              <li>Experiência premium</li>
+            </ul>
+            <a href="#contato" class="btn btn-primary">Quero este atendimento</a>
+          </article>
+          <article class="pricing-card reveal">
+            <span class="pricing-label">Avançado</span>
+            <h3>Tratamento personalizado</h3>
+            <div class="price">Sob consulta <small>conforme complexidade</small></div>
+            <p>Para necessidades mais específicas que exigem definição clínica e cronograma próprio.</p>
+            <ul class="price-list">
+              <li>Diagnóstico ampliado</li>
+              <li>Plano sob medida</li>
+              <li>Etapas customizadas</li>
+              <li>Suporte contínuo</li>
+            </ul>
+            <a href="#contato" class="btn btn-secondary">Quero saber mais</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="pill reveal"><span class="pill-dot"></span> Perguntas frequentes</div>
+        <h2 class="section-title reveal">FAQ que ajuda a remover dúvidas antes do contato.</h2>
+        <p class="section-text reveal">Em landing pages vendidas para clientes, essa seção é extremamente útil para diminuir objeções e aumentar a taxa de envio do formulário.</p>
+
+        <div class="faq-grid">
+          <div class="faq-item reveal active">
+            <button class="faq-question">Essa página é real ou apenas um exemplo?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Este projeto é um exemplo fictício criado como modelo premium de portfólio. A estrutura, porém, é totalmente realista e pronta para ser adaptada a clientes de diversos nichos.</div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-question">Esse layout pode ser usado para outros segmentos?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Sim. Com mudanças em copy, cores, imagens e blocos de conteúdo, o mesmo padrão serve para clínicas, advocacia, estética, consultoria, serviços locais e muitos outros mercados.</div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-question">O formulário pode enviar os contatos por e-mail?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Sim. Basta integrar o formulário a um serviço como Formspree, Web3Forms, EmailJS ou um backend próprio para encaminhar os leads ao seu e-mail ou CRM.</div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-question">Posso publicar esse projeto com domínio próprio?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">Sim. Ele pode ser hospedado em GitHub Pages, Cloudflare Pages, Vercel ou hospedagens tradicionais, com domínio próprio configurado normalmente.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contato">
+      <div class="container contact-layout">
+        <div class="contact-card glass reveal">
+          <div class="pill"><span class="pill-dot"></span> CTA final</div>
+          <h2 class="section-title">Agende sua avaliação e descubra o tratamento ideal para o seu sorriso.</h2>
+          <p>
+            Esta é a seção de fechamento da página. Ela reúne urgência, acolhimento e direcionamento claro para ação. Em projetos reais, aqui entram integração com formulário, automação de leads e redirecionamento para WhatsApp.
+          </p>
+
+          <ul class="contact-list">
+            <li><strong>Atendimento:</strong> segunda a sexta, das 8h às 19h</li>
+            <li><strong>Localização:</strong> estrutura fictícia em região nobre da cidade</li>
+            <li><strong>Canal rápido:</strong> WhatsApp para dúvidas e pré-agendamento</li>
+            <li><strong>Posicionamento:</strong> ideal para negócios premium e de ticket mais alto</li>
+          </ul>
+
+          <div class="mini-proof">
+            <span>Design que impressiona</span>
+            <span>Modelo reutilizável</span>
+            <span>Portfólio comercial forte</span>
+          </div>
+        </div>
+
+        <div class="contact-card glass reveal">
+          <form class="form" onsubmit="event.preventDefault(); document.getElementById('formStatus').textContent='Mensagem de demonstração enviada com sucesso. Em um projeto real, aqui você integraria com seu serviço de leads.';">
+            <div class="form-grid">
+              <div class="field">
+                <label for="nome">Nome completo</label>
+                <input id="nome" name="nome" type="text" placeholder="Seu nome" required>
+              </div>
+              <div class="field">
+                <label for="telefone">WhatsApp</label>
+                <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" required>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" placeholder="voce@email.com" required>
+              </div>
+              <div class="field">
+                <label for="interesse">Interesse principal</label>
+                <select id="interesse" name="interesse" required>
+                  <option value="">Selecione</option>
+                  <option>Avaliação inicial</option>
+                  <option>Estética dental</option>
+                  <option>Implantes</option>
+                  <option>Clareamento</option>
+                  <option>Outro tratamento</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="mensagem">Conte um pouco sobre seu objetivo</label>
+              <textarea id="mensagem" name="mensagem" placeholder="Descreva sua necessidade, expectativa ou dúvida principal..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Enviar solicitação</button>
+            <div id="formStatus" class="form-note">Este formulário está em modo demonstração. Você pode integrar facilmente com Formspree ou outro serviço de captura de leads.</div>
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="glass cta-banner reveal">
+          <div>
+            <h3 style="margin:0 0 10px; font-size:clamp(1.5rem, 2.8vw, 2.2rem); letter-spacing:-0.04em;">Este é o tipo de projeto que convence clientes a contratar você.</h3>
+            <p class="section-text" style="margin:0; max-width: 760px;">Use este modelo como portfólio, base comercial e template para futuros projetos. Ele foi pensado para parecer trabalho de agência profissional, não um “site improvisado”.</p>
+          </div>
+          <a href="#inicio" class="btn btn-primary">Voltar ao topo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-box">
+      <div>Projeto modelo fictício • Aurora Odontologia Premium</div>
+      <div>Feito para servir como portfólio, vitrine e template comercial reutilizável.</div>
+    </div>
+  </footer>
+
+  <a class="floating-whatsapp" href="#contato" aria-label="Ir para contato">✆</a>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    if (menuBtn) {
+      menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (!el.classList.contains('visible')) observer.observe(el);
+    });
+  </script>
 </body>
 </html>
